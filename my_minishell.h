@@ -50,14 +50,22 @@ void	ft_buf_to_list(char *buf, t_data *data);
 void	ft_read_ops(t_data *data);
 
 /*		ft_exec_cmd.c	*/
+void	ft_cd(char *line, t_data *data);
+void	ft_pwd(char *line, t_data *data);
+void	ft_echo(char *line, t_data *data);
+void	ft_check_cmd(char *line, t_data *data);
 void	ft_exec_cmd(t_data *data);
 
 /*		ft_get_env.c	*/
+void	ft_unset(char *line, t_data *data);
+void	ft_add_env(char *line, t_data *data);
 void	ft_env(char *line, t_data *data);
 void	ft_export(char *line, t_data *data);
 void	ft_get_env(char **env, t_data *data);
 
 /*		ft_print_sort.c	*/
+int		ft_check_double(t_read **head);
+void	ft_get_pos(t_read **head);
 void	ft_print_sort(t_read **head, t_data *data);
 
 #endif

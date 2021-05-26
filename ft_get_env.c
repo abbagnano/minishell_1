@@ -1,5 +1,58 @@
 #include "my_minishell.h"
 
+void	ft_search_env(char *line, int len, t_data *data)
+{
+	t_read	*tmp;
+	t_read	*tmp_x;
+
+	tmp = *data->env_head;
+	tmp_x = tmp;
+	if (!ft_strncmp(line, tmp->line, len))
+	{
+		*data->env_head = (*data->env_head)->next;
+		free(tmp);
+		return ;
+	}
+	while (tmp)
+	{
+		if (!ft_strncmp(line, tmp->line, len))
+		{
+			tmp_x->next = tmp->next;
+			free(tmp);
+			return ;
+		}
+		tmp_x = tmp;
+		tmp = tmp->next;
+	}
+}
+
+void	ft_unset(char *line, t_data *data)
+{
+	int	len;
+	int	x;
+
+	len = 0;
+	x = 0;
+	while (line[x] == ' ')
+		x++;
+	while (line[x + len] && line[x + len] != ' ')
+		len++;
+	if (!line[x])
+	{
+		ft_write("not enough arguments\n");
+		return ;
+	}
+	else
+		ft_search_env(line + x, len, data);
+
+}
+
+void	ft_add_env(char *line, t_data *data)
+{
+	(void)line;
+	(void)data;
+}
+
 void	ft_env(char *line, t_data *data)
 {
 	int	x;
@@ -20,6 +73,8 @@ void	ft_export(char *line, t_data *data)
 		x++;
 	if (!line[x])
 		ft_print_sort(data->env_head, data);
+	else
+		ft_add_env(line, data);
 }
 
 void	ft_get_env(char **env, t_data *data)

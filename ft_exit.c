@@ -11,8 +11,6 @@ void	ft_free_read(t_read **head)
 		free(tmp->line);
 		free(tmp);
 	}
-//	free((*head)->line);
-//	free(*head);
 }
 
 void	ft_exit(char *str, t_data *data)
