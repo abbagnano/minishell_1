@@ -1,6 +1,12 @@
 NAME	=	minishell
-OBJS	=	minishell.o
 CFLAGS	=	-Wall -Wextra #-Werror
+OBJS	=	minishell.o \
+			ft_exec_cmd.o \
+			ft_read_ops.o \
+			ft_exit.o \
+			utils_basic.o \
+			ft_get_env.o \
+			ft_print_sort.o		
 
 all		:	$(NAME)
 
@@ -8,7 +14,7 @@ $(NAME)	:	$(OBJS)
 	gcc $(CFLAGS) $^ -o $@
 
 %.o		:	%.c
-	gcc -c $(CFLAGS) $^
+	gcc -c $(CFLAGS) $^ 
 
 clean	:
 	rm -rf $(OBJS)
