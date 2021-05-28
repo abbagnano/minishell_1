@@ -1,5 +1,17 @@
 #include "my_minishell.h"
 
+void	ft_init_pos(t_read **head)
+{
+	t_read	*tmp;
+
+	tmp = *head;
+	while (tmp)
+	{
+		tmp->pos = 1;
+		tmp = tmp->next;
+	}
+}
+
 int	ft_check_double(t_read **head)
 {
 	t_read	*tmp;
@@ -28,13 +40,15 @@ int	ft_check_double(t_read **head)
 	return (0);
 }
 
-void	ft_get_pos(t_read **head)
+void	ft_get_pos(t_read **head, t_data *data)
 {
 	t_read	*tmp;
 	t_read	*tmp_x;
 	int		num;
 
+	data->env_len = 0;
 	tmp = *head;
+	ft_init_pos(head);
 	while (tmp)
 	{
 		num = tmp->line[0];
@@ -46,6 +60,7 @@ void	ft_get_pos(t_read **head)
 			tmp_x = tmp_x->next;
 		}
 		tmp = tmp->next;
+		data->env_len++;
 	}
 	num = ft_check_double(head);
 	while (num)
@@ -60,24 +75,23 @@ void	ft_print_sort(t_read **head, t_data *data)
 
 	tmp = *head;
 	len = 1;
-	ft_get_pos(head);
+	ft_get_pos(head, data);
 	tmp = *head;
-	while (len <= data->env_len)
+	while (len <= data->env_len && tmp)
 	{
 		tmp_x = *head;
 		while (tmp_x)
 		{
 			if (tmp_x->pos == len)
 			{
-				//printf("pos:%d\t\t%s\n", tmp_x->pos, tmp_x->line);
 				ft_write(tmp_x->line);
 				ft_write("\n");
+				len++;
 				break ;
 			}
 			tmp_x = tmp_x->next;
 		}
-		tmp = tmp->next;
-		len++;
+		tmp = tmp->next;		
 	}
 
 }

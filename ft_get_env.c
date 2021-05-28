@@ -1,6 +1,6 @@
 #include "my_minishell.h"
 
-void	ft_search_env(char *line, int len, t_data *data)
+int	ft_search_env(char *line, int len, t_data *data)
 {
 	t_read	*tmp;
 	t_read	*tmp_x;
@@ -11,22 +11,25 @@ void	ft_search_env(char *line, int len, t_data *data)
 	{
 		*data->env_head = (*data->env_head)->next;
 		free(tmp);
-		return ;
+		data->env_len--;
+		return (1);
 	}
 	while (tmp)
 	{
-		if (!ft_strncmp(line, tmp->line, len))
+		tmp_x = tmp;
+		tmp = tmp->next;
+		if (tmp && !ft_strncmp(line, tmp->line, len))
 		{
 			tmp_x->next = tmp->next;
 			free(tmp);
-			return ;
+			data->env_len--;
+			return (1);
 		}
-		tmp_x = tmp;
-		tmp = tmp->next;
 	}
+	return (0);
 }
 
-void	ft_unset(char *line, t_data *data)
+void	ft_unset(char *line, t_data *data)				/// unset deve cercare fino all' '='
 {
 	int	len;
 	int	x;
@@ -49,8 +52,15 @@ void	ft_unset(char *line, t_data *data)
 
 void	ft_add_env(char *line, t_data *data)
 {
-	(void)line;
-	(void)data;
+	t_read	*new;
+
+	new = (t_read *)malloc(sizeof(t_read) * 1);
+	new->line = line;
+	new->next = NULL;
+	printf("ft_add_env - line: %s\n", line);
+	ft_unset(line, data);
+	ft_append_read(new, data->env_head);
+	data->env_len++;
 }
 
 void	ft_env(char *line, t_data *data)
@@ -58,7 +68,7 @@ void	ft_env(char *line, t_data *data)
 	int	x;
 
 	x = 0;
-	while (line[x] == ' ')
+	while (!line[x] && line[x] == ' ')
 		x++;
 	if (!line[x])
 		ft_print_cmd(data->env_head);
@@ -69,7 +79,7 @@ void	ft_export(char *line, t_data *data)
 	int	x;
 
 	x = 0;
-	while (line[x] == ' ')
+	while (!line[x] && line[x] == ' ')
 		x++;
 	if (!line[x])
 		ft_print_sort(data->env_head, data);

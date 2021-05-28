@@ -33,6 +33,7 @@ void	ft_no_arg(t_data *data);
 void	ft_print_cmd(t_read **head);
 
 /*		ft_exit.c		*/
+void	ft_free_env_read(t_read **head);
 void	ft_free_read(t_read **head);
 void	ft_exit(char *str, t_data *data);
 
@@ -65,7 +66,7 @@ void	ft_get_env(char **env, t_data *data);
 
 /*		ft_print_sort.c	*/
 int		ft_check_double(t_read **head);
-void	ft_get_pos(t_read **head);
+void	ft_get_pos(t_read **head, t_data *data);
 void	ft_print_sort(t_read **head, t_data *data);
 
 #endif

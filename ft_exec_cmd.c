@@ -73,7 +73,9 @@ void	ft_check_cmd(char *line, t_data *data)
 		ft_env(line + 4, data);
 	else if (!ft_strncmp(line, "unset ", 6) || ft_strncmp(line, "unset ", 6) == -32)
 		ft_unset(line + 6, data);
-	else	
+	else if (!ft_strncmp(line, "exit ", 5) || ft_strncmp(line, "exit ", 5) == -32)
+		ft_exit("exit\n", data);
+	else
 		ft_write("minishell: command not found\n");
 }
 

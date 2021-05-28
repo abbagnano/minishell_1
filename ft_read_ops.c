@@ -66,11 +66,11 @@ void	ft_read_ops(t_data *data)
 	char	*buf;
 	int		r;
 
-	buf = (char *)malloc(sizeof(char) * 1024);
-	buf[1023] = '\0';
 	r = 1;
 	while (r > 0)
 	{
+		buf = (char *)malloc(sizeof(char) * 1024);
+		buf[1023] = '\0';
 		r = read(0, buf, 1023);
 		buf[r] = '\0';
 		if (buf[0] == '\0')
@@ -79,8 +79,32 @@ void	ft_read_ops(t_data *data)
 			return ;
 		}
 		ft_buf_to_list(buf, data);
+		free(buf);
 		ft_exec_cmd(data);
 		ft_write("minishell% ");
 	}
-	free(buf);
 }
+
+// void	ft_read_ops(t_data *data)
+// {
+// 	char	*buf;
+// 	int		r;
+
+// 	buf = (char *)malloc(sizeof(char) * 1024);
+// 	buf[1023] = '\0';
+// 	r = 1;
+// 	while (r > 0)
+// 	{
+// 		r = read(0, buf, 1023);
+// 		buf[r] = '\0';
+// 		if (buf[0] == '\0')
+// 		{
+// 			free(buf);
+// 			return ;
+// 		}
+// 		ft_buf_to_list(buf, data);
+// 		ft_exec_cmd(data);
+// 		ft_write("minishell% ");
+// 	}
+// 	free(buf);
+// }
