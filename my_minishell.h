@@ -19,6 +19,7 @@ typedef struct	s_data
 {
 	t_read	**cmd_head;
 	t_read	**env_head;
+	char	**envp;
 	int		env_len;
 }	t_data;
 

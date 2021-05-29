@@ -31,6 +31,8 @@ int	main(int ac, char **av, char **env)
 	*data.cmd_head = NULL;
 	data.env_head = (t_read **)malloc(sizeof(t_read *) * 1);
 	*data.env_head = NULL;
+	data.envp = env;
+//	printf("env: %s\n", data.envp[0]);
 	ft_get_env(env, &data);	
 	if (ac == 1)
 		ft_no_arg(&data);
