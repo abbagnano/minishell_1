@@ -81,7 +81,7 @@ void	ft_read_ops(t_data *data)
 		ft_buf_to_list(buf, data);
 		free(buf);
 		ft_exec_cmd(data);
-		ft_write("minishell% ");
+		ft_write("\033[0;32mminishell% \033[0m");
 	}
 }
 

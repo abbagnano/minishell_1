@@ -1,5 +1,23 @@
 #include "my_minishell.h"
 
+int	ft_strstr(char *find, char *str)
+{
+	while (find && str && *str)
+	{
+		while (*find && *str == *find)
+		{
+			str++;
+			find++;
+			if (!*find)
+				return (1);
+			else if (*find != *str)
+				return (0);
+		}
+		str++;
+	}
+	return (0);
+}
+
 void	ft_init_pos(t_read **head)
 {
 	t_read	*tmp;

@@ -7,13 +7,7 @@
 # include <dirent.h>
 # include <errno.h>
 # include <string.h>
-/*
-typedef struct s_list
-{
-	char			*cmd;
-	struct s_list	*next;
-}	t_list;
-*/
+
 typedef struct s_read
 {
 	char			*line;
@@ -59,12 +53,18 @@ void	ft_exec_cmd(t_data *data);
 
 /*		ft_get_env.c	*/
 void	ft_unset(char *line, t_data *data);
-void	ft_add_env(char *line, t_data *data);
 void	ft_env(char *line, t_data *data);
 void	ft_export(char *line, t_data *data);
 void	ft_get_env(char **env, t_data *data);
 
+/*		utils_get_env.c	*/
+void	ft_fix_env(char **line);
+int		ft_search_env(char *line, int len, t_data *data);
+void	ft_add_env(char *line, t_data *data);
+
 /*		ft_print_sort.c	*/
+int		ft_strstr(char *find, char *str);
+void	ft_init_pos(t_read **head);
 int		ft_check_double(t_read **head);
 void	ft_get_pos(t_read **head, t_data *data);
 void	ft_print_sort(t_read **head, t_data *data);

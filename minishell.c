@@ -16,7 +16,7 @@ void	ft_print_cmd(t_read **head)
 
 void	ft_no_arg(t_data *data)
 {
-	ft_write("minishell% ");
+	ft_write("\033[0;32mminishell% \033[0m");
 	ft_read_ops(data);
 	ft_write("exit\n");
 	ft_print_cmd(data->cmd_head);
