@@ -60,19 +60,19 @@ void	ft_check_cmd(char *line, t_data *data)
 	//if (len == 4 && !ft_strncmp(line, "echo", 4))
 //	printf("strncmp: %d\n", ft_strncmp(line, "echo ", 5));
 	if (!ft_strncmp(line, "echo ", 5) || ft_strncmp(line, "echo ", 5) == -32)
-		ft_echo(line + 5, data);
+		ft_echo(line + 4, data);
 	else if (!ft_strncmp(line, "cd ", 3) || ft_strncmp(line, "cd ", 3) == -32)
-		ft_cd(line + 3, data);
+		ft_cd(line + 2, data);
 	else if (!ft_strncmp(line, "pwd ", 4) || ft_strncmp(line, "pwd ", 4) == -32)
-		ft_pwd(line + 4, data);
+		ft_pwd(line + 3, data);
 	else if (!ft_strncmp(line, "", 1))
 		return ;
 	else if (!ft_strncmp(line, "export ", 7) || ft_strncmp(line, "export ", 7) == -32)
-		ft_export(line + 7, data);
+		ft_export(line + 6, data);
 	else if (!ft_strncmp(line, "env ", 4) || ft_strncmp(line, "env ", 4) == -32)
-		ft_env(line + 4, data);
+		ft_env(line + 3, data);
 	else if (!ft_strncmp(line, "unset ", 6) || ft_strncmp(line, "unset ", 6) == -32)
-		ft_unset(line + 6, data);
+		ft_unset(line + 5, data);
 	else if (!ft_strncmp(line, "exit ", 5) || ft_strncmp(line, "exit ", 5) == -32)
 		ft_exit("exit\n", data);
 	else

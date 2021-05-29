@@ -12,6 +12,7 @@ int	ft_strcmp(char *s1, char *s2)
 
 int	ft_strncmp(char *s1, char *s2, int len)
 {
+	//printf("s1: %s\t s2: %s\t le: %d\n", s1, s2, len);
 	while (s1 && s2 && *s1 && *s2 && *s1 == *s2 && --len)
 	{
 		s1++;

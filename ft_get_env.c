@@ -18,6 +18,7 @@ void	ft_print_env(t_read **head)
 
 void	ft_unset(char *line, t_data *data)				/// unset deve cercare fino all' '='
 {
+	//printf("%s\n", line);
 	int	len;
 	int	x;
 
@@ -27,13 +28,15 @@ void	ft_unset(char *line, t_data *data)				/// unset deve cercare fino all' '='
 		x++;
 	while (line[x + len] && (line[x + len] != ' ' && line[x + len] != '='))
 		len++;
+	if (line[x + len] == '=')
+		len++;
 	if (!line[x])
 	{
 		ft_write("not enough arguments\n");
 		return ;
 	}
 	else
-		ft_search_env(line + x, len, data);
+		ft_search_env(line + x, x, len, data);
 
 }
 
@@ -55,6 +58,7 @@ void	ft_export(char *line, t_data *data)
 	x = 0;
 	while (line[x] && line[x] == ' ')
 		x++;
+//	printf("line: %s\tx: %d\n", line, x);
 	if (!line[x])
 		ft_print_sort(data->env_head, data);
 	else

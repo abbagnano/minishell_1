@@ -13,8 +13,9 @@ int	ft_buf_to_node(int len, int x, char *buf, t_read *new)
 		x++;
 	while (buf[x] != '\n' && buf[x] != '\0')
 	{
-		new->line[y++] = buf[x];
+		new->line[y] = buf[x];
 		x++;
+		y++;
 	}
 	new->line[y] = '\0';
 	new->next = NULL;

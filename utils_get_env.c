@@ -11,9 +11,14 @@ void	ft_fix_env(char **line)
 	len = ft_strlen(*line);
 	fixed = (char *)malloc(sizeof(char) * (len + 4));
 	tmp = *line;
-	while (tmp[x])
+	len = 0;
+	while (tmp[len + x])
 	{
-		fixed[x] = tmp[x];
+		while (tmp[len + x] == ' ')
+			len++;
+		if (!tmp[len + x])
+			break ;
+		fixed[x] = tmp[len + x];
 		x++;
 	}
 	fixed[x++] = '=';
@@ -23,14 +28,14 @@ void	ft_fix_env(char **line)
 	*line = fixed;
 }
 
-int	ft_search_env(char *line, int len, t_data *data)
+int	ft_search_env(char *line, int x, int len, t_data *data)
 {
 	t_read	*tmp;
 	t_read	*tmp_x;
 
 	tmp = *data->env_head;
 	tmp_x = tmp;
-	if (!ft_strncmp(line, tmp->line, len))
+	if (!ft_strncmp(line, tmp->line + x, len))
 	{
 		*data->env_head = (*data->env_head)->next;
 		free(tmp);
@@ -41,7 +46,7 @@ int	ft_search_env(char *line, int len, t_data *data)
 	{
 		tmp_x = tmp;
 		tmp = tmp->next;
-		if (tmp && !ft_strncmp(line, tmp->line, len))
+		if (tmp && !ft_strncmp(line, tmp->line + x, len))
 		{
 			tmp_x->next = tmp->next;
 			free(tmp);
