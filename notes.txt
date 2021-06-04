@@ -1,0 +1,2 @@
+gcc -lncurses term_test.c 
+

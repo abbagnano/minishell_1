@@ -36,5 +36,5 @@ int	main(int ac, char **av, char **env)
 	if (ac == 1)
 		ft_no_arg(&data);
 	(void)av;
-	ft_exit("", &data);
+	// ft_exit("", &data);
 }

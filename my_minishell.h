@@ -7,6 +7,9 @@
 # include <dirent.h>
 # include <errno.h>
 # include <string.h>
+# include <curses.h>
+# include <term.h>
+# include <termios.h>
 
 typedef struct s_read
 {
