@@ -1,2 +1,12 @@
 gcc -lncurses term_test.c 
 
+TERMCAP UNIX
+http://www.nsc.ru/cgi-bin/www/unix_help/unix-man?termcap+5
+
+TGETENT SOURCE CODE
+https://github.com/vocho/openqnx/blob/master/trunk/lib/termcap/tgetent.c
+
+MAN TERMINFO
+https://www.unix.com/man-page/osx/5/terminfo/
+
+https://www.freebsd.org/cgi/man.cgi?query=terminfo
