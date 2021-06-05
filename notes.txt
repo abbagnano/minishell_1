@@ -24,7 +24,8 @@ https://www.gnu.org/software/libc/manual/html_node/Canonical-or-Not.html
 
 https://stackoverflow.com/questions/57916475/linux-stdin-buffering
 
-
+NON CANONICAL
+https://www.gnu.org/software/libc/manual/html_node/Noncanonical-Input.html
 
 $?-The exit status of the last command executed.
 
