@@ -1,12 +1,35 @@
 gcc -lncurses term_test.c 
 
-TERMCAP UNIX
+MAN TERMCAP
 http://www.nsc.ru/cgi-bin/www/unix_help/unix-man?termcap+5
+https://www.freebsd.org/cgi/man.cgi?query=termcap&sektion=5&format=html
+
+http://www2.phys.canterbury.ac.nz/dept/docs/manuals/unix/DEC_5.0a_Docs/HTML/MAN/MAN4/0243____.HTM
+
 
 TGETENT SOURCE CODE
 https://github.com/vocho/openqnx/blob/master/trunk/lib/termcap/tgetent.c
 
 MAN TERMINFO
 https://www.unix.com/man-page/osx/5/terminfo/
-
 https://www.freebsd.org/cgi/man.cgi?query=terminfo
+
+
+LIST FD MAC
+https://stackoverflow.com/questions/20974438/get-list-of-open-files-descriptors-in-os-x
+
+
+CANONICAL
+https://www.gnu.org/software/libc/manual/html_node/Canonical-or-Not.html
+
+https://stackoverflow.com/questions/57916475/linux-stdin-buffering
+
+
+
+$?-The exit status of the last command executed.
+
+$0-The filename of the current script.
+
+$#-The number of arguments supplied to a script.
+
+$$-The process number of the current shell. For shell scripts, this is the process ID under which they are executing.
