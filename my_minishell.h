@@ -11,6 +11,24 @@
 # include <term.h>
 # include <termios.h>
 
+typedef struct s_flag
+{
+	int		tot_com;
+	int		comma;
+	int		pipe;
+	int		infile;
+	int		outfile;
+	int		append;
+	int		dollar;
+}	t_flag;
+
+typedef struct s_char
+{
+	char			buf;
+	struct s_char	*prev;
+	struct s_char	*next;
+}	t_char;
+
 typedef struct s_read
 {
 	char			*line;
@@ -20,11 +38,15 @@ typedef struct s_read
 
 typedef struct	s_data
 {
+	struct termios old_term;
 	struct termios my_term;
+	t_char	**line_head;
 	t_read	**cmd_head;
 	t_read	**env_head;
+	t_flag	flags;
 	char	**envp;
 	int		env_len;
+	int		line_len;
 }	t_data;
 
 /*		minishell.c		*/			
@@ -43,10 +65,13 @@ int		ft_strchr(char c, char *s1);
 int		ft_strlen(char *str);
 void	ft_write(char *str);
 
-/*		ft_read_ops.c	*/
+/*		ft_buf_to_list.c	*/
 int		ft_buf_to_node(int len, int x, char *buf, t_read *new);
 void	ft_append_read(t_read *new, t_read **head);
 void	ft_buf_to_list(char *buf, t_data *data);
+
+/*		ft_read_ops.c	*/
+void	ft_read_special(t_data *data);
 void	ft_read_ops(t_data *data);
 
 /*		ft_exec_cmd.c	*/
@@ -73,5 +98,8 @@ void	ft_init_pos(t_read **head);
 int		ft_check_double(t_read **head);
 void	ft_get_pos(t_read **head, t_data *data);
 void	ft_print_sort(t_read **head, t_data *data);
+
+/*		ft_init_term.c	*/
+void	ft_init_term(t_data *data);
 
 #endif

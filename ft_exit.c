@@ -32,8 +32,9 @@ void	ft_exit(char *str, t_data *data)
 	free(data->cmd_head);
 	if (*data->env_head)
 		ft_free_env_read(data->env_head);
-	printf("xxxxxxxxxxx\n");
 	free(data->env_head);
+	tcsetattr(0, 0, &data->old_term);
+	printf("xxxxxxxxxxx\n");
 	printf("waiting_leaks\n");
 	read(0, &str, 1);
 	exit(0);
