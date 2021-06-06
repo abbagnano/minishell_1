@@ -3,33 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   ft_is_execve.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 11:22:46 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/06 17:26:37 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/06 18:20:28 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "my_minishell.h"
 #include "my_minishell2.h"
 
-int	ft_free_matrix(char ***matrix)
+int ft_do_execve(t_data *data)
 {
-	int	i;
-
-	i = -1;
-	if (!(*matrix))
-		return (0);
-	while ((*matrix)[++i])
+	int pid;
+	int status;
+	
+	pid = fork();
+	if (pid == 0)
 	{
-		free((*matrix)[i]);
-		(*matrix)[i] = NULL;
+		execve(data->com_matrix[0], data->com_matrix, data->envp);
 	}
-	free(*matrix);
-	*matrix = NULL;
+	else
+	{
+		wait(&status);
+		if (WIFEXITED(status)  && !WEXITSTATUS(status))
+			return (1);			//SUCCESS
+		else 
+			return (0);			//NOT SUCCESS
+	}
+		
 	return (0);
 }
-
 
 int	ft_path(char **path_matrix, t_data *data)
 {
@@ -48,7 +52,8 @@ int	ft_path(char **path_matrix, t_data *data)
 		fd = open(path, O_RDONLY);
 		if (fd > 0)
 		{
-			data->path = path;
+			free(data->com_matrix[0]);
+			data->com_matrix[0] = ft_strdup(path);
 			close(fd);
 			return (1);
 		}

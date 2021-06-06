@@ -81,7 +81,7 @@ void	ft_check_cmd(char *line, t_data *data)
 	else if (!ft_strncmp(line, "exit ", 5) || ft_strncmp(line, "exit ", 5) == -32)
 		ft_exit("exit\n", data);
 	else if (ft_check_if_is_execve(line,data))
-		execve(data->path, data->com_matrix, data->envp);      ///////FORK???
+		ft_do_execve(data);			//HA IL RETURN 1=SUCCESS, 0=NOT SUCCESS
 	else
 		ft_write("minishell: command not found\n");
 }

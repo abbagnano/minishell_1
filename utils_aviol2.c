@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_aviol2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 16:44:47 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/06 17:15:34 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/06 18:18:42 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,43 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		ptr[lens1 + i] = s2[i];
 	ptr[lens1 + i] = '\0';
 	return (ptr);
+}
+
+char	*ft_strdup(const char *str)
+{
+	size_t	len;
+	size_t	i;
+	char	*ptr;
+
+	if (!str)
+		return (NULL);
+	i = 0;
+	len = ft_strlen((char *)str);
+	ptr = (char *)malloc(sizeof(char) * (len + 1));
+	if (!ptr)
+		return (NULL);
+	while (i < len)
+	{
+		ptr[i] = str[i];
+		i++;
+	}
+	ptr[i] = '\0';
+	return (ptr);
+}
+
+int	ft_free_matrix(char ***matrix)
+{
+	int	i;
+
+	i = -1;
+	if (!(*matrix))
+		return (0);
+	while ((*matrix)[++i])
+	{
+		free((*matrix)[i]);
+		(*matrix)[i] = NULL;
+	}
+	free(*matrix);
+	*matrix = NULL;
+	return (0);
 }
