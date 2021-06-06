@@ -3,10 +3,14 @@
 void	ft_cd(char *line, t_data *data)
 {
 	int	ret;
+	int	x;
 
 	if (ft_strncmp(line, "cd ", 3) == -32)		//se il comando è solo "cd" senza path allora non fa niente
 		return ;
-	ret = chdir(line);
+	x = 0;
+	while (line[x] == ' ')
+		x++;
+	ret = chdir(line + x);
 	if (ret == -1)
 	{
 		ft_write(strerror(errno));
@@ -62,7 +66,7 @@ void	ft_check_cmd(char *line, t_data *data)
 	if (!ft_strncmp(line, "echo ", 5) || ft_strncmp(line, "echo ", 5) == -32)
 		ft_echo(line + 4, data);
 	else if (!ft_strncmp(line, "cd ", 3) || ft_strncmp(line, "cd ", 3) == -32)
-		ft_cd(line + 2, data);
+		ft_cd(line + 3, data);
 	else if (!ft_strncmp(line, "pwd ", 4) || ft_strncmp(line, "pwd ", 4) == -32)
 		ft_pwd(line + 3, data);
 	else if (!ft_strncmp(line, "", 1))

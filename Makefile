@@ -12,7 +12,7 @@ OBJS	=	minishell.o \
 all		:	$(NAME)
 
 $(NAME)	:	$(OBJS)
-	gcc $(CFLAGS) $^ -o $@
+	gcc $(CFLAGS) -lncurses $^ -o $@
 
 %.o		:	%.c
 	gcc -c $(CFLAGS) $^ 
