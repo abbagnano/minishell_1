@@ -20,6 +20,7 @@ typedef struct s_read
 
 typedef struct	s_data
 {
+	struct termios my_term;
 	t_read	**cmd_head;
 	t_read	**env_head;
 	char	**envp;
