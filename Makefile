@@ -7,7 +7,9 @@ OBJS	=	minishell.o \
 			utils_basic.o \
 			ft_get_env.o \
 			ft_print_sort.o	\
-			utils_get_env.o	
+			utils_get_env.o	\
+			ft_is_execve.o \
+			ft_split.o
 
 all		:	$(NAME)
 

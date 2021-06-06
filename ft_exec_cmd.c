@@ -1,4 +1,5 @@
 #include "my_minishell.h"
+#include "my_minishell2.h"
 
 void	ft_cd(char *line, t_data *data)
 {
@@ -79,6 +80,10 @@ void	ft_check_cmd(char *line, t_data *data)
 		ft_unset(line + 5, data);
 	else if (!ft_strncmp(line, "exit ", 5) || ft_strncmp(line, "exit ", 5) == -32)
 		ft_exit("exit\n", data);
+	else if (ft_check_if_is_execve(line,data))
+	{
+		printf("is_execve!\n");
+	}
 	else
 		ft_write("minishell: command not found\n");
 }
