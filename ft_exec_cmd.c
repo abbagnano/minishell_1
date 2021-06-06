@@ -81,9 +81,7 @@ void	ft_check_cmd(char *line, t_data *data)
 	else if (!ft_strncmp(line, "exit ", 5) || ft_strncmp(line, "exit ", 5) == -32)
 		ft_exit("exit\n", data);
 	else if (ft_check_if_is_execve(line,data))
-	{
-		printf("is_execve!\n");
-	}
+		execve(data->path, data->com_matrix, data->envp);      ///////FORK???
 	else
 		ft_write("minishell: command not found\n");
 }
@@ -91,11 +89,9 @@ void	ft_check_cmd(char *line, t_data *data)
 void	ft_exec_cmd(t_data *data)
 {
 	t_read	*tmp;
-	//int		len;
 
 	while (*data->cmd_head)
 	{
-		//len = ft_strchr('\n', line);
 		ft_check_cmd((*data->cmd_head)->line, data);
 		tmp = (*data->cmd_head);
 		*data->cmd_head = (*data->cmd_head)->next;

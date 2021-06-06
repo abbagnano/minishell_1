@@ -29,8 +29,8 @@ int main()
 	// printf("output flags==c_oflag : %lu\n", my_term.c_oflag);
 	// printf("control flags==c_cflag : %lu\n", my_term.c_cflag);
 	// printf("local flags==c_lflag : %lu\n", my_term.c_lflag);
-	printf("control chars==c_cc[NCCS] : %hhu\n", my_term.c_cc[VMIN]);
-	printf("control chars==c_cc[NCCS] : %hhu\n", my_term.c_cc[VTIME]);	
+	printf("control chars==c_cc[NCCS] : %hhu\n", my_term.c_cc[VEOL]);
+	printf("control chars==c_cc[NCCS] : %hhu\n", my_term.c_cc[VEOF]);	
 	// printf("input speed==c_ispeed : %lu\n", my_term.c_ispeed);
 	// printf("output speed==c_ospeed: %lu\n", my_term.c_ospeed);
 
@@ -47,19 +47,19 @@ int main()
 
 
 	// termios-p->c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
-	cfmakeraw(&my_term);
+	// cfmakeraw(&my_term);
 
 
 
 
-	tcgetattr(0, &my_term);
-	// printf("input flags==c_iflag : %lu\n", my_term.c_iflag);
-	// printf("output flags==c_oflag : %lu\n", my_term.c_oflag);
-	// printf("control flags==c_cflag : %lu\n", my_term.c_cflag);
-	// printf("local flags==c_lflag : %lu\n", my_term.c_lflag);
-	printf("control chars==c_cc[NCCS] : %hhu\n", my_term.c_cc[VMIN]);
-	printf("control chars==c_cc[NCCS] : %hhu\n", my_term.c_cc[VTIME]);	
-	// printf("input speed==c_ispeed : %lu\n", my_term.c_ispeed);
+	// tcgetattr(0, &my_term);
+	// // printf("input flags==c_iflag : %lu\n", my_term.c_iflag);
+	// // printf("output flags==c_oflag : %lu\n", my_term.c_oflag);
+	// // printf("control flags==c_cflag : %lu\n", my_term.c_cflag);
+	// // printf("local flags==c_lflag : %lu\n", my_term.c_lflag);
+	// printf("control chars==c_cc[NCCS] : %hhu\n", my_term.c_cc[VMIN]);
+	// printf("control chars==c_cc[NCCS] : %hhu\n", my_term.c_cc[VTIME]);	
+	// // printf("input speed==c_ispeed : %lu\n", my_term.c_ispeed);
 	// printf("output speed==c_ospeed: %lu\n", my_term.c_ospeed);
 
 

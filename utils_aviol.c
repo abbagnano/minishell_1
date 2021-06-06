@@ -1,38 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
+/*   utils_aviol.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 12:20:25 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/06 11:46:50 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/06 17:15:14 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "my_minishell2.h"
-
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	char	*ptr;
-	size_t	i;
-
-	i = 0;
-	if (!(s))
-		return (NULL);
-	if (!(ptr = (char *)malloc(sizeof(char) * (len + 1))))
-		return (NULL);
-	if (((int)start < ft_strlen((char *)s)))
-	{
-		while (i < len)
-		{
-			*(ptr + i) = *(s + start + i);
-			i++;
-		}
-		*(ptr + i) = '\0';
-	}
-	return (ptr);
-}
 
 size_t	ft_cntwrds(char const *s, char c)
 {
