@@ -27,8 +27,8 @@ int	main(int ac, char **av, char **env)
 {
 	t_data	data;
 
-	data.line_head = (t_char **)malloc(sizeof(t_char *) * 1);
-	*data.line_head = NULL;
+//	data.line_head = (t_char **)malloc(sizeof(t_char *) * 1);
+//	*data.line_head = NULL;
 	data.cmd_head = (t_read **)malloc(sizeof(t_read *) * 1);
 	*data.cmd_head = NULL;
 	data.env_head = (t_read **)malloc(sizeof(t_read *) * 1);
@@ -40,5 +40,5 @@ int	main(int ac, char **av, char **env)
 	if (ac == 1)
 		ft_no_arg(&data);
 	(void)av;
-	// ft_exit("", &data);
+	ft_exit("", &data);
 }

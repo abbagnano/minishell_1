@@ -9,12 +9,14 @@ OBJS	=	minishell.o \
 			ft_print_sort.o	\
 			utils_get_env.o	\
 			ft_init_term.o \
-			ft_buf_to_list.o
+			ft_buf_to_list.o \
+			ft_arrow.o
 
 all		:	$(NAME)
 
 $(NAME)	:	$(OBJS)
-	gcc $(CFLAGS) -lncurses $^ -o $@
+	gcc $(CFLAGS)  $^ -o $@
+	#gcc $(CFLAGS) -lncurses $^ -o $@
 
 %.o		:	%.c
 	gcc -c $(CFLAGS) $^ 

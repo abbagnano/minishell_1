@@ -7,8 +7,8 @@
 # include <dirent.h>
 # include <errno.h>
 # include <string.h>
-# include <curses.h>
-# include <term.h>
+//# include <curses.h>
+//# include <term.h>
 # include <termios.h>
 
 typedef struct s_flag
@@ -40,7 +40,8 @@ typedef struct	s_data
 {
 	struct termios old_term;
 	struct termios my_term;
-	t_char	**line_head;
+	//t_char	**line_head;
+//	t_read	**history;
 	t_read	**cmd_head;
 	t_read	**env_head;
 	t_flag	flags;
@@ -71,8 +72,17 @@ void	ft_append_read(t_read *new, t_read **head);
 void	ft_buf_to_list(char *buf, t_data *data);
 
 /*		ft_read_ops.c	*/
-void	ft_read_special(t_data *data);
+void    ft_linod_to_line(char **line, int len, t_char **line_head);
+void    ft_buffering(char buf, int *len, t_char **line_head);
+int		ft_read_special(t_data *data);
+int     ft_reading(t_char **line_head, int *len, t_data *data);
 void	ft_read_ops(t_data *data);
+
+/*              ft_read_ops_old.c   */
+//void    ft_linod_to_line(char **line, t_data *data);
+//void    ft_buffering(char buf, t_data *data);
+//void    ft_read_special(t_data *data);
+//void    ft_read_ops(t_data *data);
 
 /*		ft_exec_cmd.c	*/
 void	ft_cd(char *line, t_data *data);
@@ -101,5 +111,8 @@ void	ft_print_sort(t_read **head, t_data *data);
 
 /*		ft_init_term.c	*/
 void	ft_init_term(t_data *data);
+
+/*	ft_arrow.c	*/
+void	ft_arrow_up(void);
 
 #endif

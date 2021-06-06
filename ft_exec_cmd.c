@@ -25,7 +25,8 @@ void	ft_pwd(char *line, t_data *data)
 	char	*path;
 
 	path = NULL;
-	path = getcwd(path, 1);
+	//path = getcwd(path, 1);    // Mac_os ok
+	path = getcwd(NULL, 0);
 	ft_write(path);
 	ft_write("\n");
 	free(path);
@@ -58,9 +59,9 @@ void	ft_echo(char *line, t_data *data)
 void	ft_check_cmd(char *line, t_data *data)
 {
 	//printf("line: -%s-\t-%d-\n", line, (int)line);		//		LE NODE->LINE SONO GIA' PULITE DEGLI SPAZI DAVANTI
-	int	len;
+//	int	len;
 
-	len = ft_strlen(line);
+//	len = ft_strlen(line);
 	//if (len == 4 && !ft_strncmp(line, "echo", 4))
 //	printf("strncmp: %d\n", ft_strncmp(line, "echo ", 5));
 	if (!ft_strncmp(line, "echo ", 5) || ft_strncmp(line, "echo ", 5) == -32)

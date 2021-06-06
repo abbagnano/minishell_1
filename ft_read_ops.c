@@ -24,14 +24,14 @@
 // 	}
 // }
 
-void	ft_linod_to_line(char **line, t_data *data)
+void	ft_linod_to_line(char **line, int len, t_char **line_head)
 {
 	t_char	*tmp;
 	int		x;
 
 	x = 0;
-	*line = (char *)malloc(sizeof(char) * (data->line_len + 1));
-	tmp =  *data->line_head;
+	*line = (char *)malloc(sizeof(char) * (len + 1));
+	tmp =  *line_head;
 	while (tmp)
 	{
 		(*line)[x++] = tmp->buf;
@@ -39,15 +39,15 @@ void	ft_linod_to_line(char **line, t_data *data)
 		tmp = tmp->next;
 	}
 	(*line)[x] = '\0';
-	while (*data->line_head)
+	while (*line_head)
 	{
-		tmp = *data->line_head;
-		*data->line_head = (*data->line_head)->next;
+		tmp = *line_head;
+		*line_head = (*line_head)->next;
 		free(tmp);
 	}
 }
 
-void	ft_buffering(char buf, t_data *data)
+void	ft_buffering(char buf, int *len, t_char **line_head)
 {
 	t_char	*new;
 	t_char	*tmp;
@@ -56,20 +56,20 @@ void	ft_buffering(char buf, t_data *data)
 	new->buf = buf;
 	new->next = NULL;
 	tmp = NULL;
-	if (*data->line_head == NULL)
+	if (*line_head == NULL)
 	{
 		new->prev = NULL;
-		*data->line_head = new; 
+		*line_head = new; 
 	}
 	else
 	{
-		tmp = *data->line_head;
+		tmp = *line_head;
 		while (tmp->next)
 			tmp = tmp->next;
 		new->prev = tmp;
 		tmp->next = new;
 	}
-	data->line_len++;
+	*len++;
 	// ft_append_char(new, data);
 	// tmp = *data->line_head;
 	// while (tmp)
@@ -80,7 +80,8 @@ void	ft_buffering(char buf, t_data *data)
 
 }
 
-void	ft_read_special(t_data *data)
+//void	ft_read_special(t_data *data)
+int	ft_read_special(t_data *data)
 {
 	char buf;
 
@@ -98,47 +99,58 @@ void	ft_read_special(t_data *data)
 			printf("arrowww_left\n");
 	}
 	(void)data;
+	return (1);
 }
 
 
-void	ft_read_ops(t_data *data)
-{
-	char	*line;
+int	ft_reading(t_char **line_head, int *len, t_data *data)
+{	
 	char	buf;
-	int		r;
 
-	r = 1;
 	buf = ' ';
-	while (buf != '\0' && r > 0)
+	*len = 0;
+	while (buf != '\n')
 	{
-		while (buf != '\n')
+		read(0, &buf, 1);
+		//	printf("%d\t%c\n", buf, buf);
+		if (buf == 27 && ft_read_special(data))
+			continue ;
+		else if (buf == 4)
 		{
-			r = read(0, &buf, 1);
-			//	printf("%d\t%c\n", buf, buf);
-			if (buf == 27)
-			{
-				ft_read_special(data);
-				continue ;
-			}
-			else if (buf == 4)
-			{
-				buf = '\0';
-				if(*data->line_head == NULL)
-					return ;
-			}
-			// else
-		
-				write(1, &buf, 1);
-				//if (buf != '\'' && buf != '\"')
-					ft_buffering(buf, data);
-			// }
+			buf = '\0';
+			if(*line_head == NULL)
+				return (0);
 		}
-		buf = ' ';
-		ft_linod_to_line(&line, data);
-		printf("\n\nline: %s\n\n", line);
-		ft_buf_to_list(line, data);
-		ft_exec_cmd(data);
-		free(line);
-		ft_write("\033[0;32mminishell% \033[0m");
+		write(1, &buf, 1);
+		ft_buffering(buf, len, line_head);
 	}
+	return (1);
 }
+
+void    ft_read_ops(t_data *data)
+{       
+        t_char	*line_head;
+	t_read	*cmd;
+	int		len;
+
+	len = 0;
+        *data->cmd_head = (t_read *)malloc(sizeof(t_read) * 1);
+	(*data->cmd_head)->line = NULL;
+	(*data->cmd_head)->next = NULL;
+	line_head = (t_char *)malloc(sizeof(t_char) * 1);
+        while (ft_reading(&line_head, &len, data))
+        {
+		cmd = NULL;
+                ft_linod_to_line(&(*data->cmd_head)->line, len, &line_head);
+                printf("\n\nline: %s\n\n", (*data->cmd_head)->line);
+                cmd = *data->cmd_head;
+		*data->cmd_head = (*data->cmd_head)->next;
+        	*data->cmd_head = (t_read *)malloc(sizeof(t_read) * 1);
+		(*data->cmd_head)->line = NULL;
+		(*data->cmd_head)->next = NULL;
+		len = 0;
+	//	ft_exec_cmd(&cmd, data);
+                ft_write("\033[0;32mminishell% \033[0m");
+        }
+}
+
