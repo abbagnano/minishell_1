@@ -86,7 +86,6 @@ void	ft_check_cmd(char *line, t_data *data)
 void	ft_exec_cmd(t_data *data)
 {
 	t_read	*tmp;
-	//int		len;
 
 	while (*data->cmd_head)
 	{
