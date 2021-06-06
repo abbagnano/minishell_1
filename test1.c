@@ -115,11 +115,52 @@ void init_terminal_data ()
 int main(void)
 {
     // clear_screen();
-	init_terminal_data();
-	interrogate_terminal();
+	// init_terminal_data();
+	// interrogate_terminal();
+	// char  bufff[1024][1024];
+	// char *bufff = (char *)malloc( 1024);
+	char *bufff;
+	char *ret;
+	char buf[1];
+	int num;
+
     printf("Hello World!\n");
+	tgetent (term_buffer, 	getenv ("TERM"));
+
+	printf("ret");
+
+	tputs("cl", 1, putchar);
 
 
 
-    return (0);
+	printf("\n");
+	//  read(0, buf, 1);
+
+	// 	int num = tgetflag("am");
+	// printf("%d\n", num);
+
+	// tgoto("auto_right_margin",10,10);
+	//  num = tgetflag("am");
+	// printf("%d\n", num);
+
+	ret = tgetstr("@4",	&bufff);
+	 printf("ret:%s\n", ret);
+	
+	tputs("le", 0, putchar);
+	
+	// num = ioctl(0,TIOCSTI,'s');
+	// 	num = ioctl(0,TIOCSTI,'s');
+	// 	num = ioctl(0,TIOCSTI,'s');
+	// 	num = ioctl(0,TIOCSTI,'s');
+
+	printf("ioctl: %d\n",ioctl(1,TIOCSTI,"sii") );
+	printf("ioctl: %d\n",ioctl(1,TIOCSTI,"s") );
+	
+	// num = tgetnum("co");
+	// printf("%d\n", num);
+
+	// num = tgetnum("co");
+	// printf("%d\n", num);
+
+	return (0);
 }
