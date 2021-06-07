@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 17:44:47 by arrigo            #+#    #+#             */
-/*   Updated: 2021/06/07 19:59:07 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/06/07 20:03:14 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,10 @@ int		ft_redir(char *line, t_data *data)
 	i = ft_strchr('>', line);
 	if (i != -1)
 	{
+		i = 0;
 		while (split[i][0] != '>')
 			i++;
+		// printf(" i:%d\n", i);
 		if (i > 0 && split[i][0] == '>' && split[i + 1])
 		{
 			if (split[i][1] == '\0')
@@ -53,7 +55,6 @@ int		ft_redir(char *line, t_data *data)
 			{
 				outfile = open(split[i + 1], O_RDWR | O_CREAT | O_APPEND, 0666);
 			}
-		// printf(" i:%d\n", i);
 			dup2(outfile, 1);
 			close(outfile);
 		}
