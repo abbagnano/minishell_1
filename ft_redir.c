@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 17:44:47 by arrigo            #+#    #+#             */
-/*   Updated: 2021/06/07 19:28:21 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/06/07 19:59:07 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,30 @@ int		ft_redir(char *line, t_data *data)
 	}
 	
 	i = ft_strchr('>', line);
-	i = 0;
-		// printf(" i:%d\n", i);
-	while (split[i] && split[i][0] != '>')
-		i++;
-	if (i > 0 && split[i][0] == '>' && split[i + 1])
+	if (i != -1)
 	{
-		if (split[i][1] == '\0')
+		while (split[i][0] != '>')
+			i++;
+		if (i > 0 && split[i][0] == '>' && split[i + 1])
 		{
-			outfile = open(split[i + 1], O_RDWR | O_CREAT | O_TRUNC, 0666);
+			if (split[i][1] == '\0')
+			{
+				outfile = open(split[i + 1], O_RDWR | O_CREAT | O_TRUNC, 0666);
+			}
+			else if (split[i][1] == '>' && split[i][2] == '\0')
+			{
+				outfile = open(split[i + 1], O_RDWR | O_CREAT | O_APPEND, 0666);
+			}
+		// printf(" i:%d\n", i);
+			dup2(outfile, 1);
+			close(outfile);
 		}
-		else if (split[i][1] == '>' && split[i][2] == '\0')
-		{
-			outfile = open(split[i + 1], O_RDWR | O_CREAT | O_APPEND, 0666);
-		}
-		dup2(outfile, 1);
-		close(outfile);
+	}
+	else
+	{	
+		i = 0;
+		while (split[i])
+			i++;
 	}
 	
 	free(line);
