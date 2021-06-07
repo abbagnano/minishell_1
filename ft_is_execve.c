@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 11:22:46 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/07 11:40:10 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/06/07 12:24:58 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,15 @@ int ft_do_execve(t_data *data)
 	pid = fork();
 	if (pid == 0)
 	{
-		execve(data->com_matrix[0], data->com_matrix, data->envp);
+		execve(data->args[0], data->args, data->envp);
 	}
 	else
 	{
-		wait(&status);
+		waitpid(pid, &status, 0);
 		if (WIFEXITED(status)  && !WEXITSTATUS(status))
-			return (1);			//SUCCESS
+			return (0);			//SUCCESS
 		else 
-			return (0);			//NOT SUCCESS
+			return (1);			//NOT SUCCESS
 	}
 	return (0);
 }
@@ -44,12 +44,12 @@ int ft_is_a_loc_com(t_data *data)
 	save = path;
 	path = ft_strjoin(path, "/");
 	free(save);	
-	path = ft_strjoin(path, data->com_matrix[0]);
+	path = ft_strjoin(path, data->args[0]);
 	fd = open(path, O_RDONLY);
 	if (fd > 0)
 	{
-		free(data->com_matrix[0]);
-		data->com_matrix[0] = ft_strdup(path);
+		free(data->args[0]);
+		data->args[0] = ft_strdup(path);
 		free(path);
 		close(fd);
 		return (1);
@@ -74,13 +74,13 @@ int	ft_is_a_sys_com(t_data *data)
 	{	
 		path = ft_strjoin(path_matrix[i], "/");
 		save = path;
-		path = ft_strjoin(path, data->com_matrix[0]);
+		path = ft_strjoin(path, data->args[0]);
 		free(save);
 		fd = open(path, O_RDONLY);
 		if (fd > 0)
 		{
-			free(data->com_matrix[0]);
-			data->com_matrix[0] = ft_strdup(path);
+			free(data->args[0]);
+			data->args[0] = ft_strdup(path);
 			free(path);
 			ft_free_matrix(&path_matrix);
 			close(fd);
@@ -99,10 +99,10 @@ int ft_check_if_is_execve(char *line, t_data *data)
 	int fd;
 	
 	r = 0;
-	data->com_matrix = ft_split(line, ' ');
-	if (ft_strchr('/', data->com_matrix[0]) == 0)   //TESTARE
+	data->args = ft_split(line, ' ');
+	if (ft_strchr('/', data->args[0]) == 0)   //TESTARE
 	{
-		fd = open(data->com_matrix[0], O_RDONLY);
+		fd = open(data->args[0], O_RDONLY);
 		if (fd > 0)
 		{
 			close(fd);
@@ -111,7 +111,7 @@ int ft_check_if_is_execve(char *line, t_data *data)
 		else
 			r = 0;
 	}	
-	else if (ft_strchr('.', data->com_matrix[0]) == 0)
+	else if (ft_strchr('.', data->args[0]) == 0)
 	{
 		if (ft_is_a_loc_com(data))
 			r = 1;
@@ -120,6 +120,6 @@ int ft_check_if_is_execve(char *line, t_data *data)
 	else if (ft_is_a_sys_com(data))
 		r = 1;
 	if (r == 0)
-		ft_free_matrix(&data->com_matrix);
+		ft_free_matrix(&data->args);
 	return (r);
 }
