@@ -1,5 +1,6 @@
 NAME	=	minishell
 CFLAGS	=	-Wall -Wextra #-Werror
+FSAN	=	-g3 -fsanitize=address
 OBJS	=	minishell.o \
 			ft_exec_cmd.o \
 			ft_read_ops.o \
@@ -17,6 +18,8 @@ all		:	$(NAME)
 $(NAME)	:	$(OBJS)
 	gcc $(CFLAGS)  $^ -o $@
 	#gcc $(CFLAGS) -lncurses $^ -o $@
+fsan	:	$(OBJS)
+	gcc $(CFLAGS) $(FSAN) $^ -o $(NAME)
 
 %.o		:	%.c
 	gcc -c $(CFLAGS) $^ 

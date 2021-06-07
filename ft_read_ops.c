@@ -30,9 +30,10 @@ void	ft_linod_to_line(char **line, int len, t_char **line_head)
 	int		x;
 
 	x = 0;
-	*line = (char *)malloc(sizeof(char) * (len + 1));
+//	*line = (char *)malloc(sizeof(char) * (len + 1));
+	*line = (char *)malloc(sizeof(char) * len);
 	tmp =  *line_head;
-	while (tmp)
+	while (tmp->next)
 	{
 		(*line)[x++] = tmp->buf;
 	//	printf("buf: %c\n", tmp->buf);
@@ -69,7 +70,7 @@ void	ft_buffering(char buf, int *len, t_char **line_head)
 		new->prev = tmp;
 		tmp->next = new;
 	}
-	*len++;
+	(*len)++;
 	// ft_append_char(new, data);
 	// tmp = *data->line_head;
 	// while (tmp)
@@ -127,6 +128,31 @@ int	ft_reading(t_char **line_head, int *len, t_data *data)
 	return (1);
 }
 
+void	ft_print_read(t_read **cmd_head)
+{
+	t_read *tmp;
+	tmp = *cmd_head;
+	printf("ghj\n");
+	while(tmp)
+	{
+		printf("cmd:%s\n", tmp->line);
+		tmp=tmp->next;
+	}
+}
+
+void	ft_print_char(t_char **line_head)
+{
+	t_char *tmp;
+	tmp = *line_head;
+		printf("%c\n", tmp->buf);
+		tmp=tmp->next;
+	while(tmp)
+	{
+		printf("prec: %c\t%c\n", tmp->prev->buf, tmp->buf);
+		tmp=tmp->next;
+	}
+}
+
 void    ft_read_ops(t_data *data)
 {       
         t_char	*line_head;
@@ -134,23 +160,36 @@ void    ft_read_ops(t_data *data)
 	int		len;
 
 	len = 0;
-        *data->cmd_head = (t_read *)malloc(sizeof(t_read) * 1);
-	(*data->cmd_head)->line = NULL;
-	(*data->cmd_head)->next = NULL;
+//      *data->cmd_head = (t_read *)malloc(sizeof(t_read) * 1);
+//	(*data->cmd_head)->line = NULL;
+//	(*data->cmd_head)->next = NULL;
 	line_head = (t_char *)malloc(sizeof(t_char) * 1);
+	line_head = NULL;
+//        cmd = (t_read *)malloc(sizeof(t_read) * 1);
+//	cmd = NULL;
+//	cmd->next = NULL;
         while (ft_reading(&line_head, &len, data))
         {
-		cmd = NULL;
-                ft_linod_to_line(&(*data->cmd_head)->line, len, &line_head);
-                printf("\n\nline: %s\n\n", (*data->cmd_head)->line);
-                cmd = *data->cmd_head;
-		*data->cmd_head = (*data->cmd_head)->next;
-        	*data->cmd_head = (t_read *)malloc(sizeof(t_read) * 1);
-		(*data->cmd_head)->line = NULL;
-		(*data->cmd_head)->next = NULL;
+//        	*data->cmd_head = (t_read *)malloc(sizeof(t_read) * 1);
+//		(*data->cmd_head)->line = NULL;
+//		(*data->cmd_head)->next = NULL;
+        	cmd = (t_read *)malloc(sizeof(t_read) * 1);
+//		(*data->cmd_head)->line = NULL;
+		cmd->next = NULL;
+		ft_print_char(&line_head);
+//              ft_linod_to_line(&(*data->cmd_head)->line, len, &line_head);
+                ft_linod_to_line(&cmd->line, len, &line_head);
+//              printf("\n\nline: %s\n\n", (*data->cmd_head)->line);
+                printf("\n\nline: %s\nlen: %d\n", cmd->line, len);
+//		cmd->line[len - 1] = '\0';
+		ft_append_read(cmd, data->cmd_head);
+//                cmd = *data->cmd_head;
+//		*data->cmd_head = (*data->cmd_head)->next;
+		cmd = cmd->next;
 		len = 0;
 	//	ft_exec_cmd(&cmd, data);
                 ft_write("\033[0;32mminishell% \033[0m");
         }
+	free(cmd);
 }
 

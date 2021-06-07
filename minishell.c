@@ -5,6 +5,7 @@ void	ft_print_cmd(t_read **head)
 	t_read *tmp;
 
 	tmp = *head;
+	printf("printf..\n");
 	while (tmp)
 	{
 		//printf("%s\n", tmp->line);
