@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 11:23:52 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/07 13:22:21 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/06/07 17:44:04 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ int		ft_check_execve(char *line, t_data *data);
 int		ft_do_execve(t_data *data);
 /*ft_pipe.c*/
 int		ft_pipe(char *line, t_data *data);
+/*ft_redir.c*/
+int		ft_redir(char *line, t_data *data);
 /*ft_utils_aviol*/
 char	**ft_split(char const *s, char c);
 /*ft_utils_aviol2*/

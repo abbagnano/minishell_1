@@ -67,6 +67,8 @@ void	ft_check_cmd(char *line, t_data *data)
 //	printf("strncmp: %d\n", ft_strncmp(line, "echo ", 5));
 	if (ft_strchr('|', line) != -1)
 		ft_pipe(line, data);
+	else if(ft_strchr('>', line) != -1 || ft_strchr('<', line) != -1)
+		ft_redir(line,data);
 	else if (!ft_strncmp(line, "echo ", 5) || ft_strncmp(line, "echo ", 5) == -32)
 		ft_echo(line + 4, data);
 	else if (!ft_strncmp(line, "cd ", 3) || ft_strncmp(line, "cd ", 3) == -32)
