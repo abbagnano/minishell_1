@@ -65,7 +65,9 @@ void	ft_check_cmd(char *line, t_data *data)
 //	len = ft_strlen(line);
 	//if (len == 4 && !ft_strncmp(line, "echo", 4))
 //	printf("strncmp: %d\n", ft_strncmp(line, "echo ", 5));
-	if (!ft_strncmp(line, "echo ", 5) || ft_strncmp(line, "echo ", 5) == -32)
+	if (ft_strchr('|', line) != -1)
+		ft_pipe(line, data);
+	else if (!ft_strncmp(line, "echo ", 5) || ft_strncmp(line, "echo ", 5) == -32)
 		ft_echo(line + 4, data);
 	else if (!ft_strncmp(line, "cd ", 3) || ft_strncmp(line, "cd ", 3) == -32)
 		ft_cd(line + 3, data);
@@ -81,7 +83,7 @@ void	ft_check_cmd(char *line, t_data *data)
 		ft_unset(line + 5, data);
 	else if (!ft_strncmp(line, "exit ", 5) || ft_strncmp(line, "exit ", 5) == -32)
 		ft_exit("exit\n", data);
-	else if (ft_check_if_is_execve(line,data))
+	else if (ft_check_execve(line,data))
 		ft_do_execve(data);			//IMPORTANTE SE C'E' IL PUNTO e VIRGOLA 
 									//HA IL RETURN 0=SUCCESS, 1=NOT SUCCESS
 	else

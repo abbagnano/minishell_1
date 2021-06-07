@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_is_execve.c                                     :+:      :+:    :+:   */
+/*   ft_execve.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 11:22:46 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/07 12:24:58 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/06/07 13:23:06 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	ft_is_a_sys_com(t_data *data)
 	return (0);
 }
 
-int ft_check_if_is_execve(char *line, t_data *data)
+int ft_check_execve(char *line, t_data *data)
 {
 
 	int r;

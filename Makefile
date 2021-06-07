@@ -8,7 +8,8 @@ OBJS	=	minishell.o \
 			ft_get_env.o \
 			ft_print_sort.o	\
 			utils_get_env.o	\
-			ft_is_execve.o \
+			ft_execve.o \
+			ft_pipe.c \
 			utils_aviol.o \
 			utils_aviol2.o
 
