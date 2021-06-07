@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 11:22:46 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/06 18:20:28 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/06/07 10:19:01 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,43 @@ int ft_do_execve(t_data *data)
 		else 
 			return (0);			//NOT SUCCESS
 	}
-		
 	return (0);
 }
 
-int	ft_path(char **path_matrix, t_data *data)
+int ft_is_a_loc_com(t_data *data)
+{
+	char	*path;
+	char	*save;
+	int		fd;
+
+	path = getcwd(NULL, 0);
+	save = path;
+	path = ft_strjoin(path, "/");
+	free(save);	
+	path = ft_strjoin(path, data->com_matrix[0]);
+	fd = open(path, O_RDONLY);
+	if (fd > 0)
+	{
+		free(data->com_matrix[0]);
+		data->com_matrix[0] = ft_strdup(path);
+		free(path);
+		close(fd);
+		return (1);
+	}
+	free(path);
+	return (0);
+}
+
+int	ft_is_a_sys_com(t_data *data)
 {
 	char *path;
 	char *save;
 	int fd;
 	int i;
+	char **path_matrix;
+
+	path = getenv("PATH");
+	path_matrix = ft_split(path, ':');
 	
 	i  = -1;
 	while (path_matrix[++i])
@@ -54,29 +81,39 @@ int	ft_path(char **path_matrix, t_data *data)
 		{
 			free(data->com_matrix[0]);
 			data->com_matrix[0] = ft_strdup(path);
+			free(path);
+			ft_free_matrix(&path_matrix);
 			close(fd);
 			return (1);
 		}
 		free(path);
 	}
+	ft_free_matrix(&path_matrix);
 	return (0);
 }
 
 int ft_check_if_is_execve(char *line, t_data *data)
 {
-	char *path;
-	char **path_matrix;
-	int i;
+
 	int r;
+	int fd;
 	
 	r = 0;
-	i = -1;
-	path = getenv("PATH");
-	path_matrix = ft_split(path, ':');
-	//	free(path);////////////////////////////////////free del ritorno di getenv?
 	data->com_matrix = ft_split(line, ' ');
-	r = ft_path(path_matrix, data);
-	ft_free_matrix(&path_matrix);
+	fd = open(data->com_matrix[0], O_RDONLY);
+	if (fd > 0)
+	{
+		close(fd);
+		r = 1;
+	}	
+	else if (ft_strchr('.', data->com_matrix[0]) == 0)
+	{
+		if (ft_is_a_loc_com(data))
+			r = 1;
+		//ESEGUIRE IL LOCAL COMMAND COME ARGV[1] DI ./minishell     ?????
+	}
+	else if (ft_is_a_sys_com(data))
+		r = 1;
 	if (r == 0)
 		ft_free_matrix(&data->com_matrix);
 	return (r);

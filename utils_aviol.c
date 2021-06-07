@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_aviol.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 12:20:25 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/06 17:15:14 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/07 08:59:03 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,9 @@ char	**ft_fill(char **ptr, char const *s, char c)
 
 char	**ft_split(char const *s, char c)
 {
-	size_t	i;
 	char	**ptr;
-	size_t	z;
 	size_t	count;
 
-	i = 0;
-	z = 0;
 	if (!(s))
 		return (NULL);
 	count = ft_cntwrds(s, c);

@@ -6,18 +6,15 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 11:23:52 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/06 18:16:37 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/06/07 09:00:03 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MY_MINISHELL2_H
 # define MY_MINISHELL2_H
 
-#ifndef MY_MINISHELL
-# define MY_MINISHELL
-# include "my_minishell.h"
-#endif
 
+#include "my_minishell.h"
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/wait.h>
