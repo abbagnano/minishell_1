@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 11:22:46 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/07 10:19:01 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/06/07 11:40:10 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,11 +100,16 @@ int ft_check_if_is_execve(char *line, t_data *data)
 	
 	r = 0;
 	data->com_matrix = ft_split(line, ' ');
-	fd = open(data->com_matrix[0], O_RDONLY);
-	if (fd > 0)
+	if (ft_strchr('/', data->com_matrix[0]) == 0)   //TESTARE
 	{
-		close(fd);
-		r = 1;
+		fd = open(data->com_matrix[0], O_RDONLY);
+		if (fd > 0)
+		{
+			close(fd);
+			r = 1;
+		}	
+		else
+			r = 0;
 	}	
 	else if (ft_strchr('.', data->com_matrix[0]) == 0)
 	{
