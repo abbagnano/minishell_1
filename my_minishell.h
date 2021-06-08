@@ -47,7 +47,7 @@ typedef struct	s_data
 	t_flag	flags;
 	char	**envp;
 	int		env_len;
-	int		line_len;
+	char	**args;
 }	t_data;
 
 /*		minishell.c		*/			

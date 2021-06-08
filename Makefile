@@ -11,7 +11,12 @@ OBJS	=	minishell.o \
 			utils_get_env.o	\
 			ft_init_term.o \
 			ft_buf_to_list.o \
-			ft_arrow.o
+			ft_arrow.o \
+			ft_execve.o \
+			ft_pipe.o \
+			ft_redir.o \
+			utils_aviol.o \
+			utils_aviol2.o
 
 all		:	$(NAME)
 
