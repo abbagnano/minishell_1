@@ -89,7 +89,7 @@ void	ft_cd(char *line, t_data *data);
 void	ft_pwd(char *line, t_data *data);
 void	ft_echo(char *line, t_data *data);
 void	ft_check_cmd(char *line, t_data *data);
-void	ft_exec_cmd(t_data *data);
+void	ft_exec_cmd(char *line, t_data *data);
 
 /*		ft_get_env.c	*/
 void	ft_unset(char *line, t_data *data);

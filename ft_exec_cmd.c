@@ -92,15 +92,9 @@ void	ft_check_cmd(char *line, t_data *data)
 		ft_write("minishell: command not found\n");
 }
 
-void	ft_exec_cmd(t_data *data)
+void	ft_exec_cmd(char *line, t_data *data)
 {
-	t_read	*tmp;
+	// printf("line: %s/n", line);
+	ft_check_cmd(line, data);
 
-	while (*data->cmd_head)
-	{
-		ft_check_cmd((*data->cmd_head)->line, data);
-		tmp = (*data->cmd_head);
-		*data->cmd_head = (*data->cmd_head)->next;
-		free(tmp);
-	}
 }

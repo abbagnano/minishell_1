@@ -35,7 +35,6 @@ int	main(int ac, char **av, char **env)
 	data.env_head = (t_read **)malloc(sizeof(t_read *) * 1);
 	*data.env_head = NULL;
 	data.envp = env;
-	data.line_len = 0;
 	ft_init_term(&data);
 	ft_get_env(env, &data);	
 	if (ac == 1)

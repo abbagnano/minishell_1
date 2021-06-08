@@ -185,9 +185,9 @@ void    ft_read_ops(t_data *data)
 		ft_append_read(cmd, data->cmd_head);
 //                cmd = *data->cmd_head;
 //		*data->cmd_head = (*data->cmd_head)->next;
+		ft_exec_cmd(cmd->line, data);
 		cmd = cmd->next;
 		len = 0;
-	//	ft_exec_cmd(&cmd, data);
                 ft_write("\033[0;32mminishell% \033[0m");
         }
 	free(cmd);
