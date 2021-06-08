@@ -50,13 +50,15 @@ int		ft_redir(char *line, t_data *data)
 			if (split[i][1] == '\0')
 			{
 				outfile = open(split[i + 1], O_RDWR | O_CREAT | O_TRUNC, 0666);
+				dup2(outfile, 1);
+				close(outfile);
 			}
 			else if (split[i][1] == '>' && split[i][2] == '\0')
 			{
 				outfile = open(split[i + 1], O_RDWR | O_CREAT | O_APPEND, 0666);
+				dup2(outfile, 1);
+				close(outfile);
 			}
-			dup2(outfile, 1);
-			close(outfile);
 		}
 	}
 	else

@@ -81,25 +81,70 @@ void	ft_buffering(char buf, int *len, t_char **line_head)
 
 }
 
+int	ft_read_len(t_read **cmd_head)
+{
+	t_read *tmp;
+	int x;
+
+	x = 0;
+	tmp = *cmd_head;
+	while(tmp)
+	{
+		tmp = tmp->next;
+		x++;
+	}
+	return (x);
+}
+
+
 //void	ft_read_special(t_data *data)
-int	ft_read_special(t_data *data)
+int	ft_read_special(t_data *data, int *x)
 {
 	char buf;
+	int max;
+
+	max = ft_read_len(data->cmd_head);
+//	char *bp;
+		
+	//int r = 
+	tgetent(NULL, getenv ("TERM"));
+	//printf("r: %d\n", r);
 
 	read(0, &buf, 1);
 	if (buf == '[')
 	{
 		read(0, &buf, 1);
-		if (buf == 'A')
-			printf("arrowww_up\n");
-		else if (buf == 'B')
-			printf("arrowww_down\n");
+		if (buf == 'A' && *x < max)
+		{
+		//	printf("%s", tgetstr("dl", &bp));
+			ft_arrow_up(data, *x);//printf("arrowww_up\n" );
+			//if (*x < max)
+				(*x)++;
+		}
+		else if (buf == 'B' && *x > 0)
+		{
+			(*x)--;
+			ft_arrow_up(data, *x);
+		//	printf("arrowww_down\n");
+		}
 		else if (buf == 'C')
-			printf("arrowww_right\n");
+			printf("arrowww_right\n");//printf("%s", tgetstr("nd", NULL));
 		else if (buf == 'D')
-			printf("arrowww_left\n");
+		{
+			printf("arrowww_left\n");//printf("%s", tgetstr("kl", NULL));
+		}
 	}
-	(void)data;
+	else if (buf == 127)
+	{
+		printf("delete??\n");
+		// printf("%s", tgetstr("ks", &bp));
+		// printf("%s", tgetstr("kl", NULL));
+	//	ft_write(tgetstr("im", NULL));
+	//	ft_write(tgetstr("le", NULL));
+	//	ft_write(tgetstr("ec", NULL));
+	//	ft_write(tgetstr("dc", NULL));
+	//	ft_write(tgetstr("ed", NULL));
+	}
 	return (1);
 }
 
@@ -107,6 +152,7 @@ int	ft_read_special(t_data *data)
 int	ft_reading(t_char **line_head, int *len, t_data *data)
 {	
 	char	buf;
+	int		x = 0; // per history
 
 	buf = ' ';
 	*len = 0;
@@ -114,7 +160,7 @@ int	ft_reading(t_char **line_head, int *len, t_data *data)
 	{
 		read(0, &buf, 1);
 		//	printf("%d\t%c\n", buf, buf);
-		if (buf == 27 && ft_read_special(data))
+		if ((buf == 27 || buf == 127) && ft_read_special(data, &x))
 			continue ;
 		else if (buf == 4)
 		{
@@ -144,12 +190,27 @@ void	ft_print_char(t_char **line_head)
 {
 	t_char *tmp;
 	tmp = *line_head;
-		printf("%c\n", tmp->buf);
+	//	printf("%c\n", tmp->buf);
 		tmp=tmp->next;
 	while(tmp)
 	{
-		printf("prec: %c\t%c\n", tmp->prev->buf, tmp->buf);
+	//	printf("prec: %c\t%c\n", tmp->prev->buf, tmp->buf);
 		tmp=tmp->next;
+	}
+}
+
+void	ft_add_front_read(t_read *new, t_read **head)
+{
+	t_read	*tmp;
+
+	tmp = *head;
+	if (*head == NULL)
+		*head = new;
+	else
+	{
+		*head = new;
+		new->next = tmp;
+		//tmp->next->next = NULL;
 	}
 }
 
@@ -180,12 +241,14 @@ void    ft_read_ops(t_data *data)
 //              ft_linod_to_line(&(*data->cmd_head)->line, len, &line_head);
                 ft_linod_to_line(&cmd->line, len, &line_head);
 //              printf("\n\nline: %s\n\n", (*data->cmd_head)->line);
-                printf("\n\nline: %s\nlen: %d\n", cmd->line, len);
+                // printf("\n\nline: %s\nlen: %d\n", cmd->line, len);
+				 printf("line: %s\n", cmd->line);
 //		cmd->line[len - 1] = '\0';
-		ft_append_read(cmd, data->cmd_head);
+	//	ft_append_read(cmd, data->cmd_head);
+			ft_add_front_read(cmd, data->cmd_head);
 //                cmd = *data->cmd_head;
 //		*data->cmd_head = (*data->cmd_head)->next;
-		ft_exec_cmd(cmd->line, data);
+//		ft_exec_cmd(cmd->line, data);
 		cmd = cmd->next;
 		len = 0;
                 ft_write("\033[0;32mminishell% \033[0m");
