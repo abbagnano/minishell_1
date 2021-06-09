@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ft_redir.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/09 16:45:01 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/09 17:44:26 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "my_minishell.h"
 #include "my_minishell2.h"
 
-int ft_strchr_last(char *line, char c)
+int ft_strchr_last_single(char *line, char c)
 {
 	int	i;
 	int r;
@@ -22,7 +22,23 @@ int ft_strchr_last(char *line, char c)
 	r = -1;
 	while (line[i])
 	{
-		if (line[i] == c)
+		if (line[i] == c || line[i +1] || line[i + 1] != c)
+			r = i;
+		i++;
+	}
+	return (r);
+}
+
+int ft_strchr_last_double(char *line, char c)
+{
+	int	i;
+	int r;
+	
+	i = 0;
+	r = -1;
+	while (line[i])
+	{
+		if (line[i] == c && line[i + 1] && line[i + 1] == c)
 			r = i;
 		i++;
 	}
@@ -33,13 +49,11 @@ int ft_infile(char *line)
 {
 	int i;
 	int c;
-	int len;
 	char *temp;
 	int r;
 
 	r = 0;
 	c = 0;
-	len = ft_strlen(line);
 	while (line[c] && line[c] == ' ')
 		c++;
 	i = c;
@@ -47,7 +61,7 @@ int ft_infile(char *line)
 		i++;
 	temp = ft_substr(line, c, i - c);
 	r = open(temp, O_RDONLY);
-	printf("temp:%s\n", temp);
+	printf("infile:%s\n", temp);
 	if (r > 0)
 	{
 		printf("ok_fd\n");
@@ -62,13 +76,11 @@ int ft_outfile(char *line)
 {
 	int i;
 	int c;
-	int len;
 	char *temp;
 	int r;
 
 	r = 0;
 	c = 0;
-	len = ft_strlen(line);
 	while (line[c] && line[c] == ' ')
 		c++;
 	i = c;
@@ -76,7 +88,34 @@ int ft_outfile(char *line)
 		i++;
 	temp = ft_substr(line, c, i - c);
 	r = open(temp, O_RDWR | O_CREAT | O_TRUNC, 0666);
-	printf("temp:%s\n", temp);
+	printf("outfile:%s\n", temp);
+	if (r > 0)
+	{
+		printf("ok_fd\n");
+	 	dup2(r, 1);
+	 	close (r);
+	}
+	free(temp);
+	return (r);
+}
+
+int ft_outfile_app(char *line)
+{
+	int i;
+	int c;
+	char *temp;
+	int r;
+
+	r = 0;
+	c = 0;
+	while (line[c] && line[c] == ' ')
+		c++;
+	i = c;
+	while (line[i] && line[i] != ' ' && line[i] != '<' && line[i] != '>')
+		i++;
+	temp = ft_substr(line, c, i - c);
+	r = open(temp, O_RDWR | O_CREAT | O_APPEND, 0666);
+	printf("outfile_app:%s\n", temp);
 	if (r > 0)
 	{
 		printf("ok_fd\n");
@@ -90,11 +129,11 @@ int ft_outfile(char *line)
 int		ft_redir(char *line, t_data *data)
 {
 	int i;
-	int r;
 	int back_stdin;
 	int back_stdout;
 	char **split;
 	char *command;
+	(void)data;
 	
 	split = ft_split(line, ' ');
 	i = 0;
@@ -135,12 +174,13 @@ int		ft_redir(char *line, t_data *data)
 		}
 		i++;
 	}
-	if (command)
+	if (!command)
 	{
+		printf(" no command\n");
 	}
 	back_stdin = dup(0);
 	back_stdout = dup(1);
-	i = ft_strchr_last(line, '<');
+	i = ft_strchr_last_single(line, '<');
 	if (i  != -1)
 	{
 		if (ft_infile(line + i + 1) < 0)
@@ -150,16 +190,24 @@ int		ft_redir(char *line, t_data *data)
 			exit(0);										////////////////////////////SETTARE
 		}
 	}
-	i = ft_strchr_last(line, '>');
+	i = ft_strchr_last_single(line, '>');
 	if (i  != -1)
 	{
-		if (ft_infile(line + i + 1) < 0)
+		if (ft_outfile(line + i + 1) < 0)
 		{	
 			printf("Error fd\n");
 			exit(0);										////////////////////////////SETTARE
 		}
 	}
-
+	i = ft_strchr_last_double(line, '>');
+	if (i  != -1)
+	{
+		if (ft_outfile_app(line + i + 2) < 0)
+		{	
+			printf("Error fd\n");
+			exit(0);										////////////////////////////SETTARE
+		}
+	}
 
 
 	////RETURN TO STANDARD IN/OUT
