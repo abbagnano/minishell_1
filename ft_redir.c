@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/09 17:44:26 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/06/09 20:14:24 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,15 @@ int ft_strchr_last_single(char *line, char c)
 	r = -1;
 	while (line[i])
 	{
-		if (line[i] == c || line[i +1] || line[i + 1] != c)
-			r = i;
+		if (line[i] == c && line[i + 1])
+		{
+			if (line[i + 1] != c)
+				r = i;
+			else if (line[i + 1] == c && c == '>')
+				i += 2;
+			else if (line[i + 1] == c)
+				return (-1);
+		}
 		i++;
 	}
 	return (r);
@@ -39,7 +46,7 @@ int ft_strchr_last_double(char *line, char c)
 	while (line[i])
 	{
 		if (line[i] == c && line[i + 1] && line[i + 1] == c)
-			r = i;
+			r = i + 1;
 		i++;
 	}
 	return (r);
@@ -157,12 +164,12 @@ int		ft_redir(char *line, t_data *data)
 					(split[i - 1][0] == '<' || 
 					split[i - 1][0] == '>'
 					) && 
-					(
+					((
 						split[i - 1][1] && split[i - 1][1] == '>' && split[i - 1][2] 
 					) ||
 					(
 						split[i - 1][1] && split[i - 1][1] != '>'
-					)
+					))
 				)
 				)
 			{	
