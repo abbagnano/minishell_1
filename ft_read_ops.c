@@ -176,11 +176,11 @@ void    ft_read_ops(t_data *data)
         	cmd = (t_read *)malloc(sizeof(t_read) * 1);
 //		(*data->cmd_head)->line = NULL;
 		cmd->next = NULL;
-		ft_print_char(&line_head);
+		// ft_print_char(&line_head);
 //              ft_linod_to_line(&(*data->cmd_head)->line, len, &line_head);
                 ft_linod_to_line(&cmd->line, len, &line_head);
 //              printf("\n\nline: %s\n\n", (*data->cmd_head)->line);
-                printf("\n\nline: %s\nlen: %d\n", cmd->line, len);
+                // printf("\n\nline: %s\nlen: %d\n", cmd->line, len); ////////////////////////////////line
 //		cmd->line[len - 1] = '\0';
 		ft_append_read(cmd, data->cmd_head);
 //                cmd = *data->cmd_head;

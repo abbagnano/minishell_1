@@ -3,105 +3,171 @@
 /*                                                        :::      ::::::::   */
 /*   ft_redir.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/07 17:44:47 by arrigo            #+#    #+#             */
-/*   Updated: 2021/06/07 20:03:14 by arrigo           ###   ########.fr       */
+/*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
+/*   Updated: 2021/06/09 16:45:01 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "my_minishell.h"
 #include "my_minishell2.h"
 
+int ft_strchr_last(char *line, char c)
+{
+	int	i;
+	int r;
+	
+	i = 0;
+	r = -1;
+	while (line[i])
+	{
+		if (line[i] == c)
+			r = i;
+		i++;
+	}
+	return (r);
+}
+
+int ft_infile(char *line)
+{
+	int i;
+	int c;
+	int len;
+	char *temp;
+	int r;
+
+	r = 0;
+	c = 0;
+	len = ft_strlen(line);
+	while (line[c] && line[c] == ' ')
+		c++;
+	i = c;
+	while (line[i] && line[i] != ' ' && line[i] != '<' && line[i] != '>')
+		i++;
+	temp = ft_substr(line, c, i - c);
+	r = open(temp, O_RDONLY);
+	printf("temp:%s\n", temp);
+	if (r > 0)
+	{
+		printf("ok_fd\n");
+	 	dup2(r, 0);
+	 	close (r);
+	}
+	free(temp);
+	return (r);
+}
+
+int ft_outfile(char *line)
+{
+	int i;
+	int c;
+	int len;
+	char *temp;
+	int r;
+
+	r = 0;
+	c = 0;
+	len = ft_strlen(line);
+	while (line[c] && line[c] == ' ')
+		c++;
+	i = c;
+	while (line[i] && line[i] != ' ' && line[i] != '<' && line[i] != '>')
+		i++;
+	temp = ft_substr(line, c, i - c);
+	r = open(temp, O_RDWR | O_CREAT | O_TRUNC, 0666);
+	printf("temp:%s\n", temp);
+	if (r > 0)
+	{
+		printf("ok_fd\n");
+	 	dup2(r, 1);
+	 	close (r);
+	}
+	free(temp);
+	return (r);
+}
+
 int		ft_redir(char *line, t_data *data)
 {
-	int infile;
-	int outfile;
-	int c;
 	int i;
+	int r;
 	int back_stdin;
 	int back_stdout;
-	char *save;
 	char **split;
+	char *command;
 	
 	split = ft_split(line, ' ');
+	i = 0;
+	command = NULL;
+	while(split[i])
+	{
+		if (ft_strchr('<', split[i]) == -1 && ft_strchr('>', split[i]) == -1)									//TESTARE
+		{
+			// if (split[i - 1] && ft_strchr('<', split[i - 1]) != 0 && ft_strchr('>', split[i - 1]) != 0)
+			// if (split[i - 1][0] && split[i - 1][0] != '<' && split[i - 1][0] != '>')
+			// {
+			// 	if (!split[i - 1][1] || (split[i - 1][1] != '>' || split[i - 1][0] == '\0'))
+				
+			// }
+			if	(	i == 0 || 
+				(	split[i - 1][0] && split[i - 1][0] != '<' && split[i - 1][0] != '>' //&&
+					// (split[i - 1][1] && split[i - 1][1] != '>')
+				)	||
+				(
+					split[i - 1][0] &&
+					(split[i - 1][0] == '<' || 
+					split[i - 1][0] == '>'
+					) && 
+					(
+						split[i - 1][1] && split[i - 1][1] == '>' && split[i - 1][2] 
+					) ||
+					(
+						split[i - 1][1] && split[i - 1][1] != '>'
+					)
+				)
+				)
+			{	
+				printf("char: %c\n", split[i -1][1]);
+				command = split[i];
+				printf( "command: %s\n",command );
+				break ;
+			}	
+		}
+		i++;
+	}
+	if (command)
+	{
+	}
 	back_stdin = dup(0);
 	back_stdout = dup(1);
+	i = ft_strchr_last(line, '<');
+	if (i  != -1)
+	{
+		if (ft_infile(line + i + 1) < 0)
+		// if (r < 0)
+		{	
+			printf("Error fd\n");
+			exit(0);										////////////////////////////SETTARE
+		}
+	}
+	i = ft_strchr_last(line, '>');
+	if (i  != -1)
+	{
+		if (ft_infile(line + i + 1) < 0)
+		{	
+			printf("Error fd\n");
+			exit(0);										////////////////////////////SETTARE
+		}
+	}
 
-	// i = ft_strchr('<', line);
-	c = 0;
-	if (split[0][0] == '<' && split[0][1] == '\0')
-	{
-		infile = open(split[1], O_RDONLY);
-		dup2(infile, 0);
-		close(infile);
-		c = 2;
-	}
-	
-	i = ft_strchr('>', line);
-	if (i != -1)
-	{
-		i = 0;
-		while (split[i][0] != '>')
-			i++;
-		// printf(" i:%d\n", i);
-		if (i > 0 && split[i][0] == '>' && split[i + 1])
-		{
-			if (split[i][1] == '\0')
-			{
-				outfile = open(split[i + 1], O_RDWR | O_CREAT | O_TRUNC, 0666);
-			}
-			else if (split[i][1] == '>' && split[i][2] == '\0')
-			{
-				outfile = open(split[i + 1], O_RDWR | O_CREAT | O_APPEND, 0666);
-			}
-			dup2(outfile, 1);
-			close(outfile);
-		}
-	}
-	else
-	{	
-		i = 0;
-		while (split[i])
-			i++;
-	}
-	
-	free(line);
-	line = ft_strdup(split[c]);
-	while (++c < i)
-	{
-		save = line;
-		line = ft_strjoin(line, " ");
-		free(save);
-		save = line;
-		line = ft_strjoin(line, split[c]);
-		free(save);
-	}
-	// printf(" line: %s\n", line);
-	ft_free_matrix(&split);
-	data->args = ft_split(line, ' ');
-	if (ft_check_execve(line, data))
-	{
-		int pid;
-		int status;
-		
-		pid = fork();
-		if (pid == 0)
-		{
-			execve(data->args[0], data->args, data->envp);
-		}
-		else
-		{
-			waitpid(pid, &status, 0);
-			dup2(back_stdout,1);
-			close(back_stdout);
-			dup2(back_stdin, 0);
-			close(back_stdin);
-			if (WIFEXITED(status)  && !WEXITSTATUS(status))
-				return (0);			//SUCCESS
-			else 
-				return (1);			//NOT SUCCESS
-		}
-	}
+
+
+	////RETURN TO STANDARD IN/OUT
+	dup2(back_stdout,1);
+	close(back_stdout);
+	dup2(back_stdin, 0);
+	close(back_stdin);
+
+	// printf("line_out :%s\n", line);	
 	return (0);
 }

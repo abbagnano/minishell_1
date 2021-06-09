@@ -1,5 +1,8 @@
 gcc -lncurses term_test.c 
 
+TPUTS
+https://www.gnu.org/software/termutils/manual/termcap-1.3/html_node/termcap_11.html
+
 MAN TERMCAP
 http://www.nsc.ru/cgi-bin/www/unix_help/unix-man?termcap+5
 https://www.freebsd.org/cgi/man.cgi?query=termcap&sektion=5&format=html
