@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_redir.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/09 23:43:36 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/06/10 15:41:58 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,11 @@ int ft_strchr_last_single(char *line, char c)
 				r = i;
 			else if (line[i + 1] == c && c == '>')
 				i += 2;
-			else if (line[i + 1] == c)
-				return (-1);
+			else if (line[i + 1] == c)// && c == '<')
+			{
+				printf("Érror\n");
+				return (-2);
+			}
 		}
 		i++;
 	}
@@ -38,9 +41,9 @@ int ft_strchr_last_single(char *line, char c)
 
 int ft_strchr_last_double(char *line, char c)
 {
+	
 	int	i;
 	int r;
-	
 	i = 0;
 	r = -1;
 	while (line[i])
@@ -144,9 +147,9 @@ int		ft_redir(char *line, t_data *data)
 	char *command;
 	(void)data;
 	
+	*data->args = NULL;
 	split = ft_split(line, ' ');
 	i = 0;
-	command = NULL;
 	while(split[i])
 	{
 		if (ft_strchr('<', split[i]) == -1 && ft_strchr('>', split[i]) == -1)									//TESTARE
@@ -161,41 +164,36 @@ int		ft_redir(char *line, t_data *data)
 				(	split[i - 1][0] && split[i - 1][0] != '<' && split[i - 1][0] != '>' //&&
 				)	||
 				(
-					split[i - 1][0] &&
+					i > 0 && split[i - 1][0] &&
 					(split[i - 1][0] == '<' || 
 					split[i - 1][0] == '>'
 					) && 
 					((
-						split[i - 1][1] && split[i - 1][1] == '>' && split[i - 1][2] 
+						i > 0 && split[i - 1][1] && split[i - 1][1] == '>' && split[i - 1][2] 
 					) ||
 					(
-						split[i - 1][1] && split[i - 1][1] != '>'
+						i > 0 && split[i - 1][1] && split[i - 1][1] != '>'
 					))
 				)
 				)
 			{	
-				int c = i + 1;
-				int x = 0;
-				while (split[c] && (ft_strchr('<', split[c]) == -1 && ft_strchr('>', split[c]) == -1))
-					c++;
-				// printf(" c: %d\n", c);
-				// printf(" i: %d\n", i);
-				data->args = (char **)malloc(sizeof(char *) * (c - i + 1));
-				data->args[c - i] = NULL;
-				while (i < c)
-					data->args[x++] =ft_strdup(split[i++]);
-				// printf(" x: %d\n", x);
-				// i = 0;
-				// while (data->args[i])
-				// 	printf(" data->args: %s\n", data->args[i++]);
-			}	
+				break;
+			}
 		}
 		i++;
 	}
-	// if (!command)
-	// {
-	// 	printf(" no command\n");
-	// }
+	int c = i;
+	printf( "i: %d\n", i);
+	while (split[c] && (ft_strchr('<', split[c]) == -1 && ft_strchr('>', split[c]) == -1))
+	{
+	 	c++;
+	}
+
+	data->args = (char **)malloc(sizeof(char *) * (c - i + 1));
+	data->args[c - i] = NULL;
+	int x = 0;
+	while (i < c)
+	 	data->args[x++] =ft_strdup(split[i++]);
 	back_stdin = dup(0);
 	back_stdout = dup(1);
 	i = ft_strchr_last_single(line, '<');
@@ -226,9 +224,7 @@ int		ft_redir(char *line, t_data *data)
 			exit(0);										////////////////////////////SETTARE
 		}
 	}
-
-
-	if (ft_check_execve(data->args[0], data))
+	if ((*data->args) && ft_check_execve(data->args[0], data))
 	{
 		int pid;
 		int status;
@@ -251,16 +247,35 @@ int		ft_redir(char *line, t_data *data)
 				return (1);			//NOT SUCCESS
 		}
 	}
-
-
-
-
-	////RETURN TO STANDARD IN/OUT
-	// dup2(back_stdout,1);
-	// close(back_stdout);
-	// dup2(back_stdin, 0);
-	// close(back_stdin);
-
+	else
+	{
+		//RETURN TO STANDARD IN/OUT
+		dup2(back_stdout,1);
+		close(back_stdout);
+		dup2(back_stdin, 0);
+		close(back_stdin);
+	}
 	// printf("line_out :%s\n", line);	
 	return (0);
 }
+
+/* ERRORS:
+	<infile >outfile >> outfile2
+	Segmentation fault: 11
+
+	bash-3.2$ <infile >outfile >>outfile2 cat DEVE PRENDERE SOLO IL SECONDO, STESSO DISCORSO SE INVERTITI
+
+
+	<giusto<sbagliato deve creare il giusto
+	
+	<<>infile
+	<>infile 
+	<>>infile
+	
+	><<infile
+	><infile
+	>><infile 
+
+
+	cat infile >outfile non funziona
+*/
