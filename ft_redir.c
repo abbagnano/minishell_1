@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_redir.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/10 15:41:58 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/10 16:55:12 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,16 +138,13 @@ int ft_outfile_app(char *line)
 	return (r);
 }
 
-int		ft_redir(char *line, t_data *data)
+int ft_command(char *line, t_data *data)
 {
-	int i;
-	int back_stdin;
-	int back_stdout;
-	char **split;
-	char *command;
+		char **split;
 	(void)data;
+	int i;
 	
-	*data->args = NULL;
+	// *data->args = NULL;
 	split = ft_split(line, ' ');
 	i = 0;
 	while(split[i])
@@ -183,79 +180,157 @@ int		ft_redir(char *line, t_data *data)
 		i++;
 	}
 	int c = i;
-	printf( "i: %d\n", i);
+	printf(" i:%d\n", i);
 	while (split[c] && (ft_strchr('<', split[c]) == -1 && ft_strchr('>', split[c]) == -1))
 	{
 	 	c++;
 	}
-
+	printf( "c: %d\n", c);
 	data->args = (char **)malloc(sizeof(char *) * (c - i + 1));
 	data->args[c - i] = NULL;
 	int x = 0;
 	while (i < c)
 	 	data->args[x++] =ft_strdup(split[i++]);
+
+	i = 0;
+	while (data->args[i])
+		printf(" data->args[i]: %s\n", data->args[i++]);
+	return (0);
+}
+
+int		ft_redir(char *line, t_data *data)
+{
+	int i;
+	int back_stdin;
+	int back_stdout;
+
 	back_stdin = dup(0);
 	back_stdout = dup(1);
-	i = ft_strchr_last_single(line, '<');
-	if (i  != -1)
+
+
+
+
+	ft_command(line, data);
+
+
+/////*old*//////////////////////////////////////////////////////////////
+	// i = ft_strchr_last_single(line, '<');
+	// if (i  != -1)
+	// {
+	// 	if (ft_infile(line + i + 1) < 0)
+	// 	// if (r < 0)
+	// 	{	
+	// 		printf("Error fd\n");
+	// 		exit(0);										////////////////////////////SETTARE
+	// 	}
+	// }
+	// i = ft_strchr_last_single(line, '>');
+	// if (i  != -1)
+	// {
+	// 	if (ft_outfile(line + i + 1) < 0)
+	// 	{	
+	// 		printf("Error fd\n");
+	// 		exit(0);										////////////////////////////SETTARE
+	// 	}
+	// }
+	// i = ft_strchr_last_double(line, '>');
+	// if (i  != -1)
+	// {
+	// 	if (ft_outfile_app(line + i + 2) < 0)
+	// 	{	
+	// 		printf("Error fd\n");
+	// 		exit(0);										////////////////////////////SETTARE
+	// 	}
+	// }
+//////////////////////////////////////
+	
+
+	i = 0;
+	int c = 0;
+	int flag = 0;
+	int fd;
+	while (line[i])
 	{
-		if (ft_infile(line + i + 1) < 0)
-		// if (r < 0)
-		{	
-			printf("Error fd\n");
-			exit(0);										////////////////////////////SETTARE
+		flag = 0;
+		if (line[i] == '<' && line[i + 1] && line[i + 1] != '<')
+			flag = 1;
+		else if (line[i] == '>' && line[i + 1] && line[i + 1] != '>')
+			flag = 2;
+		else if (line[i] == '>' && line[i + 1] && line[i  + 1] == '>')
+		{
+			i++;
+			flag = 3;
 		}
-	}
-	i = ft_strchr_last_single(line, '>');
-	if (i  != -1)
-	{
-		if (ft_outfile(line + i + 1) < 0)
-		{	
-			printf("Error fd\n");
-			exit(0);										////////////////////////////SETTARE
+		if (flag > 0)
+		{
+			i++;
+			while(line[i] && line[i] == ' ')
+				i++;
+			c = i;
+			while(line[c] && line[c] != '<' && line[c] != '>' && line[c] != ' ')
+				c++;
+			if (c == i)
+				printf(" Error: fd\n");
+			char *file = ft_substr(line, i, c - i);
+			printf( " substr: %s\n", file);
+			printf(" flag: %d\n", flag);
+			if (flag == 1)
+			{
+				fd = open(file, O_RDONLY);
+				if (fd > 0)
+				{
+					dup2(fd, 0);
+					close(fd);
+				}
+			}
+			else
+			{
+				if (flag == 1)
+					fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0666);
+				else if (flag == 2)
+					fd = open(file, O_RDWR | O_CREAT | O_APPEND, 0666);
+				if (fd > 0)
+				{
+					dup2(fd, 1);
+					close (fd);	
+				}
+			}			
 		}
+		i++;
 	}
-	i = ft_strchr_last_double(line, '>');
-	if (i  != -1)
-	{
-		if (ft_outfile_app(line + i + 2) < 0)
-		{	
-			printf("Error fd\n");
-			exit(0);										////////////////////////////SETTARE
-		}
-	}
-	if ((*data->args) && ft_check_execve(data->args[0], data))
-	{
-		int pid;
-		int status;
+
+	// if (data->args && (*data->args) && ft_check_execve(data->args[0], data))
+	// {
+	// 	int pid;
+	// 	int status;
 		
-		pid = fork();
-		if (pid == 0)
-		{
-			execve(data->args[0], data->args, data->envp);
-		}
-		else
-		{
-			waitpid(pid, &status, 0);
-			dup2(back_stdout,1);
-			close(back_stdout);
-			dup2(back_stdin, 0);
-			close(back_stdin);
-			if (WIFEXITED(status)  && !WEXITSTATUS(status))
-				return (0);			//SUCCESS
-			else 
-				return (1);			//NOT SUCCESS
-		}
-	}
-	else
-	{
+	// 	pid = fork();
+	// 	if (pid == 0)
+	// 	{
+	// 		execve(data->args[0], data->args, data->envp);
+	// 	}
+	// 	else
+	// 	{
+	// 		waitpid(pid, &status, 0);
+	// 		dup2(back_stdout,1);
+	// 		close(back_stdout);
+	// 		dup2(back_stdin, 0);
+	// 		close(back_stdin);
+	// 		if (WIFEXITED(status)  && !WEXITSTATUS(status))
+	// 			return (0);			//SUCCESS
+	// 		else 
+	// 			return (1);			//NOT SUCCESS
+	// 	}
+	// }
+	//  else
+	//  {
 		//RETURN TO STANDARD IN/OUT
 		dup2(back_stdout,1);
 		close(back_stdout);
 		dup2(back_stdin, 0);
 		close(back_stdin);
-	}
-	// printf("line_out :%s\n", line);	
+	// }
+
 	return (0);
 }
 
