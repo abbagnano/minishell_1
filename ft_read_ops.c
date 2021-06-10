@@ -186,8 +186,13 @@ int	ft_reading(t_char **line_head, int *len, t_data *data)
 {	
 	char	buf;
 	int		x = 0; // per history
+	char	*ho;
+	char	*cd;
+	char	*up;
 
-//	tc = (char *)malloc(sizeof(char) * 2048);
+	ho = tgetstr("ho", NULL);
+	cd = tgetstr("cd", NULL);
+	up = tgetstr("up", NULL);
 	tgetent(NULL, getenv ("TERM"));
 	buf = ' ';
 	*len = 0;
@@ -199,8 +204,8 @@ int	ft_reading(t_char **line_head, int *len, t_data *data)
 			continue ;
 		else if (buf == 12)
 		{
-			printf("%s", tgetstr("ho", NULL));
-			printf("%s\n", tgetstr("cd", NULL));
+			printf("%s", ho);
+			printf("%s\n", cd);
 			//tputs(tgetstr("cd", NULL), 1, write);
 			
 			ft_write("\033[0;32mminishell% \033[0m");
@@ -221,7 +226,7 @@ int	ft_reading(t_char **line_head, int *len, t_data *data)
 			// tputs(tgetstr("cd", NULL), 0, putchar);
 			// write(1, "\n", 1);
 		//	printf("\b");
-			 printf("\n%s%s%s\n", tgetstr("up", NULL),   tgetstr("cd", NULL),  tgetstr("up", NULL));
+			 printf("\n%s%s%s\n", up, cd, up);
 			// tcsetattr(1, 0, &data->my_term);
 		//	printf("\t%s", tgetstr("up", NULL));
 			ft_canc_char(line_head);
@@ -233,11 +238,32 @@ int	ft_reading(t_char **line_head, int *len, t_data *data)
 		{
 			buf = '\0';
 			if(*line_head == NULL)
+			{
+				free(*line_head);
 				return (0);
+			}
+		}
+		else if (buf == 3)
+		{
+			if(*line_head)
+			{
+				//ft_free_char(line_head);
+				*line_head = NULL;
+			}
+			buf = '\n';
+		}
+		else if (buf == 28)
+		{
+			//printf("\n%s%s%s\n", tgetstr("up", NULL), tgetstr("bl", NULL), tgetstr("up", NULL));
+			continue ;
 		}
 		write(1, &buf, 1);
-		ft_buffering(buf, len, line_head);
+		//if (buf != '\n')
+			ft_buffering(buf, len, line_head);
 	}
+	// free(ho);
+	// free(cd);
+	// free(up);
 	return (1);
 }
 
@@ -295,12 +321,13 @@ void    ft_read_ops(t_data *data)
         {
 
         	cmd = (t_read *)malloc(sizeof(t_read) * 1);
-//		(*data->cmd_head)->line = NULL;
 		cmd->next = NULL;
+//		(*data->cmd_head)->line = NULL;
 //		ft_print_char(&line_head);
 //              ft_linod_to_line(&(*data->cmd_head)->line, len, &line_head);
 			if (line_head && line_head->buf != '\n')
-            {  ft_linod_to_line(&cmd->line, len, &line_head);
+            {
+				ft_linod_to_line(&cmd->line, len, &line_head);
 //              printf("\n\nline: %s\n\n", (*data->cmd_head)->line);
                 // printf("\n\nline: %s\nlen: %d\n", cmd->line, len);
 			//	 printf("line: %s\n", cmd->line);
@@ -310,13 +337,20 @@ void    ft_read_ops(t_data *data)
 				ft_exec_cmd(cmd->line, data);
 			}
 			if (line_head && line_head->buf == '\n')
+			{
+				free(line_head);
+				// free(cmd->line);
+				// free(cmd);
+				//ft_free_char(&line_head);
 				line_head = NULL;
+			}
 
 		cmd = cmd->next;
 		len = 0;
                 ft_write("\033[0;32mminishell% \033[0m");
         }
-	
+	if (line_head)
+		free(line_head);
 	//free(cmd);
 }
 
