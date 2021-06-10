@@ -121,6 +121,8 @@ int	ft_read_special(t_char **line_head, t_data *data, int *x)
 		}
 		else if (buf == 'B' && *x > 0)
 		{
+			if (*x == max_cmd)
+				(*x)--;
 			(*x)--;
 			ft_arrow_up(line_head, data, *x);
 		
@@ -201,9 +203,11 @@ int	ft_reading(t_char **line_head, int *len, t_data *data)
 {	
 	char	buf;
 	int		x = 0; // per history
-	
-	
-	tgetent(NULL, getenv ("TERM"));
+	char	*tc;
+
+//	tc = (char *)malloc(sizeof(char) * 2048);
+	tc = NULL;
+	tgetent(tc, getenv ("TERM"));
 	buf = ' ';
 	*len = 0;
 	while (buf != '\n')
@@ -333,6 +337,7 @@ void    ft_read_ops(t_data *data)
 		len = 0;
                 ft_write("\033[0;32mminishell% \033[0m");
         }
-	free(cmd);
+	
+	//free(cmd);
 }
 

@@ -11,20 +11,20 @@
 # include <term.h>
 # include <termios.h>
 
-typedef struct s_flag
-{
-	int		tot_com;
-	int		comma;
-	int		pipe;
-	int		infile;
-	int		outfile;
-	int		append;
-	int		dollar;
-}	t_flag;
+// typedef struct s_flag
+// {
+// 	int		tot_com;
+// 	int		comma;
+// 	int		pipe;
+// 	int		infile;
+// 	int		outfile;
+// 	int		append;
+// 	int		dollar;
+// }	t_flag;
 
 typedef struct s_char
 {
-	char			buf;
+	unsigned char			buf;
 	struct s_char	*prev;
 	struct s_char	*next;
 }	t_char;
@@ -48,6 +48,7 @@ typedef struct	s_data
 	char	**envp;
 	int		env_len;
 	char	**args;
+
 }	t_data;
 
 /*		minishell.c		*/			
