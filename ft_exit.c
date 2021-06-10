@@ -28,7 +28,8 @@ void	ft_free_read(t_read **head)
 void	ft_exit(char *str, t_data *data)
 {
 	ft_write(str);
-	ft_free_read(data->cmd_head);
+	if (*data->cmd_head)
+		ft_free_read(data->cmd_head);
 	free(data->cmd_head);
 	if (*data->env_head)
 		ft_free_env_read(data->env_head);

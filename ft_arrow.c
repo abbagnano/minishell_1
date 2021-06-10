@@ -17,7 +17,7 @@ void	ft_line_to_linod(t_char **line_head, char *line)
 		
 }
 
-void	ft_arrow_up(t_char **line_head, t_data *data, int x)
+void	ft_arrow_up(t_char **line_head, t_data *data, int x, int *len)
 {
 	t_read *tmp;
 
@@ -33,9 +33,10 @@ void	ft_arrow_up(t_char **line_head, t_data *data, int x)
 	}
 //	printf("history: %s\n", tmp->line);
 	ft_line_to_linod(line_head, tmp->line);
-		printf("\n%s", tgetstr("up", NULL));
-			printf("%s%s\n", tgetstr("cd", NULL), tgetstr("up", NULL));
+	printf("\n%s", tgetstr("up", NULL));
+	printf("%s%s\n", tgetstr("cd", NULL), tgetstr("up", NULL));
 
 	ft_write("\033[0;32mminishell% \033[0m");
 	ft_write(tmp->line);
+	*len = ft_strlen(tmp->line);
 }

@@ -75,7 +75,7 @@ void	ft_buf_to_list(char *buf, t_data *data);
 /*		ft_read_ops.c	*/
 void    ft_linod_to_line(char **line, int len, t_char **line_head);
 void    ft_buffering(char buf, int *len, t_char **line_head);
-int		ft_read_special(t_char **line_head, t_data *data, int *x);
+int		ft_read_special(t_char **line_head, t_data *data, int *x, int *len);
 int     ft_reading(t_char **line_head, int *len, t_data *data);
 void	ft_read_ops(t_data *data);
 
@@ -116,6 +116,6 @@ void	ft_print_sort(t_read **head, t_data *data);
 void	ft_init_term(t_data *data);
 
 /*	ft_arrow.c	*/
-void	ft_arrow_up(t_char **line_head, t_data *data, int x);
+void	ft_arrow_up(t_char **line_head, t_data *data, int x, int *len);
 
 #endif
