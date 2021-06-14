@@ -6,23 +6,19 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/14 12:36:11 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/14 12:48:50 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "my_minishell.h"
 #include "my_minishell2.h"
 
-int ft_command(char *line, t_data *data)
-{
-	char **split;
-	(void)data;
-	int i;
-	int r;
-	r = 0;
-	
-	split = ft_split(line, ' ');
+int ft_find_command(char **split)
+{	
+	int	i;
+
 	i = 0;
+
 	while(split[i])
 	{
 		if (ft_strchr('<', split[i]) == -1 && ft_strchr('>', split[i]) == -1)
@@ -33,35 +29,37 @@ int ft_command(char *line, t_data *data)
 				((i > 0 && split[i - 1][1] && split[i - 1][1] == '>' && split[i - 1][2]) ||
 				(i > 0 && split[i - 1][1] && split[i - 1][1] != '>'))))
 			{
-				r = 1;
-				break ;
+				return (i);
 			}
 		}
 		i++;
 	}
-	if (r == 1)
+	return (-1);
+}
+
+int	ft_command(char *line, t_data *data)
+{
+	char	**split;
+	int		i;
+	
+	split = ft_split(line, ' ');
+	i = ft_find_command(split);
+	if (i >= 0)
 	{
 		int c = i;
 		while (split[c] && (ft_strchr('<', split[c]) == -1 && ft_strchr('>', split[c]) == -1))
-		{
 		 	c++;
-		}
-		// printf( "c: %d\n", c);
 		data->args = (char **)malloc(sizeof(char *) * (c - i + 1));
 		data->args[c - i] = NULL;
 		int x = 0;
 		while (i < c)
 		 	data->args[x++] =ft_strdup(split[i++]);
-	
-		// i = 0;
-		// while (data->args[i])
-		// {
-		// 	printf(" data->args[%d]: %s\n",i,  data->args[i]);
-		// 	i++;
-		// }
+		return (1);
 	}
-	return (r);
+	return (0);
 }
+
+
 
 int		ft_redir(char *line, t_data *data)
 {
