@@ -95,6 +95,8 @@ void	ft_check_cmd(char *line, t_data *data)
 void	ft_exec_cmd(char *line, t_data *data)
 {
 	// printf("line: %s/n", line);
+	tcsetattr(0, 0, &data->old_term);
 	ft_check_cmd(line, data);
+	tcsetattr(0, 0, &data->my_term);
 
 }
