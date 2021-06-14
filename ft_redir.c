@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_redir.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/14 17:05:59 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/14 18:34:16 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,43 @@ char	*ft_name_of_file(char *line, int i)
 	return(ft_substr(line, i, c - i));
 }
 
+int	ft_open_file(char *file, int flag)
+{
+	int	fd;
+	
+	if (flag == 1)
+	{
+		fd = open(file, O_RDONLY);
+		if (fd > 0)
+		{
+			printf(" opened\n");
+			dup2(fd, 0);
+			close(fd);
+		}
+		else
+			printf("Error: 3\n");
+	}
+	else if (flag == 2 || flag == 3)
+	{
+		if (flag == 2)
+			fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0666);
+		else if (flag == 3)
+			fd = open(file, O_RDWR | O_CREAT | O_APPEND, 0666);
+		if (fd > 0)
+		{
+			printf(" opened\n");
+			dup2(fd, 1);
+			close (fd);	
+		}
+		else
+			printf("Error: 4\n");
+	}
+	else if (flag == 4)
+	{
+		printf("todo: <<\n");
+	}
+	return (0);		
+}			
 	
 int		ft_redir(char *line, t_data *data)
 {
@@ -138,74 +175,32 @@ int		ft_redir(char *line, t_data *data)
 	back_stdout = dup(1);
 	r = ft_command(line, data);
 	i = 0;
-	int c = 0;
 	int flag = 0;
-	int fd;
 	char *file;
-	
+	int pid;
+	int status;
+
 	while (line[i])
 	{
 		flag = ft_type_of_redir(line,&i);
+		
 		if (flag > 0)
 		{
 			file = ft_name_of_file(line,i);
 			if (file == NULL)
 				return (0);
-			if (flag == 1)
-			{
-				fd = open(file, O_RDONLY);
-				if (fd > 0)
-				{
-					printf(" opened\n");
-					dup2(fd, 0);
-					close(fd);
-				}
-				else
-					printf("Error: 3\n");
-			}
-			else if (flag == 2 || flag == 3)
-			{
-				if (flag == 2)
-					fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0666);
-				else if (flag == 3)
-					fd = open(file, O_RDWR | O_CREAT | O_APPEND, 0666);
-				if (fd > 0)
-				{
-					printf(" opened\n");
-					dup2(fd, 1);
-					close (fd);	
-				}
-				else
-					printf("Error: 4\n");
-			}
-			else if (flag == 4)
-			{
-				printf("todo: <<\n");
-			}		
+			ft_open_file(file, flag);
 		}
 		i++;
 	}
-	 if (r == 1)
-	 {
-			r = ft_check_execve(NULL, data);
-			// printf("return check-execve : %d\n", ft_check_execve(NULL, data));
-			// i = 0;
-			// while (data->args[i])
-			// {
-			// 	printf(" aa_data->args[%d]: %s\n",i,  data->args[i]);
-			// 	i++;
-			// }
-	
-			 if ( r == 1)
-			 {
-			 
-			int pid;
-			int status;
-			
+	if (r == 1)
+	{
+		r = ft_check_execve(NULL, data);
+		if ( r == 1)
+		{
 			pid = fork();
 			if (pid == 0)
 			{
-				
 				execve(data->args[0], data->args, data->envp);
 				printf( "child: execve failed\n");
 				printf(" 1\n");
@@ -213,7 +208,7 @@ int		ft_redir(char *line, t_data *data)
 			}
 			else
 			{
-						// printf(" child\n");
+					// printf(" child\n");
 				waitpid(pid, &status, 0);
 				dup2(back_stdout,1);
 				close(back_stdout);
@@ -221,21 +216,20 @@ int		ft_redir(char *line, t_data *data)
 				close(back_stdin);
 				printf(" parent: success\n");
 				// exit(0);
-	
 				if (WIFEXITED(status)  && !WEXITSTATUS(status))
 					return (0);			//SUCCESS
 				else 
 					return (1);			//NOT SUCCESS
 			}
-		 }
-		 else 
-		 {
-			 printf("to do: error\n");
-			 exit(1);    //TOGLIERE
-		 }
+		}
+		else 
+		{
+			printf("to do: error\n");
+			exit(1);    //TOGLIERE
+		}
 	}
-	 else
-	 {
+	else
+	{
 		//RETURN TO STANDARD IN/OUT
 		// printf(" parent\n");
 		dup2(back_stdout,1);
