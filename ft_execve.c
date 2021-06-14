@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execve.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 11:22:46 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/07 13:23:06 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/06/14 11:46:17 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,8 @@ int ft_check_execve(char *line, t_data *data)
 	int fd;
 	
 	r = 0;
-	data->args = ft_split(line, ' ');
+	if (line)
+		data->args = ft_split(line, ' ');
 	if (ft_strchr('/', data->args[0]) == 0)   //TESTARE
 	{
 		fd = open(data->args[0], O_RDONLY);
