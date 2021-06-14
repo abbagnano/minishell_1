@@ -3,11 +3,13 @@ gcc -lncurses term_test.c
 
 TODO: 
 -$
+-" "   '  '
 -av[1]
 -set unset env export
--/bin/bash con env pulita
--CTRL-\ fa l'uscita di un processo figlio
--DISATTIVA TAB 
+-matrice envp dall lista che si aggiorna 
+-/bin/bash con env pulita?? forse no
+-CTRL-\ fa l'uscita di un processo figlio es cat
+-DISATTIVA TAB
 -TILDE IN PATH
 -/bin/echo ?? 
 -PIPE E REDIRECTION DEVONO USARE LE BUILTIN INVECE CHE L'ÉXECCVE DIRETTAMENTE?
