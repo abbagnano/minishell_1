@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/14 11:28:49 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/14 12:36:11 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,37 +21,18 @@ int ft_command(char *line, t_data *data)
 	int r;
 	r = 0;
 	
-	// *data->args = NULL;
 	split = ft_split(line, ' ');
 	i = 0;
 	while(split[i])
 	{
-		if (ft_strchr('<', split[i]) == -1 && ft_strchr('>', split[i]) == -1)									//TESTARE
+		if (ft_strchr('<', split[i]) == -1 && ft_strchr('>', split[i]) == -1)
 		{
-			// if (split[i - 1] && ft_strchr('<', split[i - 1]) != 0 && ft_strchr('>', split[i - 1]) != 0)
-			// if (split[i - 1][0] && split[i - 1][0] != '<' && split[i - 1][0] != '>')
-			// {
-			// 	if (!split[i - 1][1] || (split[i - 1][1] != '>' || split[i - 1][0] == '\0'))
-				
-			// }
-			if	(	i == 0 || 
-				(	split[i - 1][0] && split[i - 1][0] != '<' && split[i - 1][0] != '>' //&&
-				)	||
-				(
-					i > 0 && split[i - 1][0] &&
-					(split[i - 1][0] == '<' || 
-					split[i - 1][0] == '>'
-					) && 
-					((
-						i > 0 && split[i - 1][1] && split[i - 1][1] == '>' && split[i - 1][2] 
-					) ||
-					(
-						i > 0 && split[i - 1][1] && split[i - 1][1] != '>'
-					))
-				)
-				)
-			{	
-				// printf(" i:%d\n", i);
+			if	(i == 0 || 
+				(i > 0 && split[i - 1][0] && split[i - 1][0] != '<' && split[i - 1][0] != '>') ||
+				(i > 0 && split[i - 1][0] && (split[i - 1][0] == '<' ||	split[i - 1][0] == '>') && 
+				((i > 0 && split[i - 1][1] && split[i - 1][1] == '>' && split[i - 1][2]) ||
+				(i > 0 && split[i - 1][1] && split[i - 1][1] != '>'))))
+			{
 				r = 1;
 				break ;
 			}
@@ -256,6 +237,9 @@ int		ft_redir(char *line, t_data *data)
 	><<infile
 	><infile
 	>><infile 
+
+
+	2>&1 > dirlist
 
 
 	cat infile >outfile non funziona
