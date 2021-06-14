@@ -27,8 +27,8 @@ void	ft_unset(char *line, t_data *data)				/// unset deve cercare fino all' '='
 		x++;
 	while (line[x + len] && (line[x + len] != ' ' && line[x + len] != '='))
 		len++;
-	if (line[x + len] == '=')
-		len++;
+	// if (line[x + len] == '=')
+		// len++;
 	if (!line[x])
 	{
 		ft_write("not enough arguments\n");
@@ -36,7 +36,7 @@ void	ft_unset(char *line, t_data *data)				/// unset deve cercare fino all' '='
 	}
 	else
 		ft_search_env(line + x, x, len, data);
-
+	ft_list_to_matr(data->env_head, &data->envp, data);
 }
 
 void	ft_env(char *line, t_data *data)
@@ -80,6 +80,13 @@ void	ft_get_env(char **env, t_data *data)
 		ft_append_read(new, data->env_head);
 		x++;
 	}
-	data->env_len = x; 
-	//ft_print_cmd(data->env_head);
+	data->env_len = x;
+	data->envp = (char **)malloc(sizeof(char *) * x);
+	x = 0;
+	while (x < data->env_len)
+	{
+		data->envp[x] = env[x];
+		x++;
+	}
 }
+	//ft_print_cmd(data->env_head);

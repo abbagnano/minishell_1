@@ -23,6 +23,15 @@ void	ft_no_arg(t_data *data)
 	//ft_print_cmd(data->cmd_head);
 }
 
+int		ft_matrlen(char **matr)
+{
+	int	x;
+
+	x = 0;
+	while (matr[x])
+		x++;
+	return (x);
+}
 
 int	main(int ac, char **av, char **env)
 {
@@ -34,7 +43,8 @@ int	main(int ac, char **av, char **env)
 	*data.cmd_head = NULL;
 	data.env_head = (t_read **)malloc(sizeof(t_read *) * 1);
 	*data.env_head = NULL;
-	data.envp = env;
+	// data.envp = env;
+	// ft_env(&data, env);
 	ft_init_term(&data);
 	ft_get_env(env, &data);	
 	if (ac == 1)

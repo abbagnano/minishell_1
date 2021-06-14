@@ -101,6 +101,7 @@ void	ft_export(char *line, t_data *data);
 void	ft_get_env(char **env, t_data *data);
 
 /*		utils_get_env.c	*/
+void	ft_list_to_matr(t_read **env_head, char ***envp, t_data *data);
 void	ft_fix_env(char **line);
 int		ft_search_env(char *line, int x, int len, t_data *data);
 void	ft_add_env(char *line, t_data *data);
