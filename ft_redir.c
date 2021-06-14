@@ -6,28 +6,30 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/14 12:48:50 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/14 13:17:16 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "my_minishell.h"
 #include "my_minishell2.h"
 
-int ft_find_command(char **split)
+int	ft_find_command(char **split)
 {	
 	int	i;
 
 	i = 0;
-
 	while(split[i])
 	{
 		if (ft_strchr('<', split[i]) == -1 && ft_strchr('>', split[i]) == -1)
 		{
 			if	(i == 0 || 
-				(i > 0 && split[i - 1][0] && split[i - 1][0] != '<' && split[i - 1][0] != '>') ||
-				(i > 0 && split[i - 1][0] && (split[i - 1][0] == '<' ||	split[i - 1][0] == '>') && 
-				((i > 0 && split[i - 1][1] && split[i - 1][1] == '>' && split[i - 1][2]) ||
-				(i > 0 && split[i - 1][1] && split[i - 1][1] != '>'))))
+				(i > 0 && split[i - 1][0] && split[i - 1][0] != '<' &&
+						split[i - 1][0] != '>') ||
+				(i > 0 && split[i - 1][0] && (split[i - 1][0] == '<' ||
+						split[i - 1][0] == '>') && 
+					((i > 0 && split[i - 1][1] && split[i - 1][1] == '>' &&
+						split[i - 1][2]) ||
+					(i > 0 && split[i - 1][1] && split[i - 1][1] != '>'))))
 			{
 				return (i);
 			}
@@ -41,19 +43,30 @@ int	ft_command(char *line, t_data *data)
 {
 	char	**split;
 	int		i;
+	int		x;
 	
+	x = 0;
+	i = -1;
 	split = ft_split(line, ' ');
-	i = ft_find_command(split);
+	if (split)
+		i = ft_find_command(split);
 	if (i >= 0)
 	{
 		int c = i;
 		while (split[c] && (ft_strchr('<', split[c]) == -1 && ft_strchr('>', split[c]) == -1))
 		 	c++;
 		data->args = (char **)malloc(sizeof(char *) * (c - i + 1));
+		if (!data->args)
+			return(0);
 		data->args[c - i] = NULL;
-		int x = 0;
 		while (i < c)
-		 	data->args[x++] =ft_strdup(split[i++]);
+		{
+		 	data->args[x] =ft_strdup(split[i]);
+			if (!data->args[x])
+				return (0);
+			x++;
+			i++;
+		}
 		return (1);
 	}
 	return (0);
@@ -70,9 +83,7 @@ int		ft_redir(char *line, t_data *data)
 
 	back_stdin = dup(0);
 	back_stdout = dup(1);
-
 	r = ft_command(line, data);
-
 	i = 0;
 	int c = 0;
 	int flag = 0;
