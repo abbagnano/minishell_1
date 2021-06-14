@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/14 16:08:54 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/14 17:05:59 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,61 @@ int	ft_command(char *line, t_data *data)
 	return (0);
 }
 
+int	ft_type_of_redir(char *line, int *i)
+{
+	int	flag;
+		
+	flag = 0;
+	if (line[*i] == '<' && line[*i + 1] && line[*i + 1] != '<')
+	{
+		if (line[*i + 1] == '>')
+		{
+			(*i)++;
+			flag = 2;
+		}
+		else
+			flag = 1;
+	}
+	else if (line[*i] == '>' && line[*i + 1] && line[*i + 1] != '>')
+	{			
+		if (line[*i + 1] == '<')
+			printf("Error: 7\n");
+		flag = 2;
+	}
+	else if (line[*i] == '>' && line[*i + 1] && line[*i  + 1] == '>')
+	{
+		if (line[*i  + 2] && line[*i + 2] == '>')
+			printf("Error: 1\n");
+		(*i)++;
+		flag = 3;
+	}
+	else if (line[*i] == '<' && line[*i + 1] && line[*i  + 1] == '<')
+	{
+		if (line[*i  + 2] && line[*i + 2] == '<')
+			printf("Error: 6\n");
+		(*i)++;
+		flag = 4;
+	}		
+	
+	return (flag);
+}
 
+char	*ft_name_of_file(char *line, int i)
+{
+	int	c;
+	
+	(i)++;
+	while(line[i] && line[i] == ' ')
+		(i)++;
+	c = i;
+	while(line[c] && line[c] != '<' && line[c] != '>' && line[c] != ' ')
+		c++;
+	if (c == i)
+		return (NULL);
+	return(ft_substr(line, i, c - i));
+}
 
+	
 int		ft_redir(char *line, t_data *data)
 {
 	int i;
@@ -88,52 +141,16 @@ int		ft_redir(char *line, t_data *data)
 	int c = 0;
 	int flag = 0;
 	int fd;
+	char *file;
+	
 	while (line[i])
 	{
-		flag = 0;
-		if (line[i] == '<' && line[i + 1] && line[i + 1] != '<')
-		{
-			if (line[i + 1] == '>')
-			{
-				i++;
-				flag = 2;
-			}
-			else
-				flag = 1;
-		}
-		else if (line[i] == '>' && line[i + 1] && line[i + 1] != '>')
-		{			
-			if (line[i + 1] == '<')
-				printf("Error: 7\n");	
-			flag = 2;
-		}
-		else if (line[i] == '>' && line[i + 1] && line[i  + 1] == '>')
-		{
-			if (line[i  + 2] && line[i + 2] == '>')
-				printf("Error: 1\n");
-			i++;
-			flag = 3;
-		}
-		else if (line[i] == '<' && line[i + 1] && line[i  + 1] == '<')
-		{
-			if (line[i  + 2] && line[i + 2] == '<')
-				printf("Error: 6\n");
-			i++;
-			flag = 4;
-		}
+		flag = ft_type_of_redir(line,&i);
 		if (flag > 0)
 		{
-			i++;
-			while(line[i] && line[i] == ' ')
-				i++;
-			c = i;
-			while(line[c] && line[c] != '<' && line[c] != '>' && line[c] != ' ')
-				c++;
-			if (c == i)
-				printf(" Error: 2\n");
-			char *file = ft_substr(line, i, c - i);
-			// printf( " substr: %s\n", file);
-			// printf(" flag: %d\n", flag);
+			file = ft_name_of_file(line,i);
+			if (file == NULL)
+				return (0);
 			if (flag == 1)
 			{
 				fd = open(file, O_RDONLY);
@@ -168,7 +185,6 @@ int		ft_redir(char *line, t_data *data)
 		}
 		i++;
 	}
-	printf(" r: %d\n", r);
 	 if (r == 1)
 	 {
 			r = ft_check_execve(NULL, data);
