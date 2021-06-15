@@ -16,8 +16,9 @@ OBJS	=	minishell.o \
 			ft_pipe.o \
 			ft_redir.o \
 			utils_aviol.o \
-			utils_aviol2.o
-
+			utils_aviol2.o \
+			ft_env_line.o 
+			
 all		:	$(NAME)
 
 $(NAME)	:	$(OBJS)

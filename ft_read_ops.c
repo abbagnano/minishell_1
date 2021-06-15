@@ -219,8 +219,10 @@ int	ft_reading(t_char **line_head, int *len, t_data *data)
 			continue ;
 		else if (buf == 12)			// ctrl -l
 		{
-			printf("%s", ho);
-			printf("%s\n", cd);
+			// printf("%s", ho);
+			// printf("%s\n", cd);
+			ft_write(ho);
+			ft_write(cd);
 			ft_write("\033[0;32mminishell% \033[0m");
 			ft_write_char(line_head);
 			continue ;
@@ -229,10 +231,15 @@ int	ft_reading(t_char **line_head, int *len, t_data *data)
 		{
 			if (!*line_head)
 				continue ;
-			printf("\n%s%s%s\n%s", up, cd, up, cd);
+			// printf("\n%s%s%s\n%s", up, cd, up, cd);
+			ft_write(tgetstr("le", NULL));
+			ft_write(cd);
+		
+		//	 ioctl(1, TIOCFLUSH); 
+		
 			ft_canc_char(line_head);
-			ft_write("\033[0;32mminishell% \033[0m");
-			ft_write_char(line_head);
+		//	ft_write("\033[0;32mminishell% \033[0m");
+		//	ft_write_char(line_head);
 			*len = ft_char_len(line_head);
 			// printf("len: %d\n", *len);
 			continue ;

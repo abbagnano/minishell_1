@@ -11,6 +11,8 @@
 # include <term.h>
 # include <termios.h>
 
+#include <sys/ioctl.h>
+
 // typedef struct s_flag
 // {
 // 	int		tot_com;
@@ -118,5 +120,8 @@ void	ft_init_term(t_data *data);
 
 /*	ft_arrow.c	*/
 void	ft_arrow_up(t_char **line_head, t_data *data, int x, int *len);
+
+
+void	ft_env_line(char **line);
 
 #endif

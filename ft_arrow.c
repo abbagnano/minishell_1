@@ -33,8 +33,18 @@ void	ft_arrow_up(t_char **line_head, t_data *data, int x, int *len)
 	}
 //	printf("history: %s\n", tmp->line);
 	ft_line_to_linod(line_head, tmp->line);
-	printf("\n%s", tgetstr("up", NULL));
-	printf("%s%s\n", tgetstr("cd", NULL), tgetstr("up", NULL));
+//	printf("\n%s", tgetstr("up", NULL));
+//	printf("%s%s\n", tgetstr("cd", NULL), tgetstr("up", NULL));
+
+
+	//while (--(*len))
+	//	ft_write(tgetstr("le", NULL));
+	ft_write(tgetstr("cr", NULL));
+	ft_write(tgetstr("cd", NULL));
+	//ft_write(tgetstr("bw", NULL));
+
+	//printf("\n%s", tgetstr("up", NULL));
+	//printf("%s%s\n", tgetstr("cd", NULL), tgetstr("up", NULL));
 
 	ft_write("\033[0;32mminishell% \033[0m");
 	ft_write(tmp->line);
