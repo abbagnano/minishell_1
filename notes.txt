@@ -16,16 +16,47 @@ TODO:
 -GESTIONE DEGLI ERRORI
 -LEAKS
 -POF per i processi
+-DELETE CHE CREA UNO SPAZIO
+-IN TOP CI SONO 2 PROCESSI DI MINISHELL
+-LINEA AGGIuNTIVA ALLA FINE DEL TERM QUANDO FA IL PRIMO DELLA HISTORY  
+-LA VARIABILE GLOBALE CON LA STRUTTURA?
+-RIGA VUOTA, PREMERE BACKSPACE E POI INSERIRE COMANDO E INVIO, NON LO PRENDE
 
+
+<<:
+-ELIMINA FILE TEMPORANEO DOPO LA LETTURA?
+-<INFILE PRIMA DI <<EOF
+->OUTFILE PRIMA DI EOF
+-STRCMP 
+-CHIUDI FILE DESCR DUP
+-UNLINK OPPURE PIPE
+-if (ft_strncmp(buf,file, ft_strlen(file) + 1) == '\n' || buf[0] == '\0')
+
+<<
+https://unix.stackexchange.com/questions/165878/what-is-the-use-of-redirection
+https://www.gnu.org/software/bash/manual/bash.html#Here-Documents
+
+
+https://app.slack.com/client/T039P7U66/CN9RHKQHW/thread/CN9RHKQHW-1623660443.354700
+https://app.slack.com/client/T039P7U66/CN9RHKQHW/thread/CN9RHKQHW-1623660443.354700
+
+
+MANUAL BASH
+https://www.gnu.org/software/bash/manual/bash.html
+
+STD OUTPUT ,STD ERROR 
+https://www.cyberciti.biz/faq/redirecting-stderr-to-stdout/
+https://stackoverflow.com/questions/2342826/how-can-i-pipe-stderr-and-not-stdout
+https://man7.org/linux/man-pages/man3/stdout.3.html
 
 
 TPUTS
 https://www.gnu.org/software/termutils/manual/termcap-1.3/html_node/termcap_11.html
 
 MAN TERMCAP
+https://www.gnu.org/software/termutils/manual/termcap-1.3/html_mono/termcap.html
 http://www.nsc.ru/cgi-bin/www/unix_help/unix-man?termcap+5
 https://www.freebsd.org/cgi/man.cgi?query=termcap&sektion=5&format=html
-
 http://www2.phys.canterbury.ac.nz/dept/docs/manuals/unix/DEC_5.0a_Docs/HTML/MAN/MAN4/0243____.HTM
 
 

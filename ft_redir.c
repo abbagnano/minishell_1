@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/14 16:08:54 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/15 16:17:49 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,146 @@ int	ft_command(char *line, t_data *data)
 	return (0);
 }
 
+int	ft_type_of_redir(char *line, int *i)
+{
+	int	flag;
+		
+	flag = 0;
+	if (line[*i] == '<' && line[*i + 1] && line[*i + 1] != '<')
+	{
+		if (line[*i + 1] == '>')
+		{
+			(*i)++;
+			flag = 5;
+		}
+		else
+			flag = 1;
+	}
+	else if (line[*i] == '>' && line[*i + 1] && line[*i + 1] != '>')
+	{			
+		if (line[*i + 1] == '<')
+			printf("Error: 7\n");
+		flag = 2;
+	}
+	else if (line[*i] == '>' && line[*i + 1] && line[*i  + 1] == '>')
+	{
+		if (line[*i  + 2] && line[*i + 2] == '>')
+			printf("Error: 1\n");
+		(*i)++;
+		flag = 3;
+	}
+	else if (line[*i] == '<' && line[*i + 1] && line[*i  + 1] == '<')
+	{
+		if (line[*i  + 2] && line[*i + 2] == '<')
+			printf("Error: 6\n");
+		(*i)++;
+		flag = 4;
+	}
+	return (flag);
+}
 
+char	*ft_name_of_file(char *line, int i)
+{
+	int	c;
+	
+	(i)++;
+	while(line[i] && line[i] == ' ')
+		(i)++;
+	c = i;
+	while(line[c] && line[c] != '<' && line[c] != '>' && line[c] != ' ')
+		c++;
+	if (c == i)
+		return (NULL);
+	return(ft_substr(line, i, c - i));
+}
 
+int	ft_open_file(char *file, int flag,int back_stdin,int back_stdout)
+{
+	int	fd;
+	
+	if (flag == 1)
+	{
+		fd = open(file, O_RDONLY);
+		if (fd > 0)
+		{
+			printf(" opened\n");
+			dup2(fd, 0);
+			close(fd);
+		}
+		else
+			printf("Error: 3\n");
+	}
+	else if (flag == 2 || flag == 3)
+	{
+		if (flag == 2)
+			fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0666);
+		else
+		// else if (flag == 3)
+			fd = open(file, O_RDWR | O_CREAT | O_APPEND, 0666);
+		if (fd > 0)
+		{
+			printf(" opened\n");
+			dup2(fd, 1);
+			close (fd);	
+		}
+		else
+			printf("Error: 4\n");
+	}
+	else if (flag == 4)
+	{
+		dup2(back_stdin, 0);
+		int back = dup(1);
+		dup2(back_stdout,1);
+		fd = open("/tmp/minishell", O_RDWR | O_CREAT | O_TRUNC, 0666);
+		if (fd > 0)
+		{
+			printf("opened <<\n");
+			printf("file:%s\n", file);
+			int r = 1;
+			char buf[1024];
+			
+			write(1, ">", 1);
+			while (r > 0)
+			{
+				dup2(back, 1);
+				r = read(0, buf, 1024);
+				buf[r] = '\0';
+				int len = ft_strlen(file);
+				if ((ft_strncmp(buf, file, len + 1) == '\n' && ft_strncmp(buf, file, len) == 0) || buf[0] == '\0')
+				{
+					close(fd);
+					break;
+				}
+				write(fd, buf, ft_strlen(buf));
+				dup2(back_stdout,1);			
+					printf("buf: %s\n", buf);
+					printf("len:%d\n", len);
+				write(1, ">", 1);
+			}
+			fd = open("/tmp/minishell", O_RDONLY, 0666);
+			dup2(fd, 0);
+			close(fd);
+		}
+		else
+			printf("Error: 6\n");	
+	}
+	else if (flag == 5)
+	{
+		fd = open(file, O_RDWR, 0666);
+		if (fd < 0)
+			fd = open(file, O_RDWR | O_CREAT | O_TRUNC , 0666);
+		if (fd > 0)
+		{
+			printf(" opened flag 5\n");
+			dup2(fd, 0);
+			close(fd);
+		}
+		else
+			printf("Error: 7\n");
+	}
+	return (0);
+}			
+	
 int		ft_redir(char *line, t_data *data)
 {
 	int i;
@@ -81,115 +219,44 @@ int		ft_redir(char *line, t_data *data)
 	int back_stdin;
 	int back_stdout;
 
+
 	back_stdin = dup(0);
 	back_stdout = dup(1);
 	r = ft_command(line, data);
 	i = 0;
-	int c = 0;
 	int flag = 0;
-	int fd;
+	char *file;
+	int pid;
+	int status;
+
 	while (line[i])
 	{
-		flag = 0;
-		if (line[i] == '<' && line[i + 1] && line[i + 1] != '<')
-		{
-			if (line[i + 1] == '>')
-			{
-				i++;
-				flag = 2;
-			}
-			else
-				flag = 1;
-		}
-		else if (line[i] == '>' && line[i + 1] && line[i + 1] != '>')
-		{			
-			if (line[i + 1] == '<')
-				printf("Error: 7\n");	
-			flag = 2;
-		}
-		else if (line[i] == '>' && line[i + 1] && line[i  + 1] == '>')
-		{
-			if (line[i  + 2] && line[i + 2] == '>')
-				printf("Error: 1\n");
-			i++;
-			flag = 3;
-		}
-		else if (line[i] == '<' && line[i + 1] && line[i  + 1] == '<')
-		{
-			if (line[i  + 2] && line[i + 2] == '<')
-				printf("Error: 6\n");
-			i++;
-			flag = 4;
-		}
+		flag = ft_type_of_redir(line,&i);
+		
 		if (flag > 0)
 		{
-			i++;
-			while(line[i] && line[i] == ' ')
-				i++;
-			c = i;
-			while(line[c] && line[c] != '<' && line[c] != '>' && line[c] != ' ')
-				c++;
-			if (c == i)
-				printf(" Error: 2\n");
-			char *file = ft_substr(line, i, c - i);
-			// printf( " substr: %s\n", file);
-			// printf(" flag: %d\n", flag);
-			if (flag == 1)
-			{
-				fd = open(file, O_RDONLY);
-				if (fd > 0)
-				{
-					printf(" opened\n");
-					dup2(fd, 0);
-					close(fd);
-				}
-				else
-					printf("Error: 3\n");
-			}
-			else if (flag == 2 || flag == 3)
-			{
-				if (flag == 2)
-					fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0666);
-				else if (flag == 3)
-					fd = open(file, O_RDWR | O_CREAT | O_APPEND, 0666);
-				if (fd > 0)
-				{
-					printf(" opened\n");
-					dup2(fd, 1);
-					close (fd);	
-				}
-				else
-					printf("Error: 4\n");
-			}
-			else if (flag == 4)
-			{
-				printf("todo: <<\n");
-			}		
+			file = ft_name_of_file(line,i);
+			if (file == NULL)
+				return (0);
+			// if (flag == 4)
+			// {
+			// 	// dup2(back_stdout,1);
+			// 	// close(back_stdout);
+			// 	dup2(back_stdin, 0);
+			// 	// close(back_stdin);
+			// }
+			ft_open_file(file, flag, back_stdin, back_stdout);   //RETURN ERROR
 		}
 		i++;
 	}
-	printf(" r: %d\n", r);
-	 if (r == 1)
-	 {
-			r = ft_check_execve(NULL, data);
-			// printf("return check-execve : %d\n", ft_check_execve(NULL, data));
-			// i = 0;
-			// while (data->args[i])
-			// {
-			// 	printf(" aa_data->args[%d]: %s\n",i,  data->args[i]);
-			// 	i++;
-			// }
-	
-			 if ( r == 1)
-			 {
-			 
-			int pid;
-			int status;
-			
+	if (r == 1)
+	{
+		r = ft_check_execve(NULL, data);
+		if ( r == 1)
+		{
 			pid = fork();
 			if (pid == 0)
 			{
-				
 				execve(data->args[0], data->args, data->envp);
 				printf( "child: execve failed\n");
 				printf(" 1\n");
@@ -197,7 +264,7 @@ int		ft_redir(char *line, t_data *data)
 			}
 			else
 			{
-						// printf(" child\n");
+					// printf(" child\n");
 				waitpid(pid, &status, 0);
 				dup2(back_stdout,1);
 				close(back_stdout);
@@ -205,21 +272,20 @@ int		ft_redir(char *line, t_data *data)
 				close(back_stdin);
 				printf(" parent: success\n");
 				// exit(0);
-	
 				if (WIFEXITED(status)  && !WEXITSTATUS(status))
 					return (0);			//SUCCESS
 				else 
 					return (1);			//NOT SUCCESS
 			}
-		 }
-		 else 
-		 {
-			 printf("to do: error\n");
-			 exit(1);    //TOGLIERE
-		 }
+		}
+		else 
+		{
+			printf("to do: error\n");
+			exit(1);    //TOGLIERE
+		}
 	}
-	 else
-	 {
+	else
+	{
 		//RETURN TO STANDARD IN/OUT
 		// printf(" parent\n");
 		dup2(back_stdout,1);
