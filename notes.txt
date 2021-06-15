@@ -27,12 +27,16 @@ TODO:
 - ELIMINA FILE TEMPORANEO DOPO LA LETTURA?
 - <INFILE PRIMA DI <<EOF
 - >OUTFILE PRIMA DI EOF
-- PRENDERE LA STRINGA PASSATA COME DELIMITATORE
-- MOFIDIFICARE VEOL FLAG CON \n?
+- infile e s
 
 <<
 https://unix.stackexchange.com/questions/165878/what-is-the-use-of-redirection
 https://www.gnu.org/software/bash/manual/bash.html#Here-Documents
+
+
+https://app.slack.com/client/T039P7U66/CN9RHKQHW/thread/CN9RHKQHW-1623660443.354700
+https://app.slack.com/client/T039P7U66/CN9RHKQHW/thread/CN9RHKQHW-1623660443.354700
+
 
 MANUAL BASH
 https://www.gnu.org/software/bash/manual/bash.html

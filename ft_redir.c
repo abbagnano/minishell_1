@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/15 10:09:27 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/15 10:45:21 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,15 +170,13 @@ int	ft_open_file(char *file, int flag)
 			write(1, ">", 1);
 			while (r > 0)
 			{
-				//MOFIDIFICARE VEOL FLAG CON \n?
 				r = read(0, buf, 1024);
-				if (ft_strcmp(buf,file) == 0 || buf[0] == '\0')
-				{
-					write(fd, "\0", 1);
-					break;
-					close(fd);
-				}
 				buf[r] = '\0';
+				if (ft_strncmp(buf,file, ft_strlen(file) + 1) == '\n' || buf[0] == '\0')
+				{
+					close(fd);
+					break;
+				}
 				write(fd, buf, ft_strlen(buf));
 				write(1, ">", 1);
 			}
