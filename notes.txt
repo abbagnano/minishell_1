@@ -24,21 +24,12 @@ TODO:
 
 
 <<:
-- ELIMINA FILE TEMPORANEO DOPO LA LETTURA?
-- <INFILE PRIMA DI <<EOF
-- >OUTFILE PRIMA DI EOF
-- STRCMP 
+-ELIMINA FILE TEMPORANEO DOPO LA LETTURA?
+-<INFILE PRIMA DI <<EOF
+->OUTFILE PRIMA DI EOF
+-STRCMP 
 -CHIUDI FILE DESCR DUP
 -UNLINK OPPURE PIPE
--GESTIRE IN FT_TYPE_OF_REDIR:
-		if (line[*i + 1] == '>')
-		{
-			(*i)++;
-			flag = 2;
-		}
-		else
-			flag = 1;
-	}
 
 <<
 https://unix.stackexchange.com/questions/165878/what-is-the-use-of-redirection

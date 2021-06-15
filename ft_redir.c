@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/15 11:59:49 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/15 14:14:55 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	ft_type_of_redir(char *line, int *i)
 		if (line[*i + 1] == '>')
 		{
 			(*i)++;
-			flag = 2;
+			flag = 5;
 		}
 		else
 			flag = 1;
@@ -106,8 +106,7 @@ int	ft_type_of_redir(char *line, int *i)
 			printf("Error: 6\n");
 		(*i)++;
 		flag = 4;
-	}		
-	
+	}
 	return (flag);
 }
 
@@ -190,8 +189,24 @@ int	ft_open_file(char *file, int flag,int back_stdin,int back_stdout)
 			dup2(fd, 0);
 			close(fd);
 		}
+		else
+			printf("Error: 6\n");	
 	}
-	return (0);		
+	else if (flag == 5)
+	{
+		fd = open(file, O_RDWR, 0666);
+		if (fd < 0)
+			fd = open(file, O_RDWR | O_CREAT | O_TRUNC , 0666);
+		if (fd > 0)
+		{
+			printf(" opened flag 5\n");
+			dup2(fd, 0);
+			close(fd);
+		}
+		else
+			printf("Error: 7\n");
+	}
+	return (0);
 }			
 	
 int		ft_redir(char *line, t_data *data)
