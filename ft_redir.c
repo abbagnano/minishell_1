@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/15 08:15:48 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/15 10:09:27 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,32 @@ int	ft_open_file(char *file, int flag)
 	}
 	else if (flag == 4)
 	{
-		printf("todo: <<\n");
+		fd = open("/tmp/minishell", O_RDWR | O_CREAT | O_TRUNC, 0666);
+		if (fd > 0)
+		{
+			printf("opened <<\n");
+			printf("file:%s\n", file);
+			int r = 1;
+			char buf[1024];
+			write(1, ">", 1);
+			while (r > 0)
+			{
+				//MOFIDIFICARE VEOL FLAG CON \n?
+				r = read(0, buf, 1024);
+				if (ft_strcmp(buf,file) == 0 || buf[0] == '\0')
+				{
+					write(fd, "\0", 1);
+					break;
+					close(fd);
+				}
+				buf[r] = '\0';
+				write(fd, buf, ft_strlen(buf));
+				write(1, ">", 1);
+			}
+			fd = open("/tmp/minishell", O_RDONLY, 0666);
+			dup2(fd, 0);
+			close(fd);
+		}
 	}
 	return (0);		
 }			
@@ -190,7 +215,14 @@ int		ft_redir(char *line, t_data *data)
 			file = ft_name_of_file(line,i);
 			if (file == NULL)
 				return (0);
-			ft_open_file(file, flag);
+			// if (flag == 4)
+			// {
+			// 	// dup2(back_stdout,1);
+			// 	// close(back_stdout);
+			// 	// dup2(back_stdin, 0);
+			// 	// close(back_stdin);
+			// }
+			ft_open_file(file, flag);   //RETURN ERROR
 		}
 		i++;
 	}
