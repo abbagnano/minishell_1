@@ -96,11 +96,12 @@ void	ft_exec_cmd(char *line, t_data *data)
 {
 	// printf("line: %s/n", line);
 	tcsetattr(0, 0, &data->old_term);
-//	if (ft_strchr('$', line) != -1)
-//		ft_env_line(line);
-	
+	if (ft_strchr('$', line) != -1)
+		ft_env_line(line, data);
+	else
+		ft_check_cmd(line, data);
+		
 	// printf("line: %s\n", line);
-	ft_check_cmd(line, data);
 	tcsetattr(0, 0, &data->my_term);
 
 

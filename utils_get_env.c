@@ -70,7 +70,7 @@ int	ft_search_env(char *line, int x, int len, t_data *data)
 		tmp = tmp->next;
 		if (tmp && !ft_strncmp(line, tmp->line, len))
 		{
-			printf("\t\t%s\t%d\n", tmp->line + x, ft_strncmp(line, tmp->line + x, len));
+			//printf("\t\t%s\t%d\n", tmp->line + x, ft_strncmp(line, tmp->line + x, len));
 			tmp_x->next = tmp->next;
 			free(tmp);
 			data->env_len--;
@@ -78,6 +78,9 @@ int	ft_search_env(char *line, int x, int len, t_data *data)
 		}
 	}
 	return (0);
+
+
+	(void)x;
 }
 
 void	ft_add_env(char *line, t_data *data)

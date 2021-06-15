@@ -122,6 +122,6 @@ void	ft_init_term(t_data *data);
 void	ft_arrow_up(t_char **line_head, t_data *data, int x, int *len);
 
 
-void	ft_env_line(char **line);
+void	ft_env_line(char *line, t_data *data);
 
 #endif
