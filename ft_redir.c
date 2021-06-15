@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/15 10:45:21 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/15 11:59:49 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ char	*ft_name_of_file(char *line, int i)
 	return(ft_substr(line, i, c - i));
 }
 
-int	ft_open_file(char *file, int flag)
+int	ft_open_file(char *file, int flag,int back_stdin,int back_stdout)
 {
 	int	fd;
 	
@@ -160,6 +160,9 @@ int	ft_open_file(char *file, int flag)
 	}
 	else if (flag == 4)
 	{
+		dup2(back_stdin, 0);
+		int back = dup(1);
+		dup2(back_stdout,1);
 		fd = open("/tmp/minishell", O_RDWR | O_CREAT | O_TRUNC, 0666);
 		if (fd > 0)
 		{
@@ -167,17 +170,20 @@ int	ft_open_file(char *file, int flag)
 			printf("file:%s\n", file);
 			int r = 1;
 			char buf[1024];
+			
 			write(1, ">", 1);
 			while (r > 0)
 			{
+				dup2(back, 1);
 				r = read(0, buf, 1024);
 				buf[r] = '\0';
-				if (ft_strncmp(buf,file, ft_strlen(file) + 1) == '\n' || buf[0] == '\0')
+				if (ft_strncmp(buf,file, ft_strlen(file)) == '\n' || buf[0] == '\0')
 				{
 					close(fd);
 					break;
 				}
 				write(fd, buf, ft_strlen(buf));
+				dup2(back_stdout,1);			
 				write(1, ">", 1);
 			}
 			fd = open("/tmp/minishell", O_RDONLY, 0666);
@@ -194,6 +200,7 @@ int		ft_redir(char *line, t_data *data)
 	int r;
 	int back_stdin;
 	int back_stdout;
+
 
 	back_stdin = dup(0);
 	back_stdout = dup(1);
@@ -217,10 +224,10 @@ int		ft_redir(char *line, t_data *data)
 			// {
 			// 	// dup2(back_stdout,1);
 			// 	// close(back_stdout);
-			// 	// dup2(back_stdin, 0);
+			// 	dup2(back_stdin, 0);
 			// 	// close(back_stdin);
 			// }
-			ft_open_file(file, flag);   //RETURN ERROR
+			ft_open_file(file, flag, back_stdin, back_stdout);   //RETURN ERROR
 		}
 		i++;
 	}
