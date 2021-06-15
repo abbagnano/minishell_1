@@ -99,8 +99,8 @@ void	ft_exec_cmd(char *line, t_data *data)
 //	if (ft_strchr('$', line) != -1)
 //		ft_env_line(line);
 	
-	printf("line: %s\n", line);
-//	ft_check_cmd(line, data);
+	// printf("line: %s\n", line);
+	ft_check_cmd(line, data);
 	tcsetattr(0, 0, &data->my_term);
 
 

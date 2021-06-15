@@ -5,9 +5,7 @@ TODO:
 -$
 -" "   '  '
 -av[1]
--set unset env export
--matrice envp dall lista che si aggiorna 
--/bin/bash con env pulita?? forse no
+-set unset env export-/bin/bash con env pulita?? forse no
 -CTRL-\ fa l'uscita di un processo figlio es cat
 -DISATTIVA TAB
 -TILDE IN PATH
@@ -20,8 +18,6 @@ TODO:
 -IN TOP CI SONO 2 PROCESSI DI MINISHELL
 -LINEA AGGIuNTIVA ALLA FINE DEL TERM QUANDO FA IL PRIMO DELLA HISTORY  
 -LA VARIABILE GLOBALE CON LA STRUTTURA?
--RIGA VUOTA, PREMERE BACKSPACE E POI INSERIRE COMANDO E INVIO, NON LO PRENDE
-
 
 <<:
 -ELIMINA FILE TEMPORANEO DOPO LA LETTURA?
@@ -30,7 +26,10 @@ TODO:
 -STRCMP 
 -CHIUDI FILE DESCR DUP
 -UNLINK OPPURE PIPE
--if (ft_strncmp(buf,file, ft_strlen(file) + 1) == '\n' || buf[0] == '\0')
+
+
+
+
 
 <<
 https://unix.stackexchange.com/questions/165878/what-is-the-use-of-redirection
