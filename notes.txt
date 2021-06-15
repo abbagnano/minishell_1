@@ -30,6 +30,7 @@ TODO:
 -STRCMP 
 -CHIUDI FILE DESCR DUP
 -UNLINK OPPURE PIPE
+-if (ft_strncmp(buf,file, ft_strlen(file) + 1) == '\n' || buf[0] == '\0')
 
 <<
 https://unix.stackexchange.com/questions/165878/what-is-the-use-of-redirection
@@ -53,9 +54,9 @@ TPUTS
 https://www.gnu.org/software/termutils/manual/termcap-1.3/html_node/termcap_11.html
 
 MAN TERMCAP
+https://www.gnu.org/software/termutils/manual/termcap-1.3/html_mono/termcap.html
 http://www.nsc.ru/cgi-bin/www/unix_help/unix-man?termcap+5
 https://www.freebsd.org/cgi/man.cgi?query=termcap&sektion=5&format=html
-
 http://www2.phys.canterbury.ac.nz/dept/docs/manuals/unix/DEC_5.0a_Docs/HTML/MAN/MAN4/0243____.HTM
 
 

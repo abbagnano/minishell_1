@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/15 14:14:55 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/15 16:17:49 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,13 +176,16 @@ int	ft_open_file(char *file, int flag,int back_stdin,int back_stdout)
 				dup2(back, 1);
 				r = read(0, buf, 1024);
 				buf[r] = '\0';
-				if (ft_strncmp(buf,file, ft_strlen(file)) == '\n' || buf[0] == '\0')
+				int len = ft_strlen(file);
+				if ((ft_strncmp(buf, file, len + 1) == '\n' && ft_strncmp(buf, file, len) == 0) || buf[0] == '\0')
 				{
 					close(fd);
 					break;
 				}
 				write(fd, buf, ft_strlen(buf));
 				dup2(back_stdout,1);			
+					printf("buf: %s\n", buf);
+					printf("len:%d\n", len);
 				write(1, ">", 1);
 			}
 			fd = open("/tmp/minishell", O_RDONLY, 0666);
