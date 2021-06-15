@@ -81,12 +81,13 @@ void	ft_get_env(char **env, t_data *data)
 		x++;
 	}
 	data->env_len = x;
-	data->envp = (char **)malloc(sizeof(char *) * x);
+	data->envp = (char **)malloc(sizeof(char *) * (x + 1));
 	x = 0;
 	while (x < data->env_len)
 	{
 		data->envp[x] = env[x];
 		x++;
 	}
+	data->envp[x] = NULL;
 }
 	//ft_print_cmd(data->env_head);

@@ -100,9 +100,9 @@ void	ft_exec_cmd(char *line, t_data *data)
 	tcsetattr(0, 0, &data->my_term);
 
 
-	int x = 0;
-	while (data->envp[x])
-	{
-		printf("\t%s\n", data->envp[x++]);
-	}
+	// int x = 0;
+	// while (data->envp[x])
+	// {
+	// 	printf("\t%s\n", data->envp[x++]);
+	// }
 }

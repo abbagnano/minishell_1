@@ -225,13 +225,16 @@ int	ft_reading(t_char **line_head, int *len, t_data *data)
 			ft_write_char(line_head);
 			continue ;
 		}
-		else if (buf == 127 && *line_head)		// canc
+		else if (buf == 127) //&& *line_head)// && *len > 1)		// canc
 		{
+			if (!*line_head)
+				continue ;
 			printf("\n%s%s%s\n%s", up, cd, up, cd);
 			ft_canc_char(line_head);
 			ft_write("\033[0;32mminishell% \033[0m");
 			ft_write_char(line_head);
 			*len = ft_char_len(line_head);
+			// printf("len: %d\n", *len);
 			continue ;
 		}
 		else if (buf == 4)			// ctrl -d
@@ -336,7 +339,7 @@ void    ft_read_ops(t_data *data)
 		}
 		if (!line_head && !len)
 		{
-			printf("sfddsf   %d\n", len);
+		//	printf("sfddsf   %d\n", len);
 			free(cmd);
 			line_head = NULL;
 		}
