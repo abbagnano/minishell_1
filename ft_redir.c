@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_redir.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/14 18:34:16 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/06/15 08:15:48 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,8 @@ int	ft_open_file(char *file, int flag)
 	{
 		if (flag == 2)
 			fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0666);
-		else if (flag == 3)
+		else
+		// else if (flag == 3)
 			fd = open(file, O_RDWR | O_CREAT | O_APPEND, 0666);
 		if (fd > 0)
 		{
