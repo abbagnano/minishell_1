@@ -19,6 +19,13 @@ TODO:
 -IN TOP CI SONO 2 PROCESSI DI MINISHELL
 -FRECCIA GIU IN HISTORY
 -APPENA APERTO IL TERMINALE E APRENDO CAT CTRL \ FUNZIONA MA POI NON FUNZIONA
+-FARE UNA STRJOIN MODIFICATA 
+
+EXPORT:
+-export ARG =ciao NON DEVE FUNZ
+-export ARG= ciao DEVE CREARE: ARG="" e ciao (2 VARIABILI)
+-export ARG="ciao ciao" DEVE CREARE: ARG= "ciao ciao"
+-export ARG="ciao" e poi ARG+="ciao" DEVE CREARE: ARG=ciaociao
 
 <<:
 -ELIMINA FILE TEMPORANEO DOPO LA LETTURA?   ->UNLINK OPPURE PIPE
@@ -26,11 +33,36 @@ TODO:
 ->OUTFILE PRIMA DI EOF
 -CHIUDI FILE DESCR DUP
 
-
 REDIR_PARSING:
 esempio: ls -l>outfile non funziona, non riesce a passare il -l
 echo ciao > outfile non deve funzionare perche passa per le builtin, invertire l'ordine di chiamata in exec_cmd?
+NON DEVE FUNZIOANRE SE LA REDIRECTION STA ALLA FINE SENZA ARGOEMNTI E CON SPAZI
+/* ERRORS:
+	<infile >outfile >> outfile2
+	Segmentation fault: 11
 
+	bash-3.2$ <infile >outfile >>outfile2 cat DEVE PRENDERE SOLO IL SECONDO, STESSO DISCORSO SE INVERTITI
+
+	<giusto<sbagliato deve creare il giusto
+	
+	<<>infile
+	<>infile 
+	<>>infile
+	
+	><<infile
+	><infile
+	>><infile 
+
+	2>&1 > dirlist
+
+	cat infile >outfile non funziona
+*/
+
+ORDINE PARSING:
+1)$ pulisce anche le virgolette relative al $ e parzialmente alle redir 
+2)REDIR pulisce anche le virgolette relative alle redirection, non pulisce le virgolette relative ai command
+3)PIPE 
+4)pulizia virgolette in generale
 
 SIGNAL
 https://stackoverflow.com/questions/4217037/catch-ctrl-c-in-c/4217052

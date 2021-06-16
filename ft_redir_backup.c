@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/16 17:40:39 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/16 16:29:51 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,25 +57,25 @@ int	ft_command(char *line, t_data *data)
 	if (i >= 0)
 	{
 		int c = i;
-		// while (split[c] && (ft_strchr('<', split[c]) == -1 && ft_strchr('>', split[c]) == -1))
-		// 	c++;
-		while (split[c])
-		{
-			x = 0;
-			// int len = ft_strlen(split[c]);
-			while (split[c][x] && (split[c][0] != '<' || split[c][0] != '>'))
-			{
-				if (split[c][x] == '<' || split[c][x] == '>')
-				{
-					save = split[c];
-					split[c] = ft_substr(split[c], 0, x);
-					free(save);
-					break ;
-				}
-				x++;
-			}
+		while (split[c] && (ft_strchr('<', split[c]) == -1 && ft_strchr('>', split[c]) == -1))
 			c++;
-		} 
+		// while (split[c])
+		// {
+		// 	x = 0;
+		// 	// int len = ft_strlen(split[c]);
+		// 	while (split[c][x] && (split[c][0] != '<' || split[c][0] != '>'))
+		// 	{
+		// 		if (split[c][x] == '<' || split[c][x] == '>')
+		// 		{
+		// 			save = split[c];
+		// 			split[c] = ft_substr(split[c], 0, x);
+		// 			free(save);
+		// 			break ;
+		// 		}
+		// 		x++;
+		// 	}
+		// 	c++;
+		// } 
 		x = 0;
 		data->args = (char **)malloc(sizeof(char *) * (c - i + 1));
 		if (!data->args)
@@ -101,115 +101,51 @@ int	ft_type_of_redir(char *line, int *i)
 	int	flag;
 		
 	flag = 0;
-	int back = i;
-	if (line[*i] == '"')
+	if (line[*i] == '<' && line[*i + 1] && line[*i + 1] != '<')
 	{
-		(*i)++;
-		while (line[*i] && line[*i] != '"')
-		(*i)++;
-		// printf("ciao\n");
+		if (line[*i + 1] == '>')
+		{
+			(*i)++;
+			flag = 5;
+		}
+		else
+			flag = 1;
 	}
-	if (line[*i])
+	else if (line[*i] == '>' && line[*i + 1] && line[*i + 1] != '>')
+	{			
+		if (line[*i + 1] == '<')
+			printf("Error: 7\n");
+		flag = 2;
+	}
+	else if (line[*i] == '>' && line[*i + 1] && line[*i  + 1] == '>')
 	{
-		if (line[*i] == '<' && line[*i + 1] && line[*i + 1] != '<')
-		{
-			if (line[*i + 1] == '>')
-			{
-				(*i)++;
-				flag = 5;
-			}
-			else
-				flag = 1;
-		}
-		else if (line[*i] == '>' && line[*i + 1] && line[*i + 1] != '>')
-		{			
-			if (line[*i + 1] == '<')
-				printf("Error: 7\n");
-			flag = 2;
-		}
-		else if (line[*i] == '>' && line[*i + 1] && line[*i  + 1] == '>')
-		{
-			if (line[*i  + 2] && line[*i + 2] == '>')
-				printf("Error: 1\n");
-			(*i)++;
-			flag = 3;
-		}
-		else if (line[*i] == '<' && line[*i + 1] && line[*i  + 1] == '<')
-		{
-			if (line[*i  + 2] && line[*i + 2] == '<')
-				printf("Error: 6\n");
-			(*i)++;
-			flag = 4;
-		}
+		if (line[*i  + 2] && line[*i + 2] == '>')
+			printf("Error: 1\n");
+		(*i)++;
+		flag = 3;
+	}
+	else if (line[*i] == '<' && line[*i + 1] && line[*i  + 1] == '<')
+	{
+		if (line[*i  + 2] && line[*i + 2] == '<')
+			printf("Error: 6\n");
+		(*i)++;
+		flag = 4;
 	}
 	return (flag);
 }
 
-char *ft_strclean(char *line, char *new_line, int i, int c)
+char	*ft_name_of_file(char *line, int i)
 {
-	char *new;
-	int x = 0;
-
-	printf("%s\t%d\t%d\n",line, i, c);
-	int len2 = ft_strlen(new_line);
-	int len = ft_strlen(line);
-	printf("%d\t%d\n", len, len2);
-	int y = len - len2;
-	new = (char *)malloc(sizeof(char) * (len2 -c -i + 1));
-	while (x < i)
-	{
-		new[x] = line[y + x];
-		x++;
-	}
-	while (line[y + c + x])
-	{
-		new[x] = line[y + c + x];
-		x++;
-	}
-	new[x] = '\0';
-	printf("newwwww:%s\n", new);
-	return (new);
-} 
-
-char	*ft_name_of_file(char *line, int i, char **new_line)
-{
-	char *temp;
 	int	c;
-
+	
 	(i)++;
 	while(line[i] && line[i] == ' ')
 		(i)++;
-	if (line[i] == '"')											//TESTARE BENE
-	{
-		i++;
-		c = i;
-		while (line[c] && line[c] != '"')
-			c++;
-	}
-	else
-	{
-		c = i;
-		while(line[c] && line[c] != '<' && line[c] != '>' && line[c] != ' ')
-			c++;
-	}
-	if (c == i)							//TESTARE
+	c = i;
+	while(line[c] && line[c] != '<' && line[c] != '>' && line[c] != ' ')
+		c++;
+	if (c == i)
 		return (NULL);
-
-	if (!(*new_line))
-	{
-		*new_line = ft_substr(line, c, ft_strlen(line));
-	}
-	else 
-	{
-		char *save;
-		temp = NULL;
-	//	temp = ft_substr(line, c, ft_strlen(line));
-		save = *new_line;
-		// *new_line = ft_strjoin(*new_line, temp);
-		*new_line = ft_strclean(line, *new_line,i ,c);
-		free(save);
-	}
-
 	return(ft_substr(line, i, c - i));
 }
 
@@ -307,10 +243,8 @@ int		ft_redir(char *line, t_data *data)
 	int r;
 	int back_stdin;
 	int back_stdout;
-	char *new_line;
 
 
-	new_line = NULL;
 	back_stdin = dup(0);
 	back_stdout = dup(1);
 	r = ft_command(line, data);
@@ -323,12 +257,11 @@ int		ft_redir(char *line, t_data *data)
 	while (line[i])
 	{
 		flag = ft_type_of_redir(line,&i);
+		
 		if (flag > 0)
 		{
-			file = ft_name_of_file(line,i, &new_line);
+			file = ft_name_of_file(line,i);
 			printf("file:%s\n", file);
-			if (new_line)
-				printf("new_line: %s\n", new_line);
 			if (file == NULL)
 				return (0);
 			// if (flag == 4)
@@ -352,9 +285,11 @@ int		ft_redir(char *line, t_data *data)
 			pid = fork();
 			if (pid == 0)
 			{
-				int i = 0;
-				while (data->args[i])
-					printf("data->args: %s\n", data->args[i++]);
+
+				// int i = 0;
+				// while (data->args[i])
+				// 	printf("data->args: %s\n", data->args[i++]);
+				
 				execve(data->args[0], data->args, data->envp);
 				printf( "child: execve failed\n");
 				printf(" 1\n");
@@ -397,7 +332,29 @@ int		ft_redir(char *line, t_data *data)
 	return (0);
 }
 
+/* ERRORS:
+	<infile >outfile >> outfile2
+	Segmentation fault: 11
 
+	bash-3.2$ <infile >outfile >>outfile2 cat DEVE PRENDERE SOLO IL SECONDO, STESSO DISCORSO SE INVERTITI
+
+
+	<giusto<sbagliato deve creare il giusto
+	
+	<<>infile
+	<>infile 
+	<>>infile
+	
+	><<infile
+	><infile
+	>><infile 
+
+
+	2>&1 > dirlist
+
+
+	cat infile >outfile non funziona
+*/
 
 /////*old*//////////////////////////////////////////////////////////////
 	// i = ft_strchr_last_single(line, '<');
