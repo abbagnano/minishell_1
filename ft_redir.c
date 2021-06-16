@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/16 18:37:16 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/06/16 18:50:01 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,14 +306,31 @@ int		ft_redir(char *line, t_data *data)
 	int status;
 	int x;
 
+	x = 0;
 	while (line[i])
 	{
 		flag = ft_type_of_redir(line,&i);
 		if (flag > 0)
 		{
-			x = i;
-			x++;
+			if (i > x)
+			{
+				x++;
+				if (!new_line)
+				{
+					new_line = ft_substr(line, x, i - x)
+				}
+				else
+				{
+					char *save;
+					char *temp;
+					save = new_line;
+					temp = ft_substr();
+					new_line = ft_strjoin(new_line, )
+				}
+				x++;
+			}	
 			file = ft_name_of_file(line,&i);
+			x = i;
 			printf("file:%s\n", file);
 			if (file == NULL)
 				return (0);
