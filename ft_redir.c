@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/16 18:23:11 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/06/16 18:37:16 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,32 +146,57 @@ int	ft_type_of_redir(char *line, int *i)
 }
 
 
-
-char	*ft_name_of_file(char *line, int i, char **new_line)
+char	*ft_name_of_file(char *line, int *i)
 {
 	int	c;
 
-	(i)++;
-	while(line[i] && line[i] == ' ')
-		(i)++;
-	if (line[i] == '"')											//TESTARE BENE
+	(*i)++;
+	while(line[*i] && line[*i] == ' ')
+		(*i)++;
+	if (line[*i] == '"')											//TESTARE BENE
 	{
-		i++;
-		c = i;
+		(*i)++;
+		c = *i;
 		while (line[c] && line[c] != '"')
 			c++;
 	}
 	else
 	{
-		c = i;
+		c = (*i);
 		while(line[c] && line[c] != '<' && line[c] != '>' && line[c] != ' ')
 			c++;
 	}
-	if (c == i)							//TESTARE
+	if (c == (*i))							//TESTARE
 		return (NULL);
 
-	return(ft_substr(line, i, c - i));
+	return(ft_substr(line, *i, c - *i));
 }
+
+// char	*ft_name_of_file(char *line, int i, char **new_line)
+// {
+// 	int	c;
+
+// 	(i)++;
+// 	while(line[i] && line[i] == ' ')
+// 		(i)++;
+// 	if (line[i] == '"')											//TESTARE BENE
+// 	{
+// 		i++;
+// 		c = i;
+// 		while (line[c] && line[c] != '"')
+// 			c++;
+// 	}
+// 	else
+// 	{
+// 		c = i;
+// 		while(line[c] && line[c] != '<' && line[c] != '>' && line[c] != ' ')
+// 			c++;
+// 	}
+// 	if (c == i)							//TESTARE
+// 		return (NULL);
+
+// 	return(ft_substr(line, i, c - i));
+// }
 
 int	ft_open_file(char *file, int flag,int back_stdin,int back_stdout)
 {
@@ -279,16 +304,17 @@ int		ft_redir(char *line, t_data *data)
 	char *file;
 	int pid;
 	int status;
+	int x;
 
 	while (line[i])
 	{
 		flag = ft_type_of_redir(line,&i);
 		if (flag > 0)
 		{
-			file = ft_name_of_file(line,i, &new_line);
+			x = i;
+			x++;
+			file = ft_name_of_file(line,&i);
 			printf("file:%s\n", file);
-			if (new_line)
-				printf("new_line: %s\n", new_line);
 			if (file == NULL)
 				return (0);
 			// if (flag == 4)
