@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_redir.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/16 17:40:39 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/16 18:23:11 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,35 +145,10 @@ int	ft_type_of_redir(char *line, int *i)
 	return (flag);
 }
 
-char *ft_strclean(char *line, char *new_line, int i, int c)
-{
-	char *new;
-	int x = 0;
 
-	printf("%s\t%d\t%d\n",line, i, c);
-	int len2 = ft_strlen(new_line);
-	int len = ft_strlen(line);
-	printf("%d\t%d\n", len, len2);
-	int y = len - len2;
-	new = (char *)malloc(sizeof(char) * (len2 -c -i + 1));
-	while (x < i)
-	{
-		new[x] = line[y + x];
-		x++;
-	}
-	while (line[y + c + x])
-	{
-		new[x] = line[y + c + x];
-		x++;
-	}
-	new[x] = '\0';
-	printf("newwwww:%s\n", new);
-	return (new);
-} 
 
 char	*ft_name_of_file(char *line, int i, char **new_line)
 {
-	char *temp;
 	int	c;
 
 	(i)++;
@@ -194,21 +169,6 @@ char	*ft_name_of_file(char *line, int i, char **new_line)
 	}
 	if (c == i)							//TESTARE
 		return (NULL);
-
-	if (!(*new_line))
-	{
-		*new_line = ft_substr(line, c, ft_strlen(line));
-	}
-	else 
-	{
-		char *save;
-		temp = NULL;
-	//	temp = ft_substr(line, c, ft_strlen(line));
-		save = *new_line;
-		// *new_line = ft_strjoin(*new_line, temp);
-		*new_line = ft_strclean(line, *new_line,i ,c);
-		free(save);
-	}
 
 	return(ft_substr(line, i, c - i));
 }
