@@ -6,12 +6,28 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 11:22:46 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/14 11:46:17 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/16 12:13:59 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "my_minishell.h"
 #include "my_minishell2.h"
+
+void  INThandler(int sig)
+{
+     char  c;
+
+    signal(sig, SIG_IGN);
+     printf("OUCH, did you hit Ctrl-C?\n"
+            "Do you really want to quit? [y/n] ");
+     c = getchar();
+     if (c == 'y' || c == 'Y')
+          exit(0);
+     else
+          signal(SIGINT, INThandler);
+     getchar(); // Get new line character
+}
+
 
 int ft_do_execve(t_data *data)
 {
@@ -25,8 +41,11 @@ int ft_do_execve(t_data *data)
 	}
 	else
 	{
+		ft_free_matrix(&data->args);
+		signal(SIGQUIT, INThandler);
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status)  && !WEXITSTATUS(status))
+		
 			return (0);			//SUCCESS
 		else 
 			return (1);			//NOT SUCCESS
@@ -39,12 +58,14 @@ int ft_is_a_loc_com(t_data *data)
 	char	*path;
 	char	*save;
 	int		fd;
-
+	// printf("loc_command\n");
 	path = getcwd(NULL, 0);
 	save = path;
 	path = ft_strjoin(path, "/");
 	free(save);	
+	save = path;
 	path = ft_strjoin(path, data->args[0]);
+	free(save);
 	fd = open(path, O_RDONLY);
 	if (fd > 0)
 	{
@@ -55,6 +76,7 @@ int ft_is_a_loc_com(t_data *data)
 		return (1);
 	}
 	free(path);
+	exit(0);
 	return (0);
 }
 
@@ -67,12 +89,16 @@ int	ft_is_a_sys_com(t_data *data)
 	char **path_matrix;
 
 	path = getenv("PATH");
+	// printf("sys_command\n");
 	path_matrix = ft_split(path, ':');
+	// free(path);
 	
 	i  = -1;
 	while (path_matrix[++i])
 	{	
+		// save = path_matrix[i];
 		path = ft_strjoin(path_matrix[i], "/");
+		// free(save);
 		save = path;
 		path = ft_strjoin(path, data->args[0]);
 		free(save);
@@ -103,6 +129,7 @@ int ft_check_execve(char *line, t_data *data)
 		data->args = ft_split(line, ' ');
 	if (ft_strchr('/', data->args[0]) == 0)   //TESTARE
 	{
+		// printf("abs_command\n");
 		fd = open(data->args[0], O_RDONLY);
 		if (fd > 0)
 		{

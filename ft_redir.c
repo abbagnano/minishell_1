@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/15 16:17:49 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/16 12:16:37 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,15 @@ int	ft_command(char *line, t_data *data)
 	char	**split;
 	int		i;
 	int		x;
+	int		r;
 	
 	x = 0;
 	i = -1;
+	r = 0;
 	split = ft_split(line, ' ');
-	if (split)
-		i = ft_find_command(split);
+	if (!split)
+		return (0);
+	i = ft_find_command(split);
 	if (i >= 0)
 	{
 		int c = i;
@@ -67,9 +70,11 @@ int	ft_command(char *line, t_data *data)
 			x++;
 			i++;
 		}
-		return (1);
+		r = 1;
+		// return (r);
 	}
-	return (0);
+	ft_free_matrix(&split);
+	return (r);
 }
 
 int	ft_type_of_redir(char *line, int *i)
@@ -188,6 +193,7 @@ int	ft_open_file(char *file, int flag,int back_stdin,int back_stdout)
 					printf("len:%d\n", len);
 				write(1, ">", 1);
 			}
+			close(back);
 			fd = open("/tmp/minishell", O_RDONLY, 0666);
 			dup2(fd, 0);
 			close(fd);
@@ -246,6 +252,8 @@ int		ft_redir(char *line, t_data *data)
 			// 	// close(back_stdin);
 			// }
 			ft_open_file(file, flag, back_stdin, back_stdout);   //RETURN ERROR
+			free(file);
+			file = NULL;
 		}
 		i++;
 	}
@@ -265,6 +273,8 @@ int		ft_redir(char *line, t_data *data)
 			else
 			{
 					// printf(" child\n");
+					ft_free_matrix(&data->args);
+
 				waitpid(pid, &status, 0);
 				dup2(back_stdout,1);
 				close(back_stdout);
@@ -288,6 +298,7 @@ int		ft_redir(char *line, t_data *data)
 	{
 		//RETURN TO STANDARD IN/OUT
 		// printf(" parent\n");
+		
 		dup2(back_stdout,1);
 		close(back_stdout);
 		dup2(back_stdin, 0);

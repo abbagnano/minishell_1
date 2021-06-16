@@ -8,7 +8,8 @@ TODO:
 -set unset env export-/bin/bash con env pulita?? forse no
 -CTRL-\ fa l'uscita di un processo figlio es cat
 -DISATTIVA TAB
--TILDE IN PATH
+-TILDE IN cd, TILDE IN PATH EXECVE
+-cd SENZA ARGOMENTI
 -/bin/echo ?? 
 -PIPE E REDIRECTION DEVONO USARE LE BUILTIN INVECE CHE L'ÉXECCVE DIRETTAMENTE?
 -GESTIONE DEGLI ERRORI
@@ -16,25 +17,28 @@ TODO:
 -POF per i processi
 -DELETE CHE CREA UNO SPAZIO
 -IN TOP CI SONO 2 PROCESSI DI MINISHELL
--LINEA AGGIuNTIVA ALLA FINE DEL TERM QUANDO FA IL PRIMO DELLA HISTORY  
--LA VARIABILE GLOBALE CON LA STRUTTURA?
+-FRECCIA GIU IN HISTORY
+-APPENA APERTO IL TERMINALE E APRENDO CAT CTRL \ FUNZIONA MA POI NON FUNZIONA
 
 <<:
--ELIMINA FILE TEMPORANEO DOPO LA LETTURA?
+-ELIMINA FILE TEMPORANEO DOPO LA LETTURA?   ->UNLINK OPPURE PIPE
 -<INFILE PRIMA DI <<EOF
 ->OUTFILE PRIMA DI EOF
--STRCMP 
 -CHIUDI FILE DESCR DUP
--UNLINK OPPURE PIPE
+
+REDIR_PARSING:
+esempio: echo ciao>outfile non funziona
 
 
-
+SIGNAL
+https://stackoverflow.com/questions/4217037/catch-ctrl-c-in-c/4217052
+https://en.wikipedia.org/wiki/Control_key
+https://man7.org/linux/man-pages/man7/signal.7.html
 
 
 <<
 https://unix.stackexchange.com/questions/165878/what-is-the-use-of-redirection
 https://www.gnu.org/software/bash/manual/bash.html#Here-Documents
-
 
 https://app.slack.com/client/T039P7U66/CN9RHKQHW/thread/CN9RHKQHW-1623660443.354700
 https://app.slack.com/client/T039P7U66/CN9RHKQHW/thread/CN9RHKQHW-1623660443.354700
@@ -73,7 +77,6 @@ https://stackoverflow.com/questions/20974438/get-list-of-open-files-descriptors-
 
 CANONICAL
 https://www.gnu.org/software/libc/manual/html_node/Canonical-or-Not.html
-
 https://stackoverflow.com/questions/57916475/linux-stdin-buffering
 
 NON CANONICAL
