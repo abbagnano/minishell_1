@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 11:22:46 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/16 12:13:59 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/16 13:38:16 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void  INThandler(int sig)
 
     signal(sig, SIG_IGN);
      printf("OUCH, did you hit Ctrl-C?\n"
-            "Do you really want to quit? [y/n] ");
+            "Do you really want to quit? [y/n] \n");
      c = getchar();
      if (c == 'y' || c == 'Y')
           exit(0);

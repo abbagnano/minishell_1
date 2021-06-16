@@ -26,8 +26,10 @@ TODO:
 ->OUTFILE PRIMA DI EOF
 -CHIUDI FILE DESCR DUP
 
+
 REDIR_PARSING:
-esempio: echo ciao>outfile non funziona
+esempio: ls -l>outfile non funziona, non riesce a passare il -l
+echo ciao > outfile non deve funzionare perche passa per le builtin, invertire l'ordine di chiamata in exec_cmd?
 
 
 SIGNAL

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 13:20:06 by arrigo            #+#    #+#             */
-/*   Updated: 2021/06/07 13:50:37 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/06/16 13:46:03 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 int ft_pipe(char *line, t_data *data)
 {
+	(void)data;
 	if (ft_strchr('|', line) == 0)
 		return (0);      ////////ERROR
 	

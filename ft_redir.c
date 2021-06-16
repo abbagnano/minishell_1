@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/16 12:16:37 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/16 13:45:31 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	ft_command(char *line, t_data *data)
 	int		i;
 	int		x;
 	int		r;
+	char *save;
 	
 	x = 0;
 	i = -1;
@@ -56,8 +57,26 @@ int	ft_command(char *line, t_data *data)
 	if (i >= 0)
 	{
 		int c = i;
-		while (split[c] && (ft_strchr('<', split[c]) == -1 && ft_strchr('>', split[c]) == -1))
-		 	c++;
+		// while (split[c] && (ft_strchr('<', split[c]) == -1 && ft_strchr('>', split[c]) == -1))
+		// 	c++;
+		while (split[c])
+		{
+			x = 0;
+			// int len = ft_strlen(split[c]);
+			while (split[c][x] && (split[c][0] != '<' || split[c][0] != '>'))
+			{
+				if (split[c][x] == '<' || split[c][x] == '>')
+				{
+					save = split[c];
+					split[c] = ft_substr(split[c], 0, x);
+					free(save);
+					break ;
+				}
+				x++;
+			}
+			c++;
+		} 
+		x = 0;
 		data->args = (char **)malloc(sizeof(char *) * (c - i + 1));
 		if (!data->args)
 			return(0);
@@ -242,6 +261,7 @@ int		ft_redir(char *line, t_data *data)
 		if (flag > 0)
 		{
 			file = ft_name_of_file(line,i);
+			printf("file:%s\n", file);
 			if (file == NULL)
 				return (0);
 			// if (flag == 4)
