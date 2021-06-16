@@ -17,7 +17,10 @@ OBJS	=	minishell.o \
 			ft_redir.o \
 			utils_aviol.o \
 			utils_aviol2.o \
-			ft_env_line.o 
+			ft_env_line.o \
+			utils_read_ops.o \
+			utils_t_char.o \
+			ft_check_quotes.o
 			
 all		:	$(NAME)
 

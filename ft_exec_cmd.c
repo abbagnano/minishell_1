@@ -89,19 +89,22 @@ void	ft_check_cmd(char *line, t_data *data)
 		ft_do_execve(data);			//IMPORTANTE SE C'E' IL PUNTO e VIRGOLA 
 									//HA IL RETURN 0=SUCCESS, 1=NOT SUCCESS
 	else
+	{
 		ft_write("minishell: command not found\n");
+		errno = 1;
+	}
 }
 
 void	ft_exec_cmd(char *line, t_data *data)
 {
 	// printf("line: %s/n", line);
 	tcsetattr(0, 0, &data->old_term);
-	if (ft_strchr('$', line) != -1)
-		ft_env_line(line, data);
-	else
-		ft_check_cmd(line, data);
-		
-	// printf("line: %s\n", line);
+	if (ft_strchr('$', line) != -1 && ft_strchr('\'', line) == -1)
+		ft_env_line(&line, data);
+	ft_check_cmd(line, data);
+	
+	// printf("line: %p\n", line);
+	free(line);
 	tcsetattr(0, 0, &data->my_term);
 
 

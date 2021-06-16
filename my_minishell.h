@@ -75,19 +75,9 @@ void	ft_append_read(t_read *new, t_read **head);
 void	ft_buf_to_list(char *buf, t_data *data);
 
 /*		ft_read_ops.c	*/
-void    ft_linod_to_line(char **line, int len, t_char **line_head);
-void    ft_buffering(char buf, int *len, t_char **line_head);
 int		ft_read_special(t_char **line_head, t_data *data, int *x, int *len);
 int     ft_reading(t_char **line_head, int *len, t_data *data);
 void	ft_read_ops(t_data *data);
-
-/*              ft_read_ops_old.c   */
-//void    ft_linod_to_line(char **line, t_data *data);
-//void    ft_buffering(char buf, t_data *data);
-//void    ft_read_special(t_data *data);
-//void    ft_read_ops(t_data *data);
-
-void	ft_free_char(t_char **line_head);
 
 /*		ft_exec_cmd.c	*/
 void	ft_cd(char *line, t_data *data);
@@ -103,6 +93,7 @@ void	ft_export(char *line, t_data *data);
 void	ft_get_env(char **env, t_data *data);
 
 /*		utils_get_env.c	*/
+char	*ft_itoa_errno(int num, int len, char *var);
 void	ft_list_to_matr(t_read **env_head, char ***envp, t_data *data);
 void	ft_fix_env(char **line);
 int		ft_search_env(char *line, int x, int len, t_data *data);
@@ -122,6 +113,25 @@ void	ft_init_term(t_data *data);
 void	ft_arrow_up(t_char **line_head, t_data *data, int x, int *len);
 
 
-void	ft_env_line(char *line, t_data *data);
+void	ft_env_line(char **line, t_data *data);
+
+/*		utils_read_ops.c	*/
+int		ft_read_len(t_read **cmd_head);
+void	ft_add_front_read(t_read *new, t_read **head);
+void	ft_linod_to_line(char **line, char **line2, int len, t_char **line_head);
+// void	ft_linod_to_line(char **line, int len, t_char **line_head);
+// void	ft_linod_to_line_nofree(char **line, int len, t_char **line_head);
+void	ft_buffering(char buf, int *len, t_char **line_head);
+
+/*		utils_t_char.c		*/
+int		ft_char_len(t_char **line_head);
+void	ft_free_char(t_char **line_head);
+void	ft_write_char(t_char **line_head);
+void	ft_canc_char(t_char **line_head);
+
+/*		ft_check_quotes.c	*/
+int		ft_check_quotes(char *line, char c);
+// int		ft_check_quotes(t_char **line_head);
+// int		ft_check_quotes_clean(t_char **line_head, char c);
 
 #endif

@@ -90,4 +90,3 @@ void	ft_get_env(char **env, t_data *data)
 	}
 	data->envp[x] = NULL;
 }
-	//ft_print_cmd(data->env_head);

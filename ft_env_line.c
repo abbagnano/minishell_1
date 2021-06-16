@@ -1,73 +1,88 @@
 #include "my_minishell.h"
 
-void	ft_var_line(char *var, char *line, int len, t_data *data)
+void	ft_get_var(char **var, int len, t_data *data)
 {
+	t_read	*tmp;
+
+	tmp = *data->env_head;
+	while (tmp && (*var)[1] != '?' && ft_strncmp((*var + 1), tmp->line, len) != -61)
+		tmp = tmp->next;
+	if ((*var)[1] == '?')
+	{
+		free(*var);
+		*var = ft_itoa_errno(errno, len, *var);//(errno);
+		len = 2;
+	}
+	else
+	{
+		free(*var);
+		*var = "\0";
+		if (tmp)
+			*var = tmp->line;
+	}
+}
+
+void	ft_var_line(char *var, char **line, int len, t_data *data)
+{
+	char	*tmp;
 	char	*new;
 	int		tot;
 	int		z;
-	t_read	*tmp;
 
-	// printf("var:%s\n", var);
-	tmp = *data->env_head;
-	while (tmp && ft_strncmp(var + 1, tmp->line, len) != -61)//'=')// && !ft_strncmp(var + 1, tmp->line, len - 1))
-	{
-	//	 printf("env: %s\n", tmp->line);
-	//	 printf("cmp1: %d\tcmp2: %d\n", ft_strncmp(var + 1, tmp->line, len), ft_strncmp(var + 1, tmp->line, len));
-		tmp = tmp->next;
-	}
-	free(var);
-	var = "\0";
-	if (tmp)
-		var = tmp->line;
-//	printf("var:%s\n", var);
-	tot = ft_strlen(line) - len + ft_strlen(var + 5);
+	ft_get_var(&var, len, data);
+//	printf(" %s\n", var);
+	tot = ft_strlen(*line) - len + ft_strlen(var + len);
 	new = (char *)malloc(sizeof(char) * (tot + 1));
+	tmp = *line;
 	z = 0;
-	while (line[z] != '$')
+	while (tmp[z] != '$')
 	{
-		new[z] = line[z];
+		new[z] = tmp[z];
 		z++;
 	}
 	tot = z;
 	z = 0;
-	while (var[z + len])
+	while (var[len + z])
 	{
-		new[tot + z] = var[z + len];
+		new[tot + z] = var[len + z];
 		z++;
 	}
 	len += tot;
 	tot += z;
 	z = 0;
-	while (line[tot + len + z])
+	while (tmp[len + z])
 	{
-		new[tot + z] = line[len + z];
+		new[tot + z] = tmp[len + z];
 		z++;
 	}
-	new[tot + z + len] = '\0';
-	// printf("len:%d\n", len);
-//	printf("new: %s\n", new);
-	ft_check_cmd(new, data);
-	free(new);
+	new[tot + z] = '\0';
+	free(*line);
+	*line = new;
+//	printf("vvar:%p\n", *line);
+//	ft_check_cmd(new, data);
+//	free(new);
 }
 
-void	ft_env_line(char *line, t_data *data)
+void	ft_env_line(char **line, t_data *data)
 {
+	char	*tmp;
 	char	*var;
 	int		x;
 	int		len;
 
 	x = 0;
 	len = 0;
+	tmp = *line;
 	// printf("line: %s\n", line);
-	while (line[x] && line[x] != '$')
+	while (tmp[x] && tmp[x] != '$')
 		x++;
-	while (line[x + len] && line[x + len] != ' ')
+	while (tmp[x + len] && tmp[x + len] != ' ')
 		len++;
 	var = (char *)malloc(sizeof(char) * (len + 1));
 	len = 0;
-	while (line[x + len] && line[x + len] != ' ')
+	while (tmp[x + len] && tmp[x + len] != ' ')
 	{
-		var[len] = line[x + len];
+		var[len] = tmp[x + len];
 		len++;
 	}
 	var[len] = '\0';
