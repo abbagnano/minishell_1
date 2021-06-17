@@ -20,6 +20,8 @@ TODO:
 -FRECCIA GIU IN HISTORY
 -APPENA APERTO IL TERMINALE E APRENDO CAT CTRL \ FUNZIONA MA POI NON FUNZIONA
 -FARE UNA STRJOIN MODIFICATA 
+-IN FLAG=4 SISTEMARE L OSTDOUT DIRETTAMENTE CON IL BACKUP SU WRITE
+-LSTAT AL POSTO DI OPEN
 
 EXPORT:
 -export ARG =ciao NON DEVE FUNZ
@@ -59,7 +61,7 @@ NON DEVE FUNZIOANRE SE LA REDIRECTION STA ALLA FINE SENZA ARGOEMNTI E CON SPAZI
 */
 
 ORDINE PARSING:
-1)$ pulisce anche le virgolette relative al $ e parzialmente alle redir 
+1)$ pulisce anche le virgolette relative al $ e parzialmente alle redir
 2)REDIR pulisce anche le virgolette relative alle redirection, non pulisce le virgolette relative ai command
 3)PIPE 
 4)pulizia virgolette in generale
