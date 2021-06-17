@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/17 11:29:31 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/17 13:15:49 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,7 @@ int		ft_redir(char *line, t_data *data)
 	int pid;
 	int status;
 	int x;
+	int z;
 
 	x = 0;
 	while (line[i])
@@ -236,18 +237,30 @@ int		ft_redir(char *line, t_data *data)
 		flag = ft_type_of_redir(line,&i);
 		if (flag > 0)
 		{
+			if (flag < 3)
+			{
+				z = 0;
+			}
+			else
+			{
+				if (x > 0)
+					z = 1;
+			}
 			if (i > x)
 			{
 				if (!new_line)
 				{
+					printf("i:%d\n", i);
+					printf("x:%d\n", x);	
 					new_line = ft_substr(line, x, i - x);
+					// exit(0);
 				}
 				else
 				{
 					char *save;
 					char *temp;
 					save = new_line;
-					temp = ft_substr(line, x, i -x);
+					temp = ft_substr(line, x, i - x);
 					printf(" temp1:%s\n", temp);
 					new_line = ft_strjoin(new_line, temp);
 					free(temp);
@@ -307,7 +320,7 @@ int		ft_redir(char *line, t_data *data)
 	// {
 		r = ft_check_execve(new_line, data);
 		printf("new_line:%s\n", new_line);
-				free(new_line);	
+				// free(new_line);	              /////////////////SCOMMENTARE
 		if ( r == 1)
 		{
 			pid = fork();
