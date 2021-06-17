@@ -6,95 +6,14 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/17 10:37:44 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/17 11:29:31 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "my_minishell.h"
 #include "my_minishell2.h"
 
-int	ft_find_command(char **split)
-{	
-	int	i;
-
-	i = 0;
-	while(split[i])
-	{
-		if (ft_strchr('<', split[i]) == -1 && ft_strchr('>', split[i]) == -1)
-		{
-			if	(i == 0 || 
-				(i > 0 && split[i - 1][0] && split[i - 1][0] != '<' &&
-						split[i - 1][0] != '>') ||
-				(i > 0 && split[i - 1][0] && (split[i - 1][0] == '<' ||
-						split[i - 1][0] == '>') && 
-					((i > 0 && split[i - 1][1] && split[i - 1][1] == '>' &&
-						split[i - 1][2]) ||
-					(i > 0 && split[i - 1][1] && split[i - 1][1] != '>'))))
-			{
-				return (i);
-			}
-		}
-		i++;
-	}
-	return (-1);
-}
-
-int	ft_command(char *line, t_data *data)
-{
-	char	**split;
-	int		i;
-	int		x;
-	int		r;
-	char *save;
-	
-	x = 0;
-	i = -1;
-	r = 0;
-	split = ft_split(line, ' ');
-	if (!split)
-		return (0);
-	i = ft_find_command(split);
-	if (i >= 0)
-	{
-		int c = i;
-		// while (split[c] && (ft_strchr('<', split[c]) == -1 && ft_strchr('>', split[c]) == -1))
-		// 	c++;
-		while (split[c])
-		{
-			x = 0;
-			// int len = ft_strlen(split[c]);
-			while (split[c][x] && (split[c][0] != '<' || split[c][0] != '>'))
-			{
-				if (split[c][x] == '<' || split[c][x] == '>')
-				{
-					save = split[c];
-					split[c] = ft_substr(split[c], 0, x);
-					free(save);
-					break ;
-				}
-				x++;
-			}
-			c++;
-		} 
-		x = 0;
-		data->args = (char **)malloc(sizeof(char *) * (c - i + 1));
-		if (!data->args)
-			return(0);
-		data->args[c - i] = NULL;
-		while (i < c)
-		{
-		 	data->args[x] =ft_strdup(split[i]);
-			if (!data->args[x])
-				return (0);
-			x++;
-			i++;
-		}
-		r = 1;
-		// return (r);
-	}
-	ft_free_matrix(&split);
-	return (r);
-}
+// 
 
 int	ft_type_of_redir(char *line, int *i)
 {
@@ -159,17 +78,20 @@ char	*ft_name_of_file(char *line, int i,int *x)
 		c = i;
 		while (line[c] && line[c] != '"')
 			c++;
+		*x = c + 1;
+		//c++;
 	}
 	else
 	{
 		c = (i);
 		while(line[c] && line[c] != '<' && line[c] != '>' && line[c] != ' ')
 			c++;
+		*x = c;
 	}
 	if (c == (i))							//TESTARE
 		return (NULL);
 	char *temp = ft_substr(line, i, c - i);
-	*x = c;
+	printf("temp:%s\n", temp);
 	return(temp);
 }
 
@@ -338,7 +260,7 @@ int		ft_redir(char *line, t_data *data)
 			// printf("x:%d\n", x);
 			file = ft_name_of_file(line,i, &x);
 			// x = i;
-			// printf("file:%s\n", file);
+			printf("file:%s\n", file);
 			if (file == NULL)
 				return (0);
 			// if (flag == 4)
@@ -384,6 +306,8 @@ int		ft_redir(char *line, t_data *data)
 	// if (r == 1)
 	// {
 		r = ft_check_execve(new_line, data);
+		printf("new_line:%s\n", new_line);
+				free(new_line);	
 		if ( r == 1)
 		{
 			pid = fork();
@@ -399,9 +323,8 @@ int		ft_redir(char *line, t_data *data)
 			}
 			else
 			{
-					// printf(" child\n");
-					ft_free_matrix(&data->args);
-
+					// printf(" child\n");			
+				ft_free_matrix(&data->args);
 				waitpid(pid, &status, 0);
 				dup2(back_stdout,1);
 				close(back_stdout);
@@ -441,6 +364,92 @@ int		ft_redir(char *line, t_data *data)
 	// }
 	return (0);
 }
+
+
+
+// int	ft_find_command(char **split)
+// {	
+// 	int	i;
+
+// 	i = 0;
+// 	while(split[i])
+// 	{
+// 		if (ft_strchr('<', split[i]) == -1 && ft_strchr('>', split[i]) == -1)
+// 		{
+// 			if	(i == 0 || 
+// 				(i > 0 && split[i - 1][0] && split[i - 1][0] != '<' &&
+// 						split[i - 1][0] != '>') ||
+// 				(i > 0 && split[i - 1][0] && (split[i - 1][0] == '<' ||
+// 						split[i - 1][0] == '>') && 
+// 					((i > 0 && split[i - 1][1] && split[i - 1][1] == '>' &&
+// 						split[i - 1][2]) ||
+// 					(i > 0 && split[i - 1][1] && split[i - 1][1] != '>'))))
+// 			{
+// 				return (i);
+// 			}
+// 		}
+// 		i++;
+// 	}
+// 	return (-1);
+// }
+
+// int	ft_command(char *line, t_data *data)
+// {
+// 	char	**split;
+// 	int		i;
+// 	int		x;
+// 	int		r;
+// 	char *save;
+	
+// 	x = 0;
+// 	i = -1;
+// 	r = 0;
+// 	split = ft_split(line, ' ');
+// 	if (!split)
+// 		return (0);
+// 	i = ft_find_command(split);
+// 	if (i >= 0)
+// 	{
+// 		int c = i;
+// 		// while (split[c] && (ft_strchr('<', split[c]) == -1 && ft_strchr('>', split[c]) == -1))
+// 		// 	c++;
+// 		while (split[c])
+// 		{
+// 			x = 0;
+// 			// int len = ft_strlen(split[c]);
+// 			while (split[c][x] && (split[c][0] != '<' || split[c][0] != '>'))
+// 			{
+// 				if (split[c][x] == '<' || split[c][x] == '>')
+// 				{
+// 					save = split[c];
+// 					split[c] = ft_substr(split[c], 0, x);
+// 					free(save);
+// 					break ;
+// 				}
+// 				x++;
+// 			}
+// 			c++;
+// 		} 
+// 		x = 0;
+// 		data->args = (char **)malloc(sizeof(char *) * (c - i + 1));
+// 		if (!data->args)
+// 			return(0);
+// 		data->args[c - i] = NULL;
+// 		while (i < c)
+// 		{
+// 		 	data->args[x] =ft_strdup(split[i]);
+// 			if (!data->args[x])
+// 				return (0);
+// 			x++;
+// 			i++;
+// 		}
+// 		r = 1;
+// 		// return (r);
+// 	}
+// 	ft_free_matrix(&split);
+// 	return (r);
+// }
+
 
 
 
