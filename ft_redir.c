@@ -6,7 +6,7 @@
 /*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/16 18:50:01 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/06/17 08:41:35 by arrigo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,30 +146,31 @@ int	ft_type_of_redir(char *line, int *i)
 }
 
 
-char	*ft_name_of_file(char *line, int *i)
+char	*ft_name_of_file(char *line, int i,int *x)
 {
 	int	c;
 
-	(*i)++;
-	while(line[*i] && line[*i] == ' ')
-		(*i)++;
-	if (line[*i] == '"')											//TESTARE BENE
+	(i)++;
+	while(line[i] && line[i] == ' ')
+		(i)++;
+	if (line[i] == '"')											//TESTARE BENE
 	{
-		(*i)++;
-		c = *i;
+		(i)++;
+		c = i;
 		while (line[c] && line[c] != '"')
 			c++;
 	}
 	else
 	{
-		c = (*i);
+		c = (i);
 		while(line[c] && line[c] != '<' && line[c] != '>' && line[c] != ' ')
 			c++;
 	}
-	if (c == (*i))							//TESTARE
+	if (c == (i))							//TESTARE
 		return (NULL);
-
-	return(ft_substr(line, *i, c - *i));
+	char *temp = ft_substr(line, i, c - i);
+	*x = c;
+	return(temp);
 }
 
 // char	*ft_name_of_file(char *line, int i, char **new_line)
@@ -312,25 +313,26 @@ int		ft_redir(char *line, t_data *data)
 		flag = ft_type_of_redir(line,&i);
 		if (flag > 0)
 		{
-			if (i > x)
+			if (i > x )
 			{
-				x++;
 				if (!new_line)
 				{
-					new_line = ft_substr(line, x, i - x)
+					new_line = ft_substr(line, x, i - x);
 				}
 				else
 				{
 					char *save;
 					char *temp;
 					save = new_line;
-					temp = ft_substr();
-					new_line = ft_strjoin(new_line, )
+					temp = ft_substr(line, x, i -x);
+					free(temp);
+					new_line = ft_strjoin(new_line, temp);
+					free(save);
 				}
-				x++;
+				// x++;
 			}	
-			file = ft_name_of_file(line,&i);
-			x = i;
+			file = ft_name_of_file(line,i, &x);
+			// x = i;
 			printf("file:%s\n", file);
 			if (file == NULL)
 				return (0);
@@ -347,6 +349,31 @@ int		ft_redir(char *line, t_data *data)
 		}
 		i++;
 	}
+	printf("i:%d\n", i);
+	printf("x:%d\n", x);
+	printf("new_line1: %s\n", new_line);
+	if (i > x)
+			{
+				if (!new_line)
+				{
+					new_line = ft_substr(line, x, i - x);
+				}
+				else
+				{
+					char *save;
+					char *temp;
+					save = new_line;
+					temp = ft_substr(line, x, i - x);
+					// printf(" temp:%s\n", temp);
+					new_line = ft_strjoin(new_line, temp);
+					free(temp);
+					free(save);
+				}
+				// x++;
+			}	
+
+	
+	printf("new_line2: %s\n", new_line);
 	if (r == 1)
 	{
 		r = ft_check_execve(NULL, data);
