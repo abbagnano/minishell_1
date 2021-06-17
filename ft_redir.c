@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/17 13:15:49 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/17 14:30:26 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,16 +243,20 @@ int		ft_redir(char *line, t_data *data)
 			}
 			else
 			{
-				if (x > 0)
+				if (i > 0)
 					z = 1;
+				else 
+					z = 0;
 			}
 			if (i > x)
 			{
 				if (!new_line)
 				{
 					printf("i:%d\n", i);
-					printf("x:%d\n", x);	
-					new_line = ft_substr(line, x, i - x);
+					printf("x:%d\n", x);
+						printf("z:%d\n", z);
+											printf("flag:%d\n", flag);	
+					new_line = ft_substr(line, x, i - z - x);
 					// exit(0);
 				}
 				else
@@ -260,12 +264,12 @@ int		ft_redir(char *line, t_data *data)
 					char *save;
 					char *temp;
 					save = new_line;
-					temp = ft_substr(line, x, i - x);
+					temp = ft_substr(line, x, i - z - x);
 					printf(" temp1:%s\n", temp);
 					new_line = ft_strjoin(new_line, temp);
 					free(temp);
 					free(save);
-					// printf("new_line1: %s\n", new_line);
+					printf("new_line1: %s\n", new_line);
 				}
 				// x++;
 			}
@@ -289,8 +293,8 @@ int		ft_redir(char *line, t_data *data)
 		}
 		i++;
 	}
-	printf("i:%d\n", i);
-	printf("x:%d\n", x);
+	printf("i2:%d\n", i);
+	printf("x2:%d\n", x);
 	
 	if (i > x)
 	{
@@ -308,19 +312,21 @@ int		ft_redir(char *line, t_data *data)
 			new_line = ft_strjoin(new_line, temp);
 			free(temp);
 			free(save);
+					printf("new_line2: %s\n", new_line);
 		}
 		// x++;
 	}	
-
 	
-	// printf("new_line2: %s\n", new_line);
+	 printf("new_line3: %s\n", new_line);
 	// printf(" strlen: %d\n", ft_strlen(new_line));
 	// exit(0);
 	// if (r == 1)
 	// {
 		r = ft_check_execve(new_line, data);
 		printf("new_line:%s\n", new_line);
-				// free(new_line);	              /////////////////SCOMMENTARE
+		if (new_line)
+			free(new_line);
+	printf( " ciao\n");
 		if ( r == 1)
 		{
 			pid = fork();
