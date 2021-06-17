@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_redir.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/17 08:41:35 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/06/17 10:37:44 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,7 +299,8 @@ int		ft_redir(char *line, t_data *data)
 	new_line = NULL;
 	back_stdin = dup(0);
 	back_stdout = dup(1);
-	r = ft_command(line, data);
+	// r = ft_command(line, data);
+	// r = 1;
 	i = 0;
 	int flag = 0;
 	char *file;
@@ -313,7 +314,7 @@ int		ft_redir(char *line, t_data *data)
 		flag = ft_type_of_redir(line,&i);
 		if (flag > 0)
 		{
-			if (i > x )
+			if (i > x)
 			{
 				if (!new_line)
 				{
@@ -325,15 +326,19 @@ int		ft_redir(char *line, t_data *data)
 					char *temp;
 					save = new_line;
 					temp = ft_substr(line, x, i -x);
-					free(temp);
+					printf(" temp1:%s\n", temp);
 					new_line = ft_strjoin(new_line, temp);
+					free(temp);
 					free(save);
+					// printf("new_line1: %s\n", new_line);
 				}
 				// x++;
-			}	
+			}
+			// printf("i:%d\n", i);
+			// printf("x:%d\n", x);
 			file = ft_name_of_file(line,i, &x);
 			// x = i;
-			printf("file:%s\n", file);
+			// printf("file:%s\n", file);
 			if (file == NULL)
 				return (0);
 			// if (flag == 4)
@@ -351,32 +356,34 @@ int		ft_redir(char *line, t_data *data)
 	}
 	printf("i:%d\n", i);
 	printf("x:%d\n", x);
-	printf("new_line1: %s\n", new_line);
+	
 	if (i > x)
-			{
-				if (!new_line)
-				{
-					new_line = ft_substr(line, x, i - x);
-				}
-				else
-				{
-					char *save;
-					char *temp;
-					save = new_line;
-					temp = ft_substr(line, x, i - x);
-					// printf(" temp:%s\n", temp);
-					new_line = ft_strjoin(new_line, temp);
-					free(temp);
-					free(save);
-				}
-				// x++;
-			}	
+	{
+		if (!new_line)
+		{
+			new_line = ft_substr(line, x, i - x);
+		}
+		else
+		{
+			char *save;
+			char *temp;
+			save = new_line;
+			temp = ft_substr(line, x, i - x);
+			printf(" temp2:%s\n", temp);
+			new_line = ft_strjoin(new_line, temp);
+			free(temp);
+			free(save);
+		}
+		// x++;
+	}	
 
 	
-	printf("new_line2: %s\n", new_line);
-	if (r == 1)
-	{
-		r = ft_check_execve(NULL, data);
+	// printf("new_line2: %s\n", new_line);
+	// printf(" strlen: %d\n", ft_strlen(new_line));
+	// exit(0);
+	// if (r == 1)
+	// {
+		r = ft_check_execve(new_line, data);
 		if ( r == 1)
 		{
 			pid = fork();
@@ -410,20 +417,28 @@ int		ft_redir(char *line, t_data *data)
 		}
 		else 
 		{
-			printf("to do: error\n");
-			exit(1);    //TOGLIERE
+				dup2(back_stdout,1);
+				close(back_stdout);
+				dup2(back_stdin, 0);
+				close(back_stdin);	
+				printf("no command\n");
 		}
-	}
-	else
-	{
-		//RETURN TO STANDARD IN/OUT
-		// printf(" parent\n");
+
+
+
+
+
+	// }
+	// else
+	// {
+	// 	//RETURN TO STANDARD IN/OUT
+	// 	// printf(" parent\n");
 		
-		dup2(back_stdout,1);
-		close(back_stdout);
-		dup2(back_stdin, 0);
-		close(back_stdin);
-	}
+	// 	dup2(back_stdout,1);
+	// 	close(back_stdout);
+	// 	dup2(back_stdin, 0);
+	// 	close(back_stdin);
+	// }
 	return (0);
 }
 
