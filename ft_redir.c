@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/18 12:15:26 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/18 15:26:52 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 int	ft_type_of_redir(char *line, int *i)
 {
+
 	int	flag;
 		
 	flag = 0;
@@ -203,10 +204,10 @@ int ft_clean_line(char *line, char **new_line, int i, int x)
 	return (1);
 }
 	
-int		ft_redir(char *line, t_data *data)
+char	*ft_redir(char *line, t_data *data)
 {
 	int i;
-	int r;
+	// int r;
 	char *new_line;
 	new_line = NULL;
 	i = 0;
@@ -237,16 +238,22 @@ int		ft_redir(char *line, t_data *data)
 			free(file);
 			file = NULL;
 		}
+		if (!line[i])
+			break ;
 		i++;
 	}
 	if (i > x)
 		ft_clean_line(line, &new_line, i, x);
-	r = ft_check_execve(new_line, data);
-	if (new_line)
-		free(new_line);
-	if (r == 1)
-		ft_do_execve(data);
-	return (0);
+	free(line);
+	return(new_line);
+
+		
+	// r = ft_check_execve(new_line, data);
+	// if (new_line)
+	// 	free(new_line);
+	// if (r == 1)
+	// 	ft_do_execve(data);
+	// return (0);
 }
 		// return(0);
 
