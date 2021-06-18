@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/18 11:51:28 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/18 12:01:24 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,27 @@ int	ft_open_file(char *file, int flag, t_data *data)
 			printf("Error: 7\n");
 	}
 	return (0);
-}			
+}
+
+int ft_clean_line(char *line, char **new_line, int i, int x)
+{
+	if (!*new_line)
+	{
+		*new_line = ft_substr(line, x, i - x);
+	}
+	else
+	{
+		char *save;
+		char *temp;
+		save = *new_line;
+		temp = ft_substr(line, x, i - x);
+		*new_line = ft_strjoin(*new_line, temp);
+		free(temp);
+		free(save);
+	}	
+
+	return (1);
+}
 	
 int		ft_redir(char *line, t_data *data)
 {
@@ -211,56 +231,16 @@ int		ft_redir(char *line, t_data *data)
 		flag = ft_type_of_redir(line,&i);
 		if (flag > 0)
 		{
-			if (flag < 3)
-			{
-				z = 0;
-			}
-			else
-			{
-				if (i > 0)
-					z = 1;
-				else 
-					z = 0;
-			}
 			if (i > x)
 			{
-				if (!new_line)
-				{
-					// printf("i:%d\n", i);
-					// printf("x:%d\n", x);
-						// printf("z:%d\n", z);
-											// printf("flag:%d\n", flag);	
-					new_line = ft_substr(line, x, i - z - x);
-					// exit(0);
-				}
+				if (i == 0 || flag < 3)
+					ft_clean_line(line, &new_line, i, x);
 				else
-				{
-					char *save;
-					char *temp;
-					save = new_line;
-					temp = ft_substr(line, x, i - z - x);
-					// printf(" temp1:%s\n", temp);
-					new_line = ft_strjoin(new_line, temp);
-					free(temp);
-					free(save);
-					// printf("new_line1: %s\n", new_line);
-				}
-				// x++;
+					ft_clean_line(line, &new_line, i-1, x);
 			}
-			// printf("i:%d\n", i);
-			// printf("x:%d\n", x);
 			file = ft_name_of_file(line,i, &x);
-			// x = i;
-			// printf("file:%s\n", file);
 			if (file == NULL)
 				return (0);
-			// if (flag == 4)
-			// {
-			// 	// dup2(back_stdout,1);
-			// 	// close(back_stdout);
-			// 	dup2(back_stdin, 0);
-			// 	// close(back_stdin);
-			// }
 			ft_open_file(file, flag,data);   //RETURN ERROR
 			free(file);
 			file = NULL;
@@ -268,25 +248,7 @@ int		ft_redir(char *line, t_data *data)
 		i++;
 	}
 	if (i > x)
-	{
-		if (!new_line)
-		{
-			new_line = ft_substr(line, x, i - x);
-		}
-		else
-		{
-			char *save;
-			char *temp;
-			save = new_line;
-			temp = ft_substr(line, x, i - x);
-			// printf(" temp2:%s\n", temp);
-			new_line = ft_strjoin(new_line, temp);
-			free(temp);
-			free(save);
-					// printf("new_line2: %s\n", new_line);
-		}
-		// x++;
-	}	
+		ft_clean_line(line, &new_line, i, x);
 	
 	//  printf("new_line3: %s\n", new_line);
 	// printf(" strlen: %d\n", ft_strlen(new_line));
