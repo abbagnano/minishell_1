@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 11:22:46 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/18 08:18:01 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/18 12:09:50 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,13 @@ int ft_do_execve(t_data *data)
 		signal(SIGINT, ft_sign_ign_int);
 		// signal(SIGQUIT, SIG_IGN);
 		waitpid(pid, &status, 0);
+
+
+
+
+
+
+
 		if (WIFEXITED(status)  && !WEXITSTATUS(status))
 		
 			return (0);			//SUCCESS

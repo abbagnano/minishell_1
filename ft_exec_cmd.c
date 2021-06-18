@@ -94,6 +94,9 @@ void	ft_check_cmd(char *line, t_data *data)
 
 void	ft_exec_cmd(char *line, t_data *data)
 {
+
+	data->std_fd[0] = dup(0);
+	data->std_fd[1] = dup(1);
 	// printf("line: %s/n", line);
 	tcsetattr(0, 0, &data->old_term);
 //	if (ft_strchr('$', line) != -1)
@@ -101,6 +104,15 @@ void	ft_exec_cmd(char *line, t_data *data)
 	
 	// printf("line: %s\n", line);
 	ft_check_cmd(line, data);
+
+	dup2(data->std_fd[1],1);
+	close(data->std_fd[1]);
+	dup2(data->std_fd[0], 0);
+	close(data->std_fd[0]);
+
+
+
+
 	tcsetattr(0, 0, &data->my_term);
 
 

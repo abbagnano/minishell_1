@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/18 12:01:24 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/18 12:15:26 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,16 +207,8 @@ int		ft_redir(char *line, t_data *data)
 {
 	int i;
 	int r;
-	// int back_stdin;
-	// int back_stdout;
 	char *new_line;
-
-
 	new_line = NULL;
-	data->std_fd[0] = dup(0);
-	data->std_fd[1] = dup(1);
-	// r = ft_command(line, data);
-	// r = 1;
 	i = 0;
 	int flag = 0;
 	char *file;
@@ -249,55 +241,54 @@ int		ft_redir(char *line, t_data *data)
 	}
 	if (i > x)
 		ft_clean_line(line, &new_line, i, x);
-	
-	//  printf("new_line3: %s\n", new_line);
-	// printf(" strlen: %d\n", ft_strlen(new_line));
-	// exit(0);
-	// if (r == 1)
-	// {
-		r = ft_check_execve(new_line, data);
-		// printf("new_line:%s\n", new_line);
-		if (new_line)
-			free(new_line);
-	// printf( " ciao\n");
-		if ( r == 1)
-		{
-			pid = fork();
-			if (pid == 0)
-			{
-				// int i = 0;
-				// while (data->args[i])
-				// 	printf("data->args: %s\n", data->args[i++]);
-				execve(data->args[0], data->args, data->envp);
-				printf( "child: execve failed\n");
-				printf(" 1\n");
-				exit(1);   //TOGLIERE
-			}
-			else
-			{
-					// printf(" child\n");			
-				ft_free_matrix(&data->args);
-				waitpid(pid, &status, 0);
-				dup2(data->std_fd[1],1);
-				close(data->std_fd[1]);
-				dup2(data->std_fd[0], 0);
-				close(data->std_fd[0]);
-				printf(" parent: success\n");
-				// exit(0);
-				if (WIFEXITED(status)  && !WEXITSTATUS(status))
-					return (0);			//SUCCESS
-				else 
-					return (1);			//NOT SUCCESS
-			}
-		}
-		else 
-		{
-				dup2(data->std_fd[1],1);
-				close(data->std_fd[1]);
-				dup2(data->std_fd[0], 0);
-				close(data->std_fd[0]);
-				printf("no command\n");
-		}
+	r = ft_check_execve(new_line, data);
+	if (new_line)
+		free(new_line);
+	if (r == 1)
+		ft_do_execve(data);
+	return (0);
+}
+		// return(0);
+
+
+		// if ( r == 1)
+		// {
+		// 	pid = fork();
+		// 	if (pid == 0)
+		// 	{
+		// 		// int i = 0;
+		// 		// while (data->args[i])
+		// 		// 	printf("data->args: %s\n", data->args[i++]);
+		// 		execve(data->args[0], data->args, data->envp);
+		// 		printf( "child: execve failed\n");
+		// 		printf(" 1\n");
+		// 		exit(1);   //TOGLIERE
+		// 	}
+		// 	else
+		// 	{
+		// 			// printf(" child\n");			
+		// 		ft_free_matrix(&data->args);
+		// 		waitpid(pid, &status, 0);
+		// 		dup2(data->std_fd[1],1);
+		// 		close(data->std_fd[1]);
+		// 		dup2(data->std_fd[0], 0);
+		// 		close(data->std_fd[0]);
+		// 		printf(" parent: success\n");
+		// 		// exit(0);
+		// 		if (WIFEXITED(status)  && !WEXITSTATUS(status))
+		// 			return (0);			//SUCCESS
+		// 		else 
+		// 			return (1);			//NOT SUCCESS
+		// 	}
+		// }
+		// else 
+		// {
+		// 		// dup2(data->std_fd[1],1);
+		// 		// close(data->std_fd[1]);
+		// 		// dup2(data->std_fd[0], 0);
+		// 		// close(data->std_fd[0]);
+		// 		printf("no command\n");
+		// }
 
 
 
@@ -314,8 +305,8 @@ int		ft_redir(char *line, t_data *data)
 	// 	dup2(back_stdin, 0);
 	// 	close(back_stdin);
 	// }
-	return (0);
-}
+// 	return (0);
+// }
 
 
 
