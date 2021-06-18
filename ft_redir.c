@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/18 08:13:32 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/18 08:40:35 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,33 +95,7 @@ char	*ft_name_of_file(char *line, int i,int *x)
 	return(temp);
 }
 
-// char	*ft_name_of_file(char *line, int i, char **new_line)
-// {
-// 	int	c;
-
-// 	(i)++;
-// 	while(line[i] && line[i] == ' ')
-// 		(i)++;
-// 	if (line[i] == '"')											//TESTARE BENE
-// 	{
-// 		i++;
-// 		c = i;
-// 		while (line[c] && line[c] != '"')
-// 			c++;
-// 	}
-// 	else
-// 	{
-// 		c = i;
-// 		while(line[c] && line[c] != '<' && line[c] != '>' && line[c] != ' ')
-// 			c++;
-// 	}
-// 	if (c == i)							//TESTARE
-// 		return (NULL);
-
-// 	return(ft_substr(line, i, c - i));
-// }
-
-int	ft_open_file(char *file, int flag,int back_stdin,int back_stdout)
+int	ft_open_file(char *file, int flag, t_data *data)
 {
 	int	fd;
 	
@@ -155,9 +129,9 @@ int	ft_open_file(char *file, int flag,int back_stdin,int back_stdout)
 	}
 	else if (flag == 4)
 	{
-		dup2(back_stdin, 0);
+		dup2(data->std_fd[0], 0);
 		int back = dup(1);
-		dup2(back_stdout,1);
+		dup2(data->std_fd[1],1);
 		fd = open("/tmp/minishell", O_RDWR | O_CREAT | O_TRUNC, 0666);
 		if (fd > 0)
 		{
@@ -179,7 +153,7 @@ int	ft_open_file(char *file, int flag,int back_stdin,int back_stdout)
 					break;
 				}
 				write(fd, buf, ft_strlen(buf));
-				dup2(back_stdout,1);			
+				dup2(data->std_fd[1],1);			
 					printf("buf: %s\n", buf);
 					printf("len:%d\n", len);
 				write(1, ">", 1);
@@ -213,14 +187,14 @@ int		ft_redir(char *line, t_data *data)
 {
 	int i;
 	int r;
-	int back_stdin;
-	int back_stdout;
+	// int back_stdin;
+	// int back_stdout;
 	char *new_line;
 
 
 	new_line = NULL;
-	back_stdin = dup(0);
-	back_stdout = dup(1);
+	data->std_fd[0] = dup(0);
+	data->std_fd[1] = dup(1);
 	// r = ft_command(line, data);
 	// r = 1;
 	i = 0;
@@ -287,7 +261,7 @@ int		ft_redir(char *line, t_data *data)
 			// 	dup2(back_stdin, 0);
 			// 	// close(back_stdin);
 			// }
-			ft_open_file(file, flag, back_stdin, back_stdout);   //RETURN ERROR
+			ft_open_file(file, flag,data);   //RETURN ERROR
 			free(file);
 			file = NULL;
 		}
@@ -345,10 +319,10 @@ int		ft_redir(char *line, t_data *data)
 					// printf(" child\n");			
 				ft_free_matrix(&data->args);
 				waitpid(pid, &status, 0);
-				dup2(back_stdout,1);
-				close(back_stdout);
-				dup2(back_stdin, 0);
-				close(back_stdin);
+				dup2(data->std_fd[1],1);
+				close(data->std_fd[1]);
+				dup2(data->std_fd[0], 0);
+				close(data->std_fd[0]);
 				printf(" parent: success\n");
 				// exit(0);
 				if (WIFEXITED(status)  && !WEXITSTATUS(status))
@@ -359,10 +333,10 @@ int		ft_redir(char *line, t_data *data)
 		}
 		else 
 		{
-				dup2(back_stdout,1);
-				close(back_stdout);
-				dup2(back_stdin, 0);
-				close(back_stdin);	
+				dup2(data->std_fd[1],1);
+				close(data->std_fd[1]);
+				dup2(data->std_fd[0], 0);
+				close(data->std_fd[0]);
 				printf("no command\n");
 		}
 

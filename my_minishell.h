@@ -50,7 +50,7 @@ typedef struct	s_data
 	char	**envp;
 	int		env_len;
 	char	**args;
-
+	int		std_fd[2];
 }	t_data;
 
 /*		minishell.c		*/			
