@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/18 08:40:35 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/18 11:44:54 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,8 +154,8 @@ int	ft_open_file(char *file, int flag, t_data *data)
 				}
 				write(fd, buf, ft_strlen(buf));
 				dup2(data->std_fd[1],1);			
-					printf("buf: %s\n", buf);
-					printf("len:%d\n", len);
+					// printf("buf: %s\n", buf);
+					// printf("len:%d\n", len);
 				write(1, ">", 1);
 			}
 			close(back);
@@ -226,10 +226,10 @@ int		ft_redir(char *line, t_data *data)
 			{
 				if (!new_line)
 				{
-					printf("i:%d\n", i);
-					printf("x:%d\n", x);
-						printf("z:%d\n", z);
-											printf("flag:%d\n", flag);	
+					// printf("i:%d\n", i);
+					// printf("x:%d\n", x);
+						// printf("z:%d\n", z);
+											// printf("flag:%d\n", flag);	
 					new_line = ft_substr(line, x, i - z - x);
 					// exit(0);
 				}
@@ -239,11 +239,11 @@ int		ft_redir(char *line, t_data *data)
 					char *temp;
 					save = new_line;
 					temp = ft_substr(line, x, i - z - x);
-					printf(" temp1:%s\n", temp);
+					// printf(" temp1:%s\n", temp);
 					new_line = ft_strjoin(new_line, temp);
 					free(temp);
 					free(save);
-					printf("new_line1: %s\n", new_line);
+					// printf("new_line1: %s\n", new_line);
 				}
 				// x++;
 			}
@@ -251,7 +251,7 @@ int		ft_redir(char *line, t_data *data)
 			// printf("x:%d\n", x);
 			file = ft_name_of_file(line,i, &x);
 			// x = i;
-			printf("file:%s\n", file);
+			// printf("file:%s\n", file);
 			if (file == NULL)
 				return (0);
 			// if (flag == 4)
@@ -267,9 +267,6 @@ int		ft_redir(char *line, t_data *data)
 		}
 		i++;
 	}
-	printf("i2:%d\n", i);
-	printf("x2:%d\n", x);
-	
 	if (i > x)
 	{
 		if (!new_line)
@@ -282,33 +279,33 @@ int		ft_redir(char *line, t_data *data)
 			char *temp;
 			save = new_line;
 			temp = ft_substr(line, x, i - x);
-			printf(" temp2:%s\n", temp);
+			// printf(" temp2:%s\n", temp);
 			new_line = ft_strjoin(new_line, temp);
 			free(temp);
 			free(save);
-					printf("new_line2: %s\n", new_line);
+					// printf("new_line2: %s\n", new_line);
 		}
 		// x++;
 	}	
 	
-	 printf("new_line3: %s\n", new_line);
+	//  printf("new_line3: %s\n", new_line);
 	// printf(" strlen: %d\n", ft_strlen(new_line));
 	// exit(0);
 	// if (r == 1)
 	// {
 		r = ft_check_execve(new_line, data);
-		printf("new_line:%s\n", new_line);
+		// printf("new_line:%s\n", new_line);
 		if (new_line)
 			free(new_line);
-	printf( " ciao\n");
+	// printf( " ciao\n");
 		if ( r == 1)
 		{
 			pid = fork();
 			if (pid == 0)
 			{
-				int i = 0;
-				while (data->args[i])
-					printf("data->args: %s\n", data->args[i++]);
+				// int i = 0;
+				// while (data->args[i])
+				// 	printf("data->args: %s\n", data->args[i++]);
 				execve(data->args[0], data->args, data->envp);
 				printf( "child: execve failed\n");
 				printf(" 1\n");
