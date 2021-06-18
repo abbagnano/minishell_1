@@ -6,16 +6,16 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 11:22:46 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/17 15:22:29 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/18 08:18:01 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "my_minishell.h"
 #include "my_minishell2.h"
 
-void  INThandler(int sig)
+void  ft_sign_ign_quit(int sig)
 {
-     char  c;
+    //  char  c;
 
 	printf("Quit: 3\n");
     signal(sig, SIG_IGN);
@@ -29,6 +29,11 @@ void  INThandler(int sig)
     //  getchar(); // Get new line character
 }
 
+void	ft_sign_ign_int(int sig)
+{
+	printf("\n");
+	signal(sig, SIG_IGN);
+}
 
 int ft_do_execve(t_data *data)
 {
@@ -43,7 +48,8 @@ int ft_do_execve(t_data *data)
 	else
 	{
 		ft_free_matrix(&data->args);
-		signal(SIGQUIT, INThandler);
+		signal(SIGQUIT, ft_sign_ign_quit);
+		signal(SIGINT, ft_sign_ign_int);
 		// signal(SIGQUIT, SIG_IGN);
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status)  && !WEXITSTATUS(status))
