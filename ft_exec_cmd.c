@@ -101,15 +101,15 @@ void	ft_exec_cmd(char *line, t_data *data)
 {
 	int	x;
 
-	// printf("line: %s/n", line);
+//	 printf("0 line: %s\n", line);
 	x = 0;
 	tcsetattr(0, 0, &data->old_term);
 	if (ft_strchr('\'', line) || ft_strchr('\"', line))
 		ft_clean_quotes(&line);
-	// printf("line: %s\n", line);
+	//  printf("1 line: %s\n", line);
 	while (ft_strchr('$', line + x) != -1)// && ft_strchr('\'', line) == -1)
 		ft_env_line(&line, &x, data);
-	//  printf("line: %s\n", line);
+	//   printf("2 line: %s\n", line);
 	ft_check_cmd(line, data);
 	
 	free(line);

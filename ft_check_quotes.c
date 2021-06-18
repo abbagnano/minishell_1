@@ -52,7 +52,7 @@ void	ft_clean_line_39(char **line, int *x)
 		if (tmp[len + z] == 39)
 			len++;
 	}
-	*x = len + z - 2;
+	*x = z;//len + z - 2;
 	// printf("x: %d\n", *x);
 	while (tmp[len + z])
 	{
@@ -84,7 +84,7 @@ void	ft_clean_line_34(char **line, int *x)
 		if (tmp[len + z] == 34)
 			len++;
 	}
-	*x = len + z - 2;
+	*x = z;//len + z - 2;
 //	printf("x: %d\n", *x);
 	while (tmp[len + z])
 	{
@@ -106,18 +106,25 @@ int		ft_check_clean(char **line, int *x, char c)
 	{
 		// printf("\tcheck:%s\n",(*line + z));
 		z++;
-		if ((*line)[z] && c == 39 && (*line)[z] == '$')
+		if ((*line)[z] && c == 39 && ((*line)[z] == '$' || (*line)[z] == '\"'))
 		{
 			while ((*line)[z] && (*line)[z] != c)
 				z++;
-			*x = z + 1;
+			*x = z;// + 1;
+			return (0);
+		}
+		else if ((*line)[z] && c == 34 && (*line)[z] == '\'')
+		{
+			while ((*line)[z] && (*line)[z] != c)
+				z++;
+			*x = z;// + 1;
 			return (0);
 		}
 		else if ((*line)[z] && ((*line)[z] == '>' || (*line)[z] == '<' || (*line)[z] == ' '))
 		{
 			while ((*line)[z] && (*line)[z] != c)
 				z++;
-			*x = z + 1;
+			*x = z;// + 1;
 			return (0);
 		}
 		else if ((*line)[z] && (*line)[z] == c)
@@ -126,7 +133,7 @@ int		ft_check_clean(char **line, int *x, char c)
 			if (c == 39)
 				ft_clean_line_39(line, &z);
 			else
-				ft_clean_line_34(line, &z);
+				ft_clean_line_34(line, x);
 			return (1);
 		}
 	}

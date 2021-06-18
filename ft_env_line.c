@@ -153,12 +153,20 @@ void	ft_env_line(char **line, int *x, t_data *data)
 	// printf(" x:%d\t%s\n", *x, *line + *x);
 	while (z < *x)
 	{
-		if (tmp[z] == '\'')
+		if (tmp[z] == 34)
 		{
+			// printf(" qwe\n");
+			z++;
+			while (z + 1 < *x && tmp[z] != 34)
+				z++;
+		}	
+		else if (tmp[z] == 39)
+		{
+			// printf(" rty\n");
 			z++;
 			while (tmp[z] != '\'')
 				z++;
-			if (z > *x)
+			if (z >= *x)
 			{
 				*x = z + 1;
 				return ;
@@ -166,10 +174,11 @@ void	ft_env_line(char **line, int *x, t_data *data)
 		}
 		z++;
 	}
-	while (tmp[z + len] && tmp[z + len] != ' ')
+//	len = 0;
+	while (tmp[z + len] && tmp[z + len] != ' ')// && tmp[z + len] != '\'' && tmp[z + len] != '\"')
 	{
 		len++;
-		if (tmp[z + len] == '$' || tmp[z + len] == '?')
+		if (tmp[z + len] == '$' || tmp[z + len] == '?' || tmp[z + len] == '\'' || tmp[z + len] == '\"')
 			break ;
 	}
 	if (tmp[z + len] == '?')
@@ -180,7 +189,7 @@ void	ft_env_line(char **line, int *x, t_data *data)
 	{
 		var[len] = tmp[z + len];
 		len++;
-		if (tmp[z + len] == '$' || tmp[z + len] == '?')
+		if (tmp[z + len] == '$' || tmp[z + len] == '?' || tmp[z + len] == '\'' || tmp[z + len] == '\"')
 			break ;
 	}
 	if (tmp[z + len] == '?')
@@ -189,7 +198,7 @@ void	ft_env_line(char **line, int *x, t_data *data)
 		len++;
 	}
 	var[len] = '\0';
-	// printf("var: %s\n", var);
+	//  printf("var: %s\n", var);
 	ft_var_line(var, line, *x, data);
 	// ft_var_line(var, line, len, data);
 //	free(var);
