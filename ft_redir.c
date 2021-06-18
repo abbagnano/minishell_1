@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/18 15:26:52 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/18 16:05:27 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	ft_type_of_redir(char *line, int *i)
 	int	flag;
 		
 	flag = 0;
-	int back = i;
 	if (line[*i] == '"')
 	{
 		(*i)++;
@@ -100,6 +99,8 @@ int	ft_open_file(char *file, int flag, t_data *data)
 {
 	int	fd;
 	
+	if (file == NULL)
+		return (0);
 	if (flag == 1)
 	{
 		fd = open(file, O_RDONLY);
@@ -181,6 +182,7 @@ int	ft_open_file(char *file, int flag, t_data *data)
 		else
 			printf("Error: 7\n");
 	}
+	free(file);
 	return (0);
 }
 
@@ -206,22 +208,17 @@ int ft_clean_line(char *line, char **new_line, int i, int x)
 	
 char	*ft_redir(char *line, t_data *data)
 {
-	int i;
-	// int r;
-	char *new_line;
-	new_line = NULL;
-	i = 0;
-	int flag = 0;
-	char *file;
-	int pid;
-	int status;
-	int x;
-	int z;
+	int		i;
+	char	*new_line;
+	int		flag;
+	int		x;
 
+	i = -1;
 	x = 0;
-	while (line[i])
+	new_line = NULL;
+	while (line[++i])
 	{
-		flag = ft_type_of_redir(line,&i);
+		flag = ft_type_of_redir(line, &i);
 		if (flag > 0)
 		{
 			if (i > x)
@@ -229,23 +226,16 @@ char	*ft_redir(char *line, t_data *data)
 				if (i == 0 || flag < 3)
 					ft_clean_line(line, &new_line, i, x);
 				else
-					ft_clean_line(line, &new_line, i-1, x);
+					ft_clean_line(line, &new_line, i - 1, x);
 			}
-			file = ft_name_of_file(line,i, &x);
-			if (file == NULL)
-				return (0);
-			ft_open_file(file, flag,data);   //RETURN ERROR
-			free(file);
-			file = NULL;
+			ft_open_file(ft_name_of_file(line,i, &x), flag,data);
 		}
-		if (!line[i])
-			break ;
-		i++;
 	}
 	if (i > x)
 		ft_clean_line(line, &new_line, i, x);
 	free(line);
 	return(new_line);
+}
 
 		
 	// r = ft_check_execve(new_line, data);
@@ -254,7 +244,6 @@ char	*ft_redir(char *line, t_data *data)
 	// if (r == 1)
 	// 	ft_do_execve(data);
 	// return (0);
-}
 		// return(0);
 
 

@@ -113,7 +113,6 @@ void	ft_exec_cmd(char *line, t_data *data)
 	//  printf("1 line: %s\n", line);
 	while (ft_strchr('$', line + x) != -1)// && ft_strchr('\'', line) == -1)
 		ft_env_line(&line, &x, data);
-	
 	if(ft_strchr('>', line) != -1 || ft_strchr('<', line) != -1)
 		line = ft_redir(line,data);
 	//   printf("2 line: %s\n", line);
