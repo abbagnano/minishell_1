@@ -6,126 +6,96 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/15 16:17:49 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/18 12:15:26 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "my_minishell.h"
 #include "my_minishell2.h"
 
-int	ft_find_command(char **split)
-{	
-	int	i;
-
-	i = 0;
-	while(split[i])
-	{
-		if (ft_strchr('<', split[i]) == -1 && ft_strchr('>', split[i]) == -1)
-		{
-			if	(i == 0 || 
-				(i > 0 && split[i - 1][0] && split[i - 1][0] != '<' &&
-						split[i - 1][0] != '>') ||
-				(i > 0 && split[i - 1][0] && (split[i - 1][0] == '<' ||
-						split[i - 1][0] == '>') && 
-					((i > 0 && split[i - 1][1] && split[i - 1][1] == '>' &&
-						split[i - 1][2]) ||
-					(i > 0 && split[i - 1][1] && split[i - 1][1] != '>'))))
-			{
-				return (i);
-			}
-		}
-		i++;
-	}
-	return (-1);
-}
-
-int	ft_command(char *line, t_data *data)
-{
-	char	**split;
-	int		i;
-	int		x;
-	
-	x = 0;
-	i = -1;
-	split = ft_split(line, ' ');
-	if (split)
-		i = ft_find_command(split);
-	if (i >= 0)
-	{
-		int c = i;
-		while (split[c] && (ft_strchr('<', split[c]) == -1 && ft_strchr('>', split[c]) == -1))
-		 	c++;
-		data->args = (char **)malloc(sizeof(char *) * (c - i + 1));
-		if (!data->args)
-			return(0);
-		data->args[c - i] = NULL;
-		while (i < c)
-		{
-		 	data->args[x] =ft_strdup(split[i]);
-			if (!data->args[x])
-				return (0);
-			x++;
-			i++;
-		}
-		return (1);
-	}
-	return (0);
-}
+// 
 
 int	ft_type_of_redir(char *line, int *i)
 {
 	int	flag;
 		
 	flag = 0;
-	if (line[*i] == '<' && line[*i + 1] && line[*i + 1] != '<')
+	int back = i;
+	if (line[*i] == '"')
 	{
-		if (line[*i + 1] == '>')
+		(*i)++;
+		while (line[*i] && line[*i] != '"')
+		(*i)++;
+		// printf("ciao\n");
+	}
+	if (line[*i])
+	{
+		if (line[*i] == '<' && line[*i + 1] && line[*i + 1] != '<')
 		{
-			(*i)++;
-			flag = 5;
+			if (line[*i + 1] == '>')
+			{
+				(*i)++;
+				flag = 5;
+			}
+			else
+				flag = 1;
 		}
-		else
-			flag = 1;
-	}
-	else if (line[*i] == '>' && line[*i + 1] && line[*i + 1] != '>')
-	{			
-		if (line[*i + 1] == '<')
-			printf("Error: 7\n");
-		flag = 2;
-	}
-	else if (line[*i] == '>' && line[*i + 1] && line[*i  + 1] == '>')
-	{
-		if (line[*i  + 2] && line[*i + 2] == '>')
-			printf("Error: 1\n");
-		(*i)++;
-		flag = 3;
-	}
-	else if (line[*i] == '<' && line[*i + 1] && line[*i  + 1] == '<')
-	{
-		if (line[*i  + 2] && line[*i + 2] == '<')
-			printf("Error: 6\n");
-		(*i)++;
-		flag = 4;
+		else if (line[*i] == '>' && line[*i + 1] && line[*i + 1] != '>')
+		{			
+			if (line[*i + 1] == '<')
+				printf("Error: 7\n");
+			flag = 2;
+		}
+		else if (line[*i] == '>' && line[*i + 1] && line[*i  + 1] == '>')
+		{
+			if (line[*i  + 2] && line[*i + 2] == '>')
+				printf("Error: 1\n");
+			(*i)++;
+			flag = 3;
+		}
+		else if (line[*i] == '<' && line[*i + 1] && line[*i  + 1] == '<')
+		{
+			if (line[*i  + 2] && line[*i + 2] == '<')
+				printf("Error: 6\n");
+			(*i)++;
+			flag = 4;
+		}
 	}
 	return (flag);
 }
 
-char	*ft_name_of_file(char *line, int i)
+
+char	*ft_name_of_file(char *line, int i,int *x)
 {
 	int	c;
-	
+
 	(i)++;
 	while(line[i] && line[i] == ' ')
 		(i)++;
-	c = i;
-	while(line[c] && line[c] != '<' && line[c] != '>' && line[c] != ' ')
-		c++;
-	if (c == i)
+	if (line[i] == '"')											//TESTARE BENE
+	{
+		(i)++;
+		c = i;
+		while (line[c] && line[c] != '"')
+			c++;
+		*x = c + 1;
+		//c++;
+	}
+	else
+	{
+		c = (i);
+		while(line[c] && line[c] != '<' && line[c] != '>' && line[c] != ' ')
+			c++;
+		*x = c;
+	}
+	if (c == (i))							//TESTARE
 		return (NULL);
-	return(ft_substr(line, i, c - i));
+	char *temp = ft_substr(line, i, c - i);
+	// printf("temp:%s\n", temp);
+	return(temp);
 }
 
-int	ft_open_file(char *file, int flag,int back_stdin,int back_stdout)
+int	ft_open_file(char *file, int flag, t_data *data)
 {
 	int	fd;
 	
@@ -159,14 +129,14 @@ int	ft_open_file(char *file, int flag,int back_stdin,int back_stdout)
 	}
 	else if (flag == 4)
 	{
-		dup2(back_stdin, 0);
+		dup2(data->std_fd[0], 0);
 		int back = dup(1);
-		dup2(back_stdout,1);
+		dup2(data->std_fd[1],1);
 		fd = open("/tmp/minishell", O_RDWR | O_CREAT | O_TRUNC, 0666);
 		if (fd > 0)
 		{
-			printf("opened <<\n");
-			printf("file:%s\n", file);
+			// printf("opened <<\n");
+			// printf("file:%s\n", file);
 			int r = 1;
 			char buf[1024];
 			
@@ -183,11 +153,12 @@ int	ft_open_file(char *file, int flag,int back_stdin,int back_stdout)
 					break;
 				}
 				write(fd, buf, ft_strlen(buf));
-				dup2(back_stdout,1);			
-					printf("buf: %s\n", buf);
-					printf("len:%d\n", len);
+				dup2(data->std_fd[1],1);			
+					// printf("buf: %s\n", buf);
+					// printf("len:%d\n", len);
 				write(1, ">", 1);
 			}
+			close(back);
 			fd = open("/tmp/minishell", O_RDONLY, 0666);
 			dup2(fd, 0);
 			close(fd);
@@ -210,115 +181,220 @@ int	ft_open_file(char *file, int flag,int back_stdin,int back_stdout)
 			printf("Error: 7\n");
 	}
 	return (0);
-}			
+}
+
+int ft_clean_line(char *line, char **new_line, int i, int x)
+{
+	if (!*new_line)
+	{
+		*new_line = ft_substr(line, x, i - x);
+	}
+	else
+	{
+		char *save;
+		char *temp;
+		save = *new_line;
+		temp = ft_substr(line, x, i - x);
+		*new_line = ft_strjoin(*new_line, temp);
+		free(temp);
+		free(save);
+	}	
+
+	return (1);
+}
 	
 int		ft_redir(char *line, t_data *data)
 {
 	int i;
 	int r;
-	int back_stdin;
-	int back_stdout;
-
-
-	back_stdin = dup(0);
-	back_stdout = dup(1);
-	r = ft_command(line, data);
+	char *new_line;
+	new_line = NULL;
 	i = 0;
 	int flag = 0;
 	char *file;
 	int pid;
 	int status;
+	int x;
+	int z;
 
+	x = 0;
 	while (line[i])
 	{
 		flag = ft_type_of_redir(line,&i);
-		
 		if (flag > 0)
 		{
-			file = ft_name_of_file(line,i);
+			if (i > x)
+			{
+				if (i == 0 || flag < 3)
+					ft_clean_line(line, &new_line, i, x);
+				else
+					ft_clean_line(line, &new_line, i-1, x);
+			}
+			file = ft_name_of_file(line,i, &x);
 			if (file == NULL)
 				return (0);
-			// if (flag == 4)
-			// {
-			// 	// dup2(back_stdout,1);
-			// 	// close(back_stdout);
-			// 	dup2(back_stdin, 0);
-			// 	// close(back_stdin);
-			// }
-			ft_open_file(file, flag, back_stdin, back_stdout);   //RETURN ERROR
+			ft_open_file(file, flag,data);   //RETURN ERROR
+			free(file);
+			file = NULL;
 		}
 		i++;
 	}
+	if (i > x)
+		ft_clean_line(line, &new_line, i, x);
+	r = ft_check_execve(new_line, data);
+	if (new_line)
+		free(new_line);
 	if (r == 1)
-	{
-		r = ft_check_execve(NULL, data);
-		if ( r == 1)
-		{
-			pid = fork();
-			if (pid == 0)
-			{
-				execve(data->args[0], data->args, data->envp);
-				printf( "child: execve failed\n");
-				printf(" 1\n");
-				exit(1);   //TOGLIERE
-			}
-			else
-			{
-					// printf(" child\n");
-				waitpid(pid, &status, 0);
-				dup2(back_stdout,1);
-				close(back_stdout);
-				dup2(back_stdin, 0);
-				close(back_stdin);
-				printf(" parent: success\n");
-				// exit(0);
-				if (WIFEXITED(status)  && !WEXITSTATUS(status))
-					return (0);			//SUCCESS
-				else 
-					return (1);			//NOT SUCCESS
-			}
-		}
-		else 
-		{
-			printf("to do: error\n");
-			exit(1);    //TOGLIERE
-		}
-	}
-	else
-	{
-		//RETURN TO STANDARD IN/OUT
-		// printf(" parent\n");
-		dup2(back_stdout,1);
-		close(back_stdout);
-		dup2(back_stdin, 0);
-		close(back_stdin);
-	}
+		ft_do_execve(data);
 	return (0);
 }
-
-/* ERRORS:
-	<infile >outfile >> outfile2
-	Segmentation fault: 11
-
-	bash-3.2$ <infile >outfile >>outfile2 cat DEVE PRENDERE SOLO IL SECONDO, STESSO DISCORSO SE INVERTITI
+		// return(0);
 
 
-	<giusto<sbagliato deve creare il giusto
+		// if ( r == 1)
+		// {
+		// 	pid = fork();
+		// 	if (pid == 0)
+		// 	{
+		// 		// int i = 0;
+		// 		// while (data->args[i])
+		// 		// 	printf("data->args: %s\n", data->args[i++]);
+		// 		execve(data->args[0], data->args, data->envp);
+		// 		printf( "child: execve failed\n");
+		// 		printf(" 1\n");
+		// 		exit(1);   //TOGLIERE
+		// 	}
+		// 	else
+		// 	{
+		// 			// printf(" child\n");			
+		// 		ft_free_matrix(&data->args);
+		// 		waitpid(pid, &status, 0);
+		// 		dup2(data->std_fd[1],1);
+		// 		close(data->std_fd[1]);
+		// 		dup2(data->std_fd[0], 0);
+		// 		close(data->std_fd[0]);
+		// 		printf(" parent: success\n");
+		// 		// exit(0);
+		// 		if (WIFEXITED(status)  && !WEXITSTATUS(status))
+		// 			return (0);			//SUCCESS
+		// 		else 
+		// 			return (1);			//NOT SUCCESS
+		// 	}
+		// }
+		// else 
+		// {
+		// 		// dup2(data->std_fd[1],1);
+		// 		// close(data->std_fd[1]);
+		// 		// dup2(data->std_fd[0], 0);
+		// 		// close(data->std_fd[0]);
+		// 		printf("no command\n");
+		// }
+
+
+
+
+
+	// }
+	// else
+	// {
+	// 	//RETURN TO STANDARD IN/OUT
+	// 	// printf(" parent\n");
+		
+	// 	dup2(back_stdout,1);
+	// 	close(back_stdout);
+	// 	dup2(back_stdin, 0);
+	// 	close(back_stdin);
+	// }
+// 	return (0);
+// }
+
+
+
+// int	ft_find_command(char **split)
+// {	
+// 	int	i;
+
+// 	i = 0;
+// 	while(split[i])
+// 	{
+// 		if (ft_strchr('<', split[i]) == -1 && ft_strchr('>', split[i]) == -1)
+// 		{
+// 			if	(i == 0 || 
+// 				(i > 0 && split[i - 1][0] && split[i - 1][0] != '<' &&
+// 						split[i - 1][0] != '>') ||
+// 				(i > 0 && split[i - 1][0] && (split[i - 1][0] == '<' ||
+// 						split[i - 1][0] == '>') && 
+// 					((i > 0 && split[i - 1][1] && split[i - 1][1] == '>' &&
+// 						split[i - 1][2]) ||
+// 					(i > 0 && split[i - 1][1] && split[i - 1][1] != '>'))))
+// 			{
+// 				return (i);
+// 			}
+// 		}
+// 		i++;
+// 	}
+// 	return (-1);
+// }
+
+// int	ft_command(char *line, t_data *data)
+// {
+// 	char	**split;
+// 	int		i;
+// 	int		x;
+// 	int		r;
+// 	char *save;
 	
-	<<>infile
-	<>infile 
-	<>>infile
-	
-	><<infile
-	><infile
-	>><infile 
+// 	x = 0;
+// 	i = -1;
+// 	r = 0;
+// 	split = ft_split(line, ' ');
+// 	if (!split)
+// 		return (0);
+// 	i = ft_find_command(split);
+// 	if (i >= 0)
+// 	{
+// 		int c = i;
+// 		// while (split[c] && (ft_strchr('<', split[c]) == -1 && ft_strchr('>', split[c]) == -1))
+// 		// 	c++;
+// 		while (split[c])
+// 		{
+// 			x = 0;
+// 			// int len = ft_strlen(split[c]);
+// 			while (split[c][x] && (split[c][0] != '<' || split[c][0] != '>'))
+// 			{
+// 				if (split[c][x] == '<' || split[c][x] == '>')
+// 				{
+// 					save = split[c];
+// 					split[c] = ft_substr(split[c], 0, x);
+// 					free(save);
+// 					break ;
+// 				}
+// 				x++;
+// 			}
+// 			c++;
+// 		} 
+// 		x = 0;
+// 		data->args = (char **)malloc(sizeof(char *) * (c - i + 1));
+// 		if (!data->args)
+// 			return(0);
+// 		data->args[c - i] = NULL;
+// 		while (i < c)
+// 		{
+// 		 	data->args[x] =ft_strdup(split[i]);
+// 			if (!data->args[x])
+// 				return (0);
+// 			x++;
+// 			i++;
+// 		}
+// 		r = 1;
+// 		// return (r);
+// 	}
+// 	ft_free_matrix(&split);
+// 	return (r);
+// }
 
 
-	2>&1 > dirlist
 
-
-	cat infile >outfile non funziona
-*/
 
 /////*old*//////////////////////////////////////////////////////////////
 	// i = ft_strchr_last_single(line, '<');

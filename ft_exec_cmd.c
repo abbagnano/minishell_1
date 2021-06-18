@@ -103,6 +103,10 @@ void	ft_exec_cmd(char *line, t_data *data)
 
 //	 printf("0 line: %s\n", line);
 	x = 0;
+
+	data->std_fd[0] = dup(0);
+	data->std_fd[1] = dup(1);
+	// printf("line: %s/n", line);
 	tcsetattr(0, 0, &data->old_term);
 	if (ft_strchr('\'', line) || ft_strchr('\"', line))
 		ft_clean_quotes(&line);
@@ -113,6 +117,15 @@ void	ft_exec_cmd(char *line, t_data *data)
 	ft_check_cmd(line, data);
 	
 	free(line);
+
+	dup2(data->std_fd[1],1);
+	close(data->std_fd[1]);
+	dup2(data->std_fd[0], 0);
+	close(data->std_fd[0]);
+
+
+
+
 	tcsetattr(0, 0, &data->my_term);
 
 

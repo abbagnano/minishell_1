@@ -7,8 +7,13 @@ TODO:
 -av[1]
 -set unset env export-/bin/bash con env pulita?? forse no
 -CTRL-\ fa l'uscita di un processo figlio es cat
+-IGNORA CTRL+C , CTRL / E NEL CAT
+-IGNORA CTRL+C , CTRL / NEL <<INFILE CAT
 -DISATTIVA TAB
--TILDE IN PATH
+-TILDE IN cd, TILDE IN PATH EXECVE
+-cd SENZA ARGOMENTI
+-DEVE PRENDERE LE WILDCARD? ? *
+-cd -
 -/bin/echo ?? 
 -PIPE E REDIRECTION DEVONO USARE LE BUILTIN INVECE CHE L'ÉXECCVE DIRETTAMENTE?
 -GESTIONE DEGLI ERRORI
@@ -16,25 +21,65 @@ TODO:
 -POF per i processi
 -DELETE CHE CREA UNO SPAZIO
 -IN TOP CI SONO 2 PROCESSI DI MINISHELL
--LINEA AGGIuNTIVA ALLA FINE DEL TERM QUANDO FA IL PRIMO DELLA HISTORY  
--LA VARIABILE GLOBALE CON LA STRUTTURA?
+-SE SI TABBA POI SI TORNA INDIETRO SI PERDE L'INDICE E TORNA TROPPO INDIETRO
+-FRECCIA GIU IN HISTORY
+-APPENA APERTO IL TERMINALE E APRENDO CAT CTRL \ FUNZIONA MA POI NON FUNZIONA
+-FARE UNA STRJOIN MODIFICATA CHE SI AUTOFREEA
+-IN FLAG=4 SISTEMARE L OSTDOUT DIRETTAMENTE CON IL BACKUP SU WRITE
+-LSTAT AL POSTO DI OPEN
+
+EXPORT:
+-export ARG =ciao NON DEVE FUNZ
+-export ARG= ciao DEVE CREARE: ARG="" e ciao (2 VARIABILI)
+-export ARG="ciao ciao" DEVE CREARE: ARG= "ciao ciao"
+-export ARG="ciao" e poi ARG+="ciao" DEVE CREARE: ARG=ciaociao
 
 <<:
--ELIMINA FILE TEMPORANEO DOPO LA LETTURA?
+-ELIMINA FILE TEMPORANEO DOPO LA LETTURA?   ->UNLINK OPPURE PIPE
 -<INFILE PRIMA DI <<EOF
 ->OUTFILE PRIMA DI EOF
--STRCMP 
 -CHIUDI FILE DESCR DUP
--UNLINK OPPURE PIPE
 
+REDIR_PARSING:
+esempio: ls -l>outfile non funziona, non riesce a passare il -l
+echo ciao > outfile non deve funzionare perche passa per le builtin, invertire l'ordine di chiamata in exec_cmd?
+NON DEVE FUNZIOANRE SE LA REDIRECTION STA ALLA FINE SENZA ARGOEMNTI E CON SPAZI
+/* ERRORS:
+	<infile >outfile >> outfile2
+	Segmentation fault: 11
 
+	bash-3.2$ <infile >outfile >>outfile2 cat DEVE PRENDERE SOLO IL SECONDO, STESSO DISCORSO SE INVERTITI
 
+	<giusto<sbagliato deve creare il giusto
+	
+	<<>infile
+	<>infile 
+	<>>infile
+	
+	><<infile
+	><infile
+	>><infile 
+
+	2>&1 > dirlist
+
+	cat infile >outfile non funziona
+*/
+
+ORDINE PARSING:
+1)$ pulisce anche le virgolette relative al $ e parzialmente alle redir
+2)REDIR pulisce anche le virgolette relative alle redirection, non pulisce le virgolette relative ai command
+3)PIPE 
+4)pulizia virgolette in generale
+
+SIGNAL
+https://stackoverflow.com/questions/4217037/catch-ctrl-c-in-c/4217052
+https://en.wikipedia.org/wiki/Control_key
+https://man7.org/linux/man-pages/man7/signal.7.html
 
 
 <<
 https://unix.stackexchange.com/questions/165878/what-is-the-use-of-redirection
 https://www.gnu.org/software/bash/manual/bash.html#Here-Documents
-
 
 https://app.slack.com/client/T039P7U66/CN9RHKQHW/thread/CN9RHKQHW-1623660443.354700
 https://app.slack.com/client/T039P7U66/CN9RHKQHW/thread/CN9RHKQHW-1623660443.354700
@@ -73,7 +118,6 @@ https://stackoverflow.com/questions/20974438/get-list-of-open-files-descriptors-
 
 CANONICAL
 https://www.gnu.org/software/libc/manual/html_node/Canonical-or-Not.html
-
 https://stackoverflow.com/questions/57916475/linux-stdin-buffering
 
 NON CANONICAL
