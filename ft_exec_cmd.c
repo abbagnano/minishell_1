@@ -43,13 +43,15 @@ void	ft_echo(char *line, t_data *data)
 
 	x = 0;
 	new_line = 1;
+	// printf("echosss: %s\n", line);
 	while (line[x] == ' ')
 		x++;
-	if (!ft_strncmp(line + x, "-n ", 3) || ft_strncmp(line + x, "-n ", 3) == -32)
+	if ((!ft_strncmp(line + x, "-n ", 3) || ft_strncmp(line + x, "-n ", 3) == -32) && !ft_strncmp(line + x, "-n", 2))
 	{
 		new_line = 0;
 		x += 3;
 	}
+	// printf("2 echosss: %s\n", line + x);
 	ft_write(line + x);
 	if (new_line)
 		ft_write("\n");
@@ -59,7 +61,7 @@ void	ft_echo(char *line, t_data *data)
 
 void	ft_check_cmd(char *line, t_data *data)
 {
-	//printf("line: -%s-\t-%d-\n", line, (int)line);		//		LE NODE->LINE SONO GIA' PULITE DEGLI SPAZI DAVANTI
+	// printf("line: -%s-\n", line);		//		LE NODE->LINE SONO GIA' PULITE DEGLI SPAZI DAVANTI
 //	int	len;
 
 //	len = ft_strlen(line);
@@ -97,13 +99,19 @@ void	ft_check_cmd(char *line, t_data *data)
 
 void	ft_exec_cmd(char *line, t_data *data)
 {
+	int	x;
+
 	// printf("line: %s/n", line);
+	x = 0;
 	tcsetattr(0, 0, &data->old_term);
-	if (ft_strchr('$', line) != -1 && ft_strchr('\'', line) == -1)
-		ft_env_line(&line, data);
+	if (ft_strchr('\'', line) || ft_strchr('\"', line))
+		ft_clean_quotes(&line);
+	// printf("line: %s\n", line);
+	while (ft_strchr('$', line + x) != -1)// && ft_strchr('\'', line) == -1)
+		ft_env_line(&line, &x, data);
+	//  printf("line: %s\n", line);
 	ft_check_cmd(line, data);
 	
-	// printf("line: %p\n", line);
 	free(line);
 	tcsetattr(0, 0, &data->my_term);
 

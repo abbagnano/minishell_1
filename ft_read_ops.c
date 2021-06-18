@@ -155,8 +155,12 @@ void    ft_read_ops(t_data *data)
 			// ft_linod_to_line_nofree(&line, len, &line_head);//ft_write("wrong quotes\n");//ft_reading(line_head, len, data);
 			// ft_linod_to_line(&cmd->line, len, &line_head);
 			ft_linod_to_line(&cmd->line, &line, len, &line_head);
-			ft_add_front_read(cmd, data->cmd_head);			
-			ft_exec_cmd(line, data);
+			ft_add_front_read(cmd, data->cmd_head);
+			//if (!ft_check_quotes(line, '\'') || !ft_check_quotes(line, '\"'))
+			if (!ft_check_quote(line))
+				free(line);
+			else
+				ft_exec_cmd(line, data);
 		//	printf("read:%p\n", line);
 		//	free(line);
 		}

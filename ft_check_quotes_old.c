@@ -32,6 +32,37 @@ int		ft_check_quote(char	*line)
 	return (1);
 }
 
+int		ft_check_clean(char *line, int *x, char c)
+{
+	int	z;
+
+	z = 1;
+	while (line[z])
+	{
+		if (line[z] && c == 39 && line[z] == '$')
+		{
+			while (line[z] && line[z] != c)
+				z++;
+			*x += z + 1;
+			return (0);
+		}
+		else if (line[z] && (line[z] == '>' || line[z] == '<' || line[z] == ' '))
+		{
+			while (line[z] && line[z] != c)
+				z++;
+			*x += z + 1;
+			return (0);
+		}
+		else if (line[z] && line[z] == c)
+		{
+			//*x += z + 1;
+			return (1);
+		}
+		z++;
+	printf("check:%s\n",line + z);
+	}
+	return (0);
+}
 
 void	ft_clean_line_39(char **line, int *x)
 {
@@ -45,15 +76,15 @@ void	ft_clean_line_39(char **line, int *x)
 	z = 0;
 	len = 0;
 	tmp = *line;
-	while (tmp[len + z] && tmp[len + z] != 39 && len < 2)
+	while (tmp[len + z] && tmp[len + z] != 39)
 	{
 		new[z] = tmp[len + z];
 		z++;
 		if (tmp[len + z] == 39)
 			len++;
 	}
-	*x = len + z - 2;
-	// printf("x: %d\n", *x);
+	*x = len + z	;
+	printf("x: %d\n", *x);
 	while (tmp[len + z])
 	{
 		new[z] = tmp[len + z];
@@ -62,7 +93,7 @@ void	ft_clean_line_39(char **line, int *x)
 	new[z] = '\0';
 	free(*line);
 	*line = new;
-	// printf("\t\tclean_39\t%s\n", *line);
+//	printf("\tclean_39\t%s\n", *line);
 }
 
 void	ft_clean_line_34(char **line, int *x)
@@ -84,8 +115,8 @@ void	ft_clean_line_34(char **line, int *x)
 		if (tmp[len + z] == 34)
 			len++;
 	}
-	*x = len + z - 2;
-//	printf("x: %d\n", *x);
+	*x = len + z;
+	printf("x: %d\n", *x);
 	while (tmp[len + z])
 	{
 		new[z] = tmp[len + z];
@@ -94,63 +125,33 @@ void	ft_clean_line_34(char **line, int *x)
 	new[z] = '\0';
 	free(*line);
 	*line = new;
-	// printf("\t\tclean_34\t%s\n", *line);
-}
-
-int		ft_check_clean(char **line, int *x, char c)
-{
-	int	z;
-
-	z = *x;
-	while ((*line)[z])
-	{
-		// printf("\tcheck:%s\n",(*line + z));
-		z++;
-		if ((*line)[z] && c == 39 && (*line)[z] == '$')
-		{
-			while ((*line)[z] && (*line)[z] != c)
-				z++;
-			*x = z + 1;
-			return (0);
-		}
-		else if ((*line)[z] && ((*line)[z] == '>' || (*line)[z] == '<' || (*line)[z] == ' '))
-		{
-			while ((*line)[z] && (*line)[z] != c)
-				z++;
-			*x = z + 1;
-			return (0);
-		}
-		else if ((*line)[z] && (*line)[z] == c)
-		{
-			*x = z;
-			if (c == 39)
-				ft_clean_line_39(line, &z);
-			else
-				ft_clean_line_34(line, &z);
-			return (1);
-		}
-	}
-	return (0);
+	printf("\tclean_34\t%s\n", *line);
 }
 
 void	ft_clean_quotes(char **line)
 {
 	int		x;
-	// char	*tmp;
+	char	*tmp;
 
 	x = 0;
-	// tmp = *line;
-	while ((*line)[x])
+	tmp = *line;
+	while (tmp[x])
 	{	
-		// printf("(*line):-%s-\n", (*line + x));
-		if ((*line)[x] == 39)
-			ft_check_clean(line, &x, 39);
-		else if ((*line)[x] == '\"')
-			ft_check_clean(line, &x, '\"');
-	//	 printf("tmp_x: %d\n", x);
+		if (tmp[x] == '\'')
+		{
+			if (ft_check_clean(tmp + x, &x, '\''))
+				ft_clean_line_39(line, &x);
+		}
+		else if (tmp[x] == '\"')
+		{
+			if (ft_check_clean(tmp + x, &x, '\"'))
+				ft_clean_line_34(line, &x);
+		}
+		printf("tmp: %s\n", tmp + x);
+		printf("tmp_x: %d\n", x);
 		x++;
 	}
-	// printf("end:%s\n", *line);
+	printf("end:%s\n", *line);
 }
 
 

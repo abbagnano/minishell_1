@@ -8,7 +8,7 @@ char	*ft_itoa_errno(int num, int len, char *var)
 
 	tmp = num;
 	x = 1;
-	printf("num:%d\n", num);
+//	printf("num:%d\n", num);
 	while (tmp > 10)
 	{
 		tmp /= 10;
@@ -30,7 +30,8 @@ char	*ft_itoa_errno(int num, int len, char *var)
 		new[x--] = var[len];
 	while (x)
 		new[x--] = ' ';
-	printf("new: %s\n", new);
+	//printf("new: %s\n", new);
+	free(var);
 	return (new);
 }
 

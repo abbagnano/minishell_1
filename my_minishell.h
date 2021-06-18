@@ -24,9 +24,15 @@
 // 	int		dollar;
 // }	t_flag;
 
+typedef struct s_int
+{
+	int				x;
+	struct s_int	*next;
+}	t_int;
+
 typedef struct s_char
 {
-	unsigned char			buf;
+	unsigned char	buf;
 	struct s_char	*prev;
 	struct s_char	*next;
 }	t_char;
@@ -113,7 +119,7 @@ void	ft_init_term(t_data *data);
 void	ft_arrow_up(t_char **line_head, t_data *data, int x, int *len);
 
 
-void	ft_env_line(char **line, t_data *data);
+void	ft_env_line(char **line, int *x, t_data *data);
 
 /*		utils_read_ops.c	*/
 int		ft_read_len(t_read **cmd_head);
@@ -130,7 +136,10 @@ void	ft_write_char(t_char **line_head);
 void	ft_canc_char(t_char **line_head);
 
 /*		ft_check_quotes.c	*/
-int		ft_check_quotes(char *line, char c);
+int		ft_check_quote(char	*line);
+void	ft_clean_quotes(char **line);
+int		ft_check_clean(char **line, int *x, char c);
+// int		ft_check_quotes(char *line, char c);
 // int		ft_check_quotes(t_char **line_head);
 // int		ft_check_quotes_clean(t_char **line_head, char c);
 
