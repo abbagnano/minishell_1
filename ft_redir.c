@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/18 11:44:54 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/18 11:51:28 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ char	*ft_name_of_file(char *line, int i,int *x)
 	if (c == (i))							//TESTARE
 		return (NULL);
 	char *temp = ft_substr(line, i, c - i);
-	printf("temp:%s\n", temp);
+	// printf("temp:%s\n", temp);
 	return(temp);
 }
 
@@ -135,8 +135,8 @@ int	ft_open_file(char *file, int flag, t_data *data)
 		fd = open("/tmp/minishell", O_RDWR | O_CREAT | O_TRUNC, 0666);
 		if (fd > 0)
 		{
-			printf("opened <<\n");
-			printf("file:%s\n", file);
+			// printf("opened <<\n");
+			// printf("file:%s\n", file);
 			int r = 1;
 			char buf[1024];
 			
