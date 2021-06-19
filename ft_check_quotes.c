@@ -14,8 +14,8 @@ int		ft_check_quote(char	*line)
 				x++;
 			if (!line[x])
 				return (0);
-			else if (line[x] == '\'')
-				x++;
+			// else if (line[x] == '\'')
+			// 	x++;
 		}
 		else if (line[x] == '\"')
 		{
@@ -24,8 +24,8 @@ int		ft_check_quote(char	*line)
 				x++;
 			if (!line[x])
 				return (0);
-			else if (line[x] == '\"')
-				x++;
+			// else if (line[x] == '\"')
+			// 	x++;
 		}		
 		x++;
 	}
@@ -112,7 +112,7 @@ void	ft_clean_clean(char **line, int e, int s)
 	int		x;
 	int		y;
 
-	new = (char *)malloc(sizeof(char) * (ft_strlen(*line) - 2));
+	new = (char *)malloc(sizeof(char) * (ft_strlen(*line) - 1));
 	x = 0;
 	y = 0;
 	while ((*line)[x + y])
