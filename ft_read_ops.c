@@ -139,6 +139,7 @@ void    ft_read_ops(t_data *data)
 	len = 0;
 	line_head = NULL;
 	line = NULL;
+	cmd = NULL;
 	while (ft_reading(&line_head, &len, data))
 	{
 		cmd = (t_read *)malloc(sizeof(t_read) * 1);
@@ -157,6 +158,7 @@ void    ft_read_ops(t_data *data)
 				ft_exec_cmd(line, data);
 		//	printf("read:%p\n", line);
 		//	free(line);
+			cmd = cmd->next;
 		}
 		if (!line_head && !len)
 		{
@@ -164,7 +166,6 @@ void    ft_read_ops(t_data *data)
 			free(line);
 			line_head = NULL;
 		}
-		cmd = cmd->next;
 		len = 0;
 		line = NULL;
 		ft_write("\033[0;32mminishell% \033[0m");

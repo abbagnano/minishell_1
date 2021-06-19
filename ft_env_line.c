@@ -36,7 +36,7 @@ void	ft_var_line(char *var, char **line, int x, t_data *data)
 	int		r;
 
 	len = ft_strlen(var);
-	printf("len:%d\tvar: %s\n",len, var);
+	// printf("len:%d\tvar: %s\n",len, var);
 	r = ft_get_var(&var, &len, data);
 	tot = ft_strlen(*line) - len + ft_strlen(var + len);
 	new = (char *)malloc(sizeof(char) * (tot + 1));
