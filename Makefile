@@ -28,7 +28,7 @@ $(NAME)	:	$(OBJS)
 	gcc $(CFLAGS) -lncurses $^ -o $@
 	#gcc $(CFLAGS)  $^ -o $@
 fsan	:	$(OBJS)
-	gcc $(CFLAGS) $(FSAN) $^ -o $(NAME)
+	gcc $(CFLAGS) $(FSAN) -lncurses $^ -o $(NAME)
 
 %.o		:	%.c
 	gcc -c $(CFLAGS) $^ 

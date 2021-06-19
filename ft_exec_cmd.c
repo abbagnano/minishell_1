@@ -108,17 +108,18 @@ void	ft_exec_cmd(char *line, t_data *data)
 	data->std_fd[1] = dup(1);
 	// printf("line: %s/n", line);
 	tcsetattr(0, 0, &data->old_term);
-	if (ft_strchr('\'', line) || ft_strchr('\"', line))
-		ft_clean_quotes(&line);
-	//  printf("1 line: %s\n", line);
 	while (ft_strchr('$', line + x) != -1)// && ft_strchr('\'', line) == -1)
 		ft_env_line(&line, &x, data);
 	
-	if(ft_strchr('>', line) != -1 || ft_strchr('<', line) != -1)
-		line = ft_redir(line,data);
-	//   printf("2 line: %s\n", line);
-	if (line)
-		ft_check_cmd(line, data);
+	//  printf("1 line: %s\n", line);
+	if (ft_strchr('\'', line) || ft_strchr('\"', line))
+		ft_clean_quotes(&line);
+	
+	// if(ft_strchr('>', line) != -1 || ft_strchr('<', line) != -1)
+	// 	line = ft_redir(line,data);
+	// //   printf("2 line: %s\n", line);
+	// if (line)
+	// 	ft_check_cmd(line, data);
 	
 	free(line);
 

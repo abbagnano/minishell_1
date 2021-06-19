@@ -10,12 +10,14 @@ void	ft_get_var(char **var, int *len, t_data *data)
 	if ((*var)[1] == '?')
 	{
 		free(*var);
-		*var = ft_itoa_errno(errno, *len, *var);//(errno);
+		*var = ft_itoa_errno(errno, *len);//(errno);
+		// printf("-%s-\n", *var);
 		*len = 2;
 	}
 	else
 	{
 		free(*var);
+		// *var = NULL;
 		*var = "\0";
 		if (tmp)
 			*var = tmp->line;
@@ -32,7 +34,7 @@ void	ft_var_line(char *var, char **line, int x, t_data *data)
 
 	len = ft_strlen(var);
 	ft_get_var(&var, &len, data);
-//	printf("len:%d\tvar: %s\n",len, var);
+	// printf("len:%d\tvar: %s\n",len, var);
 	tot = ft_strlen(*line) - len + ft_strlen(var + len);
 	new = (char *)malloc(sizeof(char) * (tot + 1));
 	tmp = *line;
@@ -59,7 +61,9 @@ void	ft_var_line(char *var, char **line, int x, t_data *data)
 	}
 	new[tot + z] = '\0';
 	free(*line);
-	// 	free(var);
+	// *line = NULL;
+	if (!ft_strncmp(var, "$ 0", 3))
+		free(var);
 	*line = new;
 //	printf("vvar:%s\n", *line);
 //	ft_check_cmd(new, data);
@@ -150,21 +154,26 @@ void	ft_env_line(char **line, int *x, t_data *data)
 	z = 0;
 	// printf("pre x:%d\t%s\n", *x, *line + *x);
 	*x += ft_strchr('$', (*line + *x));
+	if (*x < 0)
+		return ;
 	// printf(" x:%d\t%s\n", *x, *line + *x);
-	while (z < *x)
+	while (z < *x && tmp[z])
 	{
 		if (tmp[z] == 34)
 		{
 			// printf(" qwe\n");
 			z++;
-			while (z + 1 < *x && tmp[z] != 34)
+			while (z < *x && tmp[z] && tmp[z] != 34)
 				z++;
+			if (tmp[z] == 34)
+				z++;
+			continue ;
 		}	
 		else if (tmp[z] == 39)
 		{
 			// printf(" rty\n");
 			z++;
-			while (tmp[z] != '\'')
+			while (tmp[z] && tmp[z] != '\'')
 				z++;
 			if (z >= *x)
 			{
@@ -174,7 +183,10 @@ void	ft_env_line(char **line, int *x, t_data *data)
 		}
 		z++;
 	}
+	while (z < *x && tmp[z])
+		z++;
 //	len = 0;
+// printf("%s\n", tmp + z + len);
 	while (tmp[z + len] && tmp[z + len] != ' ')// && tmp[z + len] != '\'' && tmp[z + len] != '\"')
 	{
 		len++;
@@ -201,7 +213,7 @@ void	ft_env_line(char **line, int *x, t_data *data)
 	//  printf("var: %s\n", var);
 	ft_var_line(var, line, *x, data);
 	// ft_var_line(var, line, len, data);
-//	free(var);
+	// free(var);
 	//
 	//  printf("updated_line: %s\n", *line);
 }

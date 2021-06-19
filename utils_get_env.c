@@ -1,37 +1,39 @@
 #include "my_minishell.h"
 
-char	*ft_itoa_errno(int num, int len, char *var)
+char	*ft_itoa_errno(int num, int len)
 {
 	char	*new;
 	int		tmp;
 	int		x;
 
 	tmp = num;
-	x = 1;
-//	printf("num:%d\n", num);
+	x = 3;
+	// printf("num:%d\n", num);
+//	printf("%s\n", var);
 	while (tmp > 10)
 	{
 		tmp /= 10;
 		x++;
 	}
-	x += ft_strlen(var);
+	// printf("%d\n", x);
+//	x += ft_strlen(var);
 	new = (char *)malloc(sizeof(char) * (x + 1));
 	new[x--] = '\0';
-	while (var[--len] != '?')
-		new[x--] = var[len];
+	// while (var[--len] != '?')
+	// 	new[x--] = var[len];
 	while (num >= 10)
 	{
 		new[x--] = num % 10 + 48;
 		num /= 10;
 	}
 	new[x--] = num + 48;
-	len -= 2;
-	while (x && var[--len])
-		new[x--] = var[len];
+	// len -= 2;
+	// while (x && var[--len])
+	// 	new[x--] = var[len];
 	while (x)
 		new[x--] = ' ';
-	//printf("new: %s\n", new);
-	free(var);
+	// printf("new: %s\n", new);
+	// free(var);
 	return (new);
 }
 

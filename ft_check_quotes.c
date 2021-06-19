@@ -77,14 +77,23 @@ void	ft_clean_line_34(char **line, int *x)
 	z = 0;
 	len = 0;
 	tmp = *line;
+	// while (tmp[len + z] && z < *x)
+	// {
+	// 	new[z] = tmp[len + z];
+	// 	z++;
+	// }
 	while (tmp[len + z] && tmp[len + z] != 34 && len < 2)
 	{
 		new[z] = tmp[len + z];
 		z++;
+		if (tmp[len +z] == 39)
+		{
+
+		}
 		if (tmp[len + z] == 34)
 			len++;
 	}
-	*x = z;//len + z - 2;
+	*x = z - 1;//len + z - 2;
 //	printf("x: %d\n", *x);
 	while (tmp[len + z])
 	{
@@ -97,14 +106,39 @@ void	ft_clean_line_34(char **line, int *x)
 	// printf("\t\tclean_34\t%s\n", *line);
 }
 
+void	ft_clean_clean(char **line, int e, int s)
+{
+	char	*new;
+	int		x;
+	int		y;
+
+	new = (char *)malloc(sizeof(char) * (ft_strlen(*line) - 2));
+	x = 0;
+	y = 0;
+	while ((*line)[x + y])
+	{
+		if (x + y == e || x + y == s)
+			y++;
+		new[x] = (*line)[x + y];
+		x++;
+	}
+	new[x] = '\0';
+	free(*line);
+	*line = new;
+
+}
+
 int		ft_check_clean(char **line, int *x, char c)
 {
 	int	z;
+	int s;
+	int e;
 
 	z = *x;
+	s = z;
 	while ((*line)[z])
 	{
-		// printf("\tcheck:%s\n",(*line + z));
+		// printf("\tcheck:%s	\n",(*line + z));
 		z++;
 		if ((*line)[z] && c == 39 && ((*line)[z] == '$' || (*line)[z] == '\"'))
 		{
@@ -130,10 +164,12 @@ int		ft_check_clean(char **line, int *x, char c)
 		else if ((*line)[z] && (*line)[z] == c)
 		{
 			*x = z;
-			if (c == 39)
-				ft_clean_line_39(line, &z);
-			else
-				ft_clean_line_34(line, x);
+			e = z;
+			ft_clean_clean(line, s, e);
+			// if (c == 39)
+			// 	ft_clean_line_39(line, &z);
+			// else
+			// 	ft_clean_line_34(line, x);
 			return (1);
 		}
 	}
@@ -157,7 +193,7 @@ void	ft_clean_quotes(char **line)
 	//	 printf("tmp_x: %d\n", x);
 		x++;
 	}
-	// printf("end:%s\n", *line);
+	printf("%s\n", *line);
 }
 
 
