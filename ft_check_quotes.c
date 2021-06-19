@@ -132,7 +132,6 @@ int		ft_check_clean(char **line, int *x, char c)
 {
 	int	z;
 	int s;
-	int e;
 
 	z = *x;
 	s = z;
@@ -163,9 +162,8 @@ int		ft_check_clean(char **line, int *x, char c)
 		}
 		else if ((*line)[z] && (*line)[z] == c)
 		{
-			*x = z;
-			e = z;
-			ft_clean_clean(line, s, e);
+			*x = z - 1;
+			ft_clean_clean(line, s, z);
 			// if (c == 39)
 			// 	ft_clean_line_39(line, &z);
 			// else
