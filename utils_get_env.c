@@ -1,6 +1,6 @@
 #include "my_minishell.h"
 
-char	*ft_itoa_errno(int num, int len)
+char	*ft_itoa_errno(int num)
 {
 	char	*new;
 	int		tmp;

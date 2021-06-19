@@ -2,6 +2,7 @@
 
 void	ft_init_term(t_data *data)
 {
+	tgetent(NULL, getenv ("TERM"));
 	tcgetattr(0, &data->old_term);
 	tcgetattr(0, &data->my_term);
 	data->my_term.c_lflag &= ~(ICANON | ECHO);

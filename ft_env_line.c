@@ -1,6 +1,6 @@
 #include "my_minishell.h"
 
-void	ft_get_var(char **var, int *len, t_data *data)
+int	ft_get_var(char **var, int *len, t_data *data)
 {
 	t_read	*tmp;
 
@@ -10,18 +10,20 @@ void	ft_get_var(char **var, int *len, t_data *data)
 	if ((*var)[1] == '?')
 	{
 		free(*var);
-		*var = ft_itoa_errno(errno, *len);//(errno);
+		*var = ft_itoa_errno(errno);//(errno);
 		// printf("-%s-\n", *var);
 		*len = 2;
+		return (0);
 	}
 	else
 	{
 		free(*var);
-		// *var = NULL;
+		//  *var = NULL;
 		*var = "\0";
 		if (tmp)
 			*var = tmp->line;
 	}
+	return (1);
 }
 
 void	ft_var_line(char *var, char **line, int x, t_data *data)
@@ -31,10 +33,11 @@ void	ft_var_line(char *var, char **line, int x, t_data *data)
 	int		tot;
 	int		z;
 	int 	len;
+	int		r;
 
 	len = ft_strlen(var);
-	ft_get_var(&var, &len, data);
-	// printf("len:%d\tvar: %s\n",len, var);
+	printf("len:%d\tvar: %s\n",len, var);
+	r = ft_get_var(&var, &len, data);
 	tot = ft_strlen(*line) - len + ft_strlen(var + len);
 	new = (char *)malloc(sizeof(char) * (tot + 1));
 	tmp = *line;
@@ -62,7 +65,7 @@ void	ft_var_line(char *var, char **line, int x, t_data *data)
 	new[tot + z] = '\0';
 	free(*line);
 	// *line = NULL;
-	if (!ft_strncmp(var, "$ 0", 3))
+	if (!r)//(ft_strncmp(var, "$ 0", 3) == 0)
 		free(var);
 	*line = new;
 //	printf("vvar:%s\n", *line);

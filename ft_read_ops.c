@@ -53,14 +53,7 @@ int	ft_reading(t_char **line_head, int *len, t_data *data)
 {	
 	char	buf;
 	int		x = 0; // per history
-	char	*ho;
-	char	*cd;
-	char	*up;
 
-	tgetent(NULL, getenv ("TERM"));
-	ho = tgetstr("ho", NULL);
-	cd = tgetstr("cd", NULL);
-	up = tgetstr("up", NULL);
 	buf = ' ';
 	*len = 0;
 	while (buf != '\n')
@@ -73,8 +66,9 @@ int	ft_reading(t_char **line_head, int *len, t_data *data)
 		{
 			// printf("%s", ho);
 			// printf("%s\n", cd);
-			ft_write(ho);
-			ft_write(cd);
+			// ft_write(ho);
+			ft_write(tgetstr("ho", NULL));
+			ft_write(tgetstr("cd", NULL));
 			ft_write("\033[0;32mminishell% \033[0m");
 			ft_write_char(line_head);
 			continue ;
@@ -85,7 +79,7 @@ int	ft_reading(t_char **line_head, int *len, t_data *data)
 				continue ;
 			// printf("\n%s%s%s\n%s", up, cd, up, cd);
 			ft_write(tgetstr("le", NULL));
-			ft_write(cd);
+			ft_write(tgetstr("cd", NULL));
 		
 		//	 ioctl(1, TIOCFLUSH); 
 		
