@@ -48,11 +48,49 @@ void	ft_echo(char *line, t_data *data)
 		x++;
 	if ((!ft_strncmp(line + x, "-n ", 3) || ft_strncmp(line + x, "-n ", 3) == -32) && !ft_strncmp(line + x, "-n", 2))
 	{
+		printf("\n\tsdfasf\n");
 		new_line = 0;
 		x += 3;
 	}
+	while (line[x])
+	{
+		if (line[x] == ' ')
+		{
+			write(1, &line[x], 1);
+			x++;
+			while (line[x] && line[x] == ' ')
+				x++;
+		}
+		if (line[x] == 39)
+		{
+			// printf("\n\t39:%s\n", line + x);
+			x++;
+			while (line[x] && line[x] != 39)
+			{
+				write(1, &line[x], 1);
+				x++;
+			}
+			x++;
+		}
+		if (line[x] == 34)
+		{
+			// printf("\n\t34:%s\n", line + x);
+			x++;
+			while (line[x] && line[x] != 34)
+			{
+				write(1, &line[x], 1);
+				x++;
+			}
+			x++;
+		}
+		if (!line[x])
+			break ;
+		// printf("\nprinting: %c\t%d\n", line[x], line[x]);
+		write(1, &line[x], 1);
+		x++;
+	}
 	// printf("2 echosss: %s\n", line + x);
-	ft_write(line + x);
+	// ft_write(line + x);
 	if (new_line)
 		ft_write("\n");
 
@@ -115,11 +153,11 @@ void	ft_exec_cmd(char *line, t_data *data)
 	if (ft_strchr('\'', line) || ft_strchr('\"', line))
 		ft_clean_quotes(&line);
 	
-	// if(ft_strchr('>', line) != -1 || ft_strchr('<', line) != -1)
-	// 	line = ft_redir(line,data);
-	// //   printf("2 line: %s\n", line);
-	// if (line)
-	// 	ft_check_cmd(line, data);
+	if(ft_strchr('>', line) != -1 || ft_strchr('<', line) != -1)
+		line = ft_redir(line,data);
+	//   printf("2 line: %s\n", line);
+	if (line)
+		ft_check_cmd(line, data);
 	
 	free(line);
 

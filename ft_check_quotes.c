@@ -193,7 +193,7 @@ void	ft_clean_quotes(char **line)
 	//	 printf("tmp_x: %d\n", x);
 		x++;
 	}
-	printf("%s\n", *line);
+	// printf("%s\n", *line);
 }
 
 
