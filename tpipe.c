@@ -13,6 +13,7 @@
 #include <signal.h>
 #include <sys/ioctl.h>
 
+//2 PROCESSI//
 // int main(int ac, char **av)
 // {	
 // 	int pid;
@@ -47,10 +48,10 @@
 // 	return 0;
 // }
 
+//3 PROCESSI
 int main(int ac, char **av)
 {	
 	int pid;
-	int pid2;
 	int fd_pipe[2];
 	int fd0= dup(0);
 	int fd1= dup(1);
@@ -60,8 +61,8 @@ int main(int ac, char **av)
 	pid = fork();
 	if (pid == 0)
 	{
-		printf("pid_C:%d\n", pid);
-		write(fd1, "Child\n", 6);
+		// printf("pid_C:%d\n", pid);
+		// write(fd1, "Child\n", 6);
 		close(fd_pipe[0]);
 		dup2(fd_pipe[1], 1);
 		close(fd_pipe[1]);
@@ -70,17 +71,17 @@ int main(int ac, char **av)
 	}
 	else
 	{
-		printf("pid_P:%d\n", pid);
-		write(fd1, "Waiting\n", 8);
+		// printf("pid_P:%d\n", pid);
+		// write(fd1, "Waiting\n", 8);
 		// w = wait(NULL);
 		w = waitpid(pid, NULL, 0);		
-		printf("wait:%d\n", w);
-		write(fd1, "Parent\n", 7);
-		pid2 = fork();
-		if (pid2 == 0)
+		// printf("wait:%d\n", w);
+		// write(fd1, "Parent\n", 7);
+		pid = fork();
+		if (pid == 0)
 		{
-			printf("pid2_C2:%d\n", pid2);
-			write(fd1, "Child2\n", 7);
+			// printf("pid_C2:%d\n", pid);
+			// write(fd1, "Child2\n", 7);
 			close(fd_pipe[1]);
 			dup2(fd_pipe[0], 0);
 			close(fd_pipe[0]);
@@ -89,15 +90,15 @@ int main(int ac, char **av)
 		}
 		else
 		{
-			write(fd1, "Waiting\n", 8);
-			printf("pid2_Last:%d\n", pid2);
-			w = waitpid(pid2, NULL, 0);
-			printf("wait:%d\n", w);
-			exit(1);
+			// write(fd1, "Waiting\n", 8);
+			// printf("pid_Last:%d\n", pid);
+			close(fd_pipe[1]);					//SE COMMENTATO NON CHIUDE
 			close(fd_pipe[0]);
-			close(fd_pipe[1]);
-			dup2(fd0, 0);
-			close(fd0);
+			w = waitpid(pid, NULL, 0);
+			// printf("wait:%d\n", w);
+			// exit(1);
+			// dup2(fd0, 0);
+			// close(fd0);
 			// dup2(fd1, 1);
 			// close(fd1);
 			write(fd1, "Ok\n", 3);
@@ -105,3 +106,4 @@ int main(int ac, char **av)
 	}
 	return 0;
 }
+
