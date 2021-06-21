@@ -1,4 +1,5 @@
 #include "my_minishell.h"
+#include "my_minishell2.h"
 
 void	ft_print_env(t_read **head)
 {
@@ -74,7 +75,7 @@ void	ft_get_env(char **env, t_data *data)
 	while (env[x])
 	{
 		new = (t_read *)malloc(sizeof(t_read) * 1);
-		new->line = env[x];
+		new->line = ft_strdup(env[x]);
 		new->pos = 1;
 		new->next = NULL;
 		ft_append_read(new, data->env_head);

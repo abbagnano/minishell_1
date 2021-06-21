@@ -1,4 +1,5 @@
 #include "my_minishell.h"
+#include "my_minishell2.h"
 
 char	*ft_itoa_errno(int num)
 {
@@ -94,7 +95,7 @@ int	ft_search_env(char *line, int x, int len, t_data *data)
 
 	tmp = *data->env_head;
 	tmp_x = tmp;
-	if (!ft_strncmp(line, tmp->line, len))
+	if (!ft_strncmp(line, tmp->line, len) && !ft_strncmp(line, tmp->line, len + 1))
 	{
 		*data->env_head = (*data->env_head)->next;
 		free(tmp);
@@ -105,7 +106,7 @@ int	ft_search_env(char *line, int x, int len, t_data *data)
 	{
 		tmp_x = tmp;
 		tmp = tmp->next;
-		if (tmp && !ft_strncmp(line, tmp->line, len))
+		if (tmp && !ft_strncmp(line, tmp->line, len) && !ft_strncmp(line, tmp->line, len + 1))
 		{
 			//printf("\t\t%s\t%d\n", tmp->line + x, ft_strncmp(line, tmp->line + x, len));
 			tmp_x->next = tmp->next;
@@ -127,7 +128,7 @@ void	ft_add_env(char *line, t_data *data)
 	new = (t_read *)malloc(sizeof(t_read) * 1);
 	if (ft_strchr('=', line) < 0)
 		ft_fix_env(&line);
-	new->line = line;
+	new->line = ft_strdup(line);
 	new->next = NULL;
 	ft_unset(line, data);
 	ft_append_read(new, data->env_head);
