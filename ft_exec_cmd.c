@@ -93,7 +93,6 @@ void	ft_echo(char *line, t_data *data)
 	// ft_write(line + x);
 	if (new_line)
 		ft_write("\n");
-
 	(void)data;
 }
 
@@ -154,7 +153,11 @@ void	ft_exec_cmd(char *line, t_data *data)
 		ft_clean_quotes(&line);
 	
 	if(ft_strchr('>', line) != -1 || ft_strchr('<', line) != -1)
-		line = ft_redir(line,data);
+		if (ft_redir(&line,data) == 0)
+		{
+			printf("Error REDIR\n");     //TEMPORANEO
+			exit(0);
+		}
 	//   printf("2 line: %s\n", line);
 	if (line)
 		ft_check_cmd(line, data);

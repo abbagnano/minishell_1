@@ -1,6 +1,5 @@
 gcc -lncurses term_test.c 
 
-
 TODO: 
 -av[1]
 -LSTAT AL POSTO DI OPEN
@@ -38,6 +37,9 @@ EXPORT:
 -<INFILE PRIMA DI <<EOF
 ->OUTFILE PRIMA DI EOF
 -CHIUDI FILE DESCR DUP
+-PRINTARE "MINISHELL: COMMAND NOT FOUND" NEL FD data->std_fd[1] e non nello st out, 
+	esempio rigurdante l'errore "<infile" cat -e >outfile che scrive l'outfput dell'errore in outfile
+-NON DA ERRORE NEL CASO: <"inf 
 
 REDIR_PARSING:
 esempio: ls -l>outfile non funziona, non riesce a passare il -l
