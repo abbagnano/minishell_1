@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/21 10:34:04 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/21 10:54:50 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,93 +84,111 @@ char	*ft_name_of_file(char *line, int i,int *x)
 	return (ft_substr(line, i, c - i));
 }
 
-int	ft_open_file(char *file, int flag, t_data *data)
+int	ft_flag_1(char *file)
 {
 	int	fd;
 	
-	if (file == NULL)
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
 		return (0);
-	if (flag == 1)
+	dup2(fd, 0);
+	close(fd);
+	return (1);
+}
+
+int	ft_flag_2(char *file)
+{
+	int	fd;
+	
+	fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0666);	
+	if (fd < 0)
+		return (0);
+	dup2(fd, 1);
+	close(fd);
+	return (1);
+}
+
+int	ft_flag_3(char *file)
+{
+	int	fd;
+	
+	fd = open(file, O_RDWR | O_CREAT | O_APPEND, 0666);
+	if (fd < 0)
+		return (0);
+	dup2(fd, 1);
+	close(fd);
+	return (1);
+}
+
+int	ft_flag_4(char *file, t_data *data)
+{
+	int	fd;
+	
+	dup2(data->std_fd[0], 0);
+	int back = dup(1);
+	dup2(data->std_fd[1],1);
+	fd = open("/tmp/minishell", O_RDWR | O_CREAT | O_TRUNC, 0666);
+	if (fd > 0)
 	{
-		fd = open(file, O_RDONLY);
-		if (fd > 0)
+		int r = 1;
+		char buf[1024];
+		
+		write(1, ">", 1);
+		while (r > 0)
 		{
-			printf(" opened\n");
-			dup2(fd, 0);
-			close(fd);
-		}
-		else
-			printf("Error: 3\n");
-	}
-	else if (flag == 2 || flag == 3)
-	{
-		if (flag == 2)
-			fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0666);
-		else
-		// else if (flag == 3)
-			fd = open(file, O_RDWR | O_CREAT | O_APPEND, 0666);
-		if (fd > 0)
-		{
-			printf(" opened\n");
-			dup2(fd, 1);
-			close (fd);	
-		}
-		else
-			printf("Error: 4\n");
-	}
-	else if (flag == 4)
-	{
-		dup2(data->std_fd[0], 0);
-		int back = dup(1);
-		dup2(data->std_fd[1],1);
-		fd = open("/tmp/minishell", O_RDWR | O_CREAT | O_TRUNC, 0666);
-		if (fd > 0)
-		{
-			// printf("opened <<\n");
-			// printf("file:%s\n", file);
-			int r = 1;
-			char buf[1024];
-			
-			write(1, ">", 1);
-			while (r > 0)
+			dup2(back, 1);
+			r = read(0, buf, 1024);
+			buf[r] = '\0';
+			int len = ft_strlen(file);
+			if ((ft_strncmp(buf, file, len + 1) == '\n' && ft_strncmp(buf, file, len) == 0) || buf[0] == '\0')
 			{
-				dup2(back, 1);
-				r = read(0, buf, 1024);
-				buf[r] = '\0';
-				int len = ft_strlen(file);
-				if ((ft_strncmp(buf, file, len + 1) == '\n' && ft_strncmp(buf, file, len) == 0) || buf[0] == '\0')
-				{
-					close(fd);
-					break;
-				}
-				write(fd, buf, ft_strlen(buf));
-				dup2(data->std_fd[1],1);			
-					// printf("buf: %s\n", buf);
-					// printf("len:%d\n", len);
-				write(1, ">", 1);
+				close(fd);
+				break;
 			}
-			close(back);
-			fd = open("/tmp/minishell", O_RDONLY, 0666);
-			dup2(fd, 0);
-			close(fd);
+			write(fd, buf, ft_strlen(buf));
+			dup2(data->std_fd[1],1);			
+				// printf("buf: %s\n", buf);
+				// printf("len:%d\n", len);
+			write(1, ">", 1);
 		}
-		else
-			printf("Error: 6\n");	
+		close(back);
+		fd = open("/tmp/minishell", O_RDONLY, 0666);
+		dup2(fd, 0);
+		close(fd);
 	}
+	else
+		printf("Error: 6\n");		
+	return (1);
+}
+
+int	ft_flag_5(char *file)
+{
+	int	fd;
+	
+	fd = open(file, O_RDWR, 0666);
+	if (fd < 0)
+		fd = open(file, O_RDWR | O_CREAT | O_TRUNC , 0666);
+	if (fd < 0)
+		return (0);
+	dup2(fd, 0);
+	close(fd);
+	return (1);
+}
+
+int	ft_open_file(char *file, int flag, t_data *data)
+{
+	if (file == NULL)
+		return (0);						//RETURN -1?
+	if (flag == 1)
+		return (ft_flag_1(file));
+	else if (flag == 2)
+		return (ft_flag_2(file));
+	else if (flag == 3)
+		return (ft_flag_3(file));
+	else if (flag == 4)
+		return (ft_flag_4(file, data));
 	else if (flag == 5)
-	{
-		fd = open(file, O_RDWR, 0666);
-		if (fd < 0)
-			fd = open(file, O_RDWR | O_CREAT | O_TRUNC , 0666);
-		if (fd > 0)
-		{
-			printf(" opened flag 5\n");
-			dup2(fd, 0);
-			close(fd);
-		}
-		else
-			printf("Error: 7\n");
-	}
+		return (ft_flag_5(file));
 	// free(file);
 	return (0);
 }
@@ -218,11 +236,12 @@ int	ft_redir(char **line, t_data *data)
 			else if (i > x)
 				ft_clean_line(*line, &new_line, i - 1, x);
 			file = ft_name_of_file(*line,i, &x);
-			ft_open_file(file, flag, data);
-			free(file);								//SI PUO FARE IL FREE ALLA FINE DELLA FUNZ OPEN_FILE
+			if (ft_open_file(file, flag, data) == 0)
+				return (0);							//FARE IL FREE PRIMA DEL RETURN
+			free(file);								//IL FREE SI PUO FARE ANCHE NELLA FUNZIONE FT_OPEN_FILe
 		}
-		if (flag == -1)
-			return (0);
+		if (flag == -1)								
+			return (0);							//FARE IL FREE PRIMA DEL RETURN	
 	}
 	if (i > x)
 		ft_clean_line(*line, &new_line, i, x);
@@ -230,6 +249,101 @@ int	ft_redir(char **line, t_data *data)
 	*line = new_line;
 	return (1);
 }
+
+// int	ft_open_file(char *file, int flag, t_data *data)
+// {
+// 	int	fd;
+	
+// 	if (file == NULL)
+// 		return (0);						//RETURN -1?
+// 	if (flag == 1)
+// 	{
+// 		fd = open(file, O_RDONLY);
+// 		if (fd > 0)
+// 		{
+// 			printf(" opened\n");
+// 			dup2(fd, 0);
+// 			close(fd);
+// 		}
+// 		else
+// 			printf("Error: 3\n");
+// 	}
+// 	else if (flag == 2 || flag == 3)
+// 	{
+// 		if (flag == 2)
+// 			fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0666);
+// 		else
+// 		// else if (flag == 3)
+// 			fd = open(file, O_RDWR | O_CREAT | O_APPEND, 0666);
+// 		if (fd > 0)
+// 		{
+// 			printf(" opened\n");
+// 			dup2(fd, 1);
+// 			close (fd);	
+// 		}
+// 		else
+// 			printf("Error: 4\n");
+// 	}
+// 	else if (flag == 4)
+// 	{
+// 		dup2(data->std_fd[0], 0);
+// 		int back = dup(1);
+// 		dup2(data->std_fd[1],1);
+// 		fd = open("/tmp/minishell", O_RDWR | O_CREAT | O_TRUNC, 0666);
+// 		if (fd > 0)
+// 		{
+// 			// printf("opened <<\n");
+// 			// printf("file:%s\n", file);
+// 			int r = 1;
+// 			char buf[1024];
+			
+// 			write(1, ">", 1);
+// 			while (r > 0)
+// 			{
+// 				dup2(back, 1);
+// 				r = read(0, buf, 1024);
+// 				buf[r] = '\0';
+// 				int len = ft_strlen(file);
+// 				if ((ft_strncmp(buf, file, len + 1) == '\n' && ft_strncmp(buf, file, len) == 0) || buf[0] == '\0')
+// 				{
+// 					close(fd);
+// 					break;
+// 				}
+// 				write(fd, buf, ft_strlen(buf));
+// 				dup2(data->std_fd[1],1);			
+// 					// printf("buf: %s\n", buf);
+// 					// printf("len:%d\n", len);
+// 				write(1, ">", 1);
+// 			}
+// 			close(back);
+// 			fd = open("/tmp/minishell", O_RDONLY, 0666);
+// 			dup2(fd, 0);
+// 			close(fd);
+// 		}
+// 		else
+// 			printf("Error: 6\n");	
+// 	}
+// 	else if (flag == 5)
+// 	{
+// 		fd = open(file, O_RDWR, 0666);
+// 		if (fd < 0)
+// 			fd = open(file, O_RDWR | O_CREAT | O_TRUNC , 0666);
+// 		if (fd > 0)
+// 		{
+// 			printf(" opened flag 5\n");
+// 			dup2(fd, 0);
+// 			close(fd);
+// 		}
+// 		else
+// 			printf("Error: 7\n");
+// 	}
+// 	// free(file);
+// 	return (0);
+// }
+
+
+
+
 // int	ft_type_of_redir(char *line, int *i)
 // {
 
