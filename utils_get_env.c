@@ -98,6 +98,7 @@ int	ft_search_env(char *line, int x, int len, t_data *data)
 	if (!ft_strncmp(line, tmp->line, len) && !ft_strncmp(line, tmp->line, len + 1))
 	{
 		*data->env_head = (*data->env_head)->next;
+		free(tmp->line);
 		free(tmp);
 		data->env_len--;
 		return (1);
@@ -110,6 +111,7 @@ int	ft_search_env(char *line, int x, int len, t_data *data)
 		{
 			//printf("\t\t%s\t%d\n", tmp->line + x, ft_strncmp(line, tmp->line + x, len));
 			tmp_x->next = tmp->next;
+			free(tmp->line);
 			free(tmp);
 			data->env_len--;
 			return (1);
