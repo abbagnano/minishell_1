@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_aviol2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 16:44:47 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/06 18:18:42 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/06/21 11:57:16 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,32 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		*(ptr + i) = '\0';
 	}
 	return (ptr);
+}
+
+int	ft_strjoin_over(char **s1, char const *s2)
+{
+	char		*ptr;
+	size_t		i;
+	size_t		lens1;
+	size_t		lens2;
+
+	i = -1;
+	if (!(*s1) || !(s2))
+		return (0);
+	lens1 = ft_strlen((char *)(*s1));
+	lens2 = ft_strlen((char *)s2);
+	ptr = (char *)malloc(sizeof(char) * (lens1 + lens2 + 1));
+	if (!ptr)
+		return (0);
+	while (++i < lens1)
+		ptr[i] = (*s1)[i];
+	i = -1;
+	while (++i < lens2)
+		ptr[lens1 + i] = s2[i];
+	ptr[lens1 + i] = '\0';
+	free(*s1);
+	*s1 = ptr;
+	return (1);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)

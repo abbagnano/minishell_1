@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 11:23:52 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/21 10:11:08 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/21 11:56:12 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int	ft_redir(char **line, t_data *data);
 /*ft_utils_aviol*/
 char	**ft_split(char const *s, char c);
 /*ft_utils_aviol2*/
+int	ft_strjoin_over(char **s1, char const *s2);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strdup(const char *str);

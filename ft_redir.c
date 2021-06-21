@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/21 11:05:14 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/21 12:14:42 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ char	*ft_name_of_file(char *line, int i,int *x)
 		while (line[c] && line[c] != '"')
 			c++;
 		*x = c + 1;
-		//c++;
 	}
 	else
 	{
@@ -184,22 +183,18 @@ int	ft_open_file(char *file, int flag, t_data *data)
 
 int ft_clean_line(char *line, char **new_line, int i, int x)
 {
-	char	*save;
 	char	*temp;
 
 	if (!*new_line)
 		*new_line = ft_substr(line, x, i - x);
 	else
 	{
-		save = *new_line;
 		temp = ft_substr(line, x, i - x);
 		if (!temp)
 			return (0);
-		*new_line = ft_strjoin(*new_line, temp);
-		if (!(*new_line))
+		if (ft_strjoin_over(new_line, temp) == 0)
 			return (0);
 		free(temp);
-		free(save);
 	}
 	return (1);
 }
@@ -221,9 +216,15 @@ int	ft_redir(char **line, t_data *data)
 		if (flag > 0)
 		{
 			if (i > x && (i == 0 || flag < 3))
-				ft_clean_line(*line, &new_line, i, x);
+			{
+				if (ft_clean_line(*line, &new_line, i, x) == 0)
+					return(0);
+			}
 			else if (i > x)
-				ft_clean_line(*line, &new_line, i - 1, x);
+			{
+				if (ft_clean_line(*line, &new_line, i - 1, x) == 0)
+					return(0);
+			}
 			file = ft_name_of_file(*line,i, &x);
 			if (ft_open_file(file, flag, data) == 0)
 				return (0);							//FARE IL FREE PRIMA DEL RETURN
@@ -233,7 +234,10 @@ int	ft_redir(char **line, t_data *data)
 			return (0);							//FARE IL FREE PRIMA DEL RETURN	
 	}
 	if (i > x)
-		ft_clean_line(*line, &new_line, i, x);
+	{
+		if (ft_clean_line(*line, &new_line, i, x) == 0)
+			return (0);
+	}
 	free(*line);
 	*line = new_line;
 	return (1);
