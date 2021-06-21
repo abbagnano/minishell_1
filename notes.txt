@@ -4,33 +4,21 @@ TODO:
 -av[1]
 -LSTAT AL POSTO DI OPEN
 -CTRL-\ fa l'uscita di un processo figlio es cat
--READING OPS IN <<INFILE
 -IGNORA CTRL+C , CTRL / E NEL CAT
 -IGNORA CTRL+C , CTRL / NEL <<INFILE CAT
 -DISATTIVA TAB
+-FRECCIA GIU IN HISTORY
 -TILDE IN cd, TILDE IN PATH EXECVE
--cd SENZA ARGOMENTI
--DEVE PRENDERE LE WILDCARD? ? *
--cd -
--/bin/echo ?? 
 -PIPE E REDIRECTION DEVONO USARE LE BUILTIN INVECE CHE L'ÉXECCVE DIRETTAMENTE?
 -GESTIONE DEGLI ERRORI
 -LEAKS
--POF per i processi
--SE SI TABBA POI SI TORNA INDIETRO SI PERDE L'INDICE E TORNA TROPPO INDIETRO
--FRECCIA GIU IN HISTORY
--FARE UNA STRJOIN MODIFICATA CHE SI AUTOFREEA
--IN FLAG=4 SISTEMARE L OSTDOUT DIRETTAMENTE CON IL BACKUP SU WRITE
--$?
--" "   '  ' PERFEZIONARE 
+-POF per i processi 
 
 EXPORT:
 -export ARG =ciao NON DEVE FUNZ
 -export ARG= ciao DEVE CREARE: ARG="" e ciao (2 VARIABILI)
 -export ARG="ciao ciao" DEVE CREARE: ARG= "ciao ciao"
 -export ARG="ciao" e poi ARG+="ciao" DEVE CREARE: ARG=ciaociao
-
--<INFILE SENZA SPAZIO ALLA FINE E BASTA
 
 <<:
 -ELIMINA FILE TEMPORANEO DOPO LA LETTURA?   ->UNLINK OPPURE PIPE
@@ -39,7 +27,8 @@ EXPORT:
 -CHIUDI FILE DESCR DUP
 -PRINTARE "MINISHELL: COMMAND NOT FOUND" NEL FD data->std_fd[1] e non nello st out, 
 	esempio rigurdante l'errore "<infile" cat -e >outfile che scrive l'outfput dell'errore in outfile
--NON DA ERRORE NEL CASO: <"inf 
+-IN CASO DI QUOTE OPEN PRINT ERRORE?
+-FT EXIT RETURN REDIR
 
 REDIR_PARSING:
 esempio: ls -l>outfile non funziona, non riesce a passare il -l
@@ -66,11 +55,6 @@ NON DEVE FUNZIOANRE SE LA REDIRECTION STA ALLA FINE SENZA ARGOEMNTI E CON SPAZI
 	cat infile >outfile non funziona
 */
 
-ORDINE PARSING:
-1)$ pulisce anche le virgolette relative al $ e parzialmente alle redir
-2)REDIR pulisce anche le virgolette relative alle redirection, non pulisce le virgolette relative ai command
-3)PIPE 
-4)pulizia virgolette in generale
 
 SIGNAL
 https://stackoverflow.com/questions/4217037/catch-ctrl-c-in-c/4217052
