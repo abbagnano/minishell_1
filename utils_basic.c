@@ -50,5 +50,5 @@ void	ft_write(char *str)
 	int len;
 
 	len = ft_strlen(str);
-	write(0, str, len);
+	write(1, str, len);
 }

@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/18 16:05:27 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/21 09:53:14 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,23 @@
 
 // 
 
+void	ft_slide_quotes(char *line, int *i)
+{
+	if (line[*i] == '"')
+	{
+		(*i)++;
+		while (line[*i] && line[*i] != '"')
+		(*i)++;
+	}	
+}
+
 int	ft_type_of_redir(char *line, int *i)
 {
 
 	int	flag;
 		
 	flag = 0;
-	if (line[*i] == '"')
-	{
-		(*i)++;
-		while (line[*i] && line[*i] != '"')
-		(*i)++;
-		// printf("ciao\n");
-	}
+	ft_slide_quotes(line, i);
 	if (line[*i])
 	{
 		if (line[*i] == '<' && line[*i + 1] && line[*i + 1] != '<')
@@ -90,9 +94,9 @@ char	*ft_name_of_file(char *line, int i,int *x)
 	}
 	if (c == (i))							//TESTARE
 		return (NULL);
-	char *temp = ft_substr(line, i, c - i);
-	// printf("temp:%s\n", temp);
-	return(temp);
+	// char *temp = ft_substr(line, i, c - i);
+	// // printf("temp:%s\n", temp);
+	return (ft_substr(line, i, c - i));
 }
 
 int	ft_open_file(char *file, int flag, t_data *data)
@@ -182,27 +186,29 @@ int	ft_open_file(char *file, int flag, t_data *data)
 		else
 			printf("Error: 7\n");
 	}
-	free(file);
+	// free(file);
 	return (0);
 }
 
 int ft_clean_line(char *line, char **new_line, int i, int x)
 {
+	char	*save;
+	char	*temp;
+
 	if (!*new_line)
-	{
 		*new_line = ft_substr(line, x, i - x);
-	}
 	else
 	{
-		char *save;
-		char *temp;
 		save = *new_line;
 		temp = ft_substr(line, x, i - x);
+		if (!temp)
+			return (0);
 		*new_line = ft_strjoin(*new_line, temp);
+		if (!(*new_line))
+			return (0);
 		free(temp);
 		free(save);
-	}	
-
+	}
 	return (1);
 }
 	
@@ -212,6 +218,7 @@ char	*ft_redir(char *line, t_data *data)
 	char	*new_line;
 	int		flag;
 	int		x;
+	char	*file;
 
 	i = -1;
 	x = 0;
@@ -221,20 +228,19 @@ char	*ft_redir(char *line, t_data *data)
 		flag = ft_type_of_redir(line, &i);
 		if (flag > 0)
 		{
-			if (i > x)
-			{
-				if (i == 0 || flag < 3)
-					ft_clean_line(line, &new_line, i, x);
-				else
-					ft_clean_line(line, &new_line, i - 1, x);
-			}
-			ft_open_file(ft_name_of_file(line,i, &x), flag,data);
+			if (i > x && (i == 0 || flag < 3))
+				ft_clean_line(line, &new_line, i, x);
+			else if (i > x)
+				ft_clean_line(line, &new_line, i - 1, x);
+			file = ft_name_of_file(line,i, &x);
+			ft_open_file(file, flag, data);
+			free(file);								//SI PUO FARE IL FREE ALLA FINE DELLA FUNZ OPEN_FILE
 		}
 	}
 	if (i > x)
 		ft_clean_line(line, &new_line, i, x);
 	free(line);
-	return(new_line);
+	return (new_line);
 }
 
 		

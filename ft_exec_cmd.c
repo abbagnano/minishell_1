@@ -55,7 +55,6 @@ void	ft_echo(char *line, t_data *data)
 	ft_write(line + x);
 	if (new_line)
 		ft_write("\n");
-
 	(void)data;
 }
 
