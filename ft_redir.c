@@ -6,14 +6,12 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/21 09:53:14 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/06/21 10:34:04 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "my_minishell.h"
 #include "my_minishell2.h"
-
-// 
 
 void	ft_slide_quotes(char *line, int *i)
 {
@@ -27,43 +25,30 @@ void	ft_slide_quotes(char *line, int *i)
 
 int	ft_type_of_redir(char *line, int *i)
 {
-
 	int	flag;
 		
 	flag = 0;
 	ft_slide_quotes(line, i);
 	if (line[*i])
 	{
-		if (line[*i] == '<' && line[*i + 1] && line[*i + 1] != '<')
-		{
-			if (line[*i + 1] == '>')
-			{
-				(*i)++;
-				flag = 5;
-			}
-			else
-				flag = 1;
-		}
-		else if (line[*i] == '>' && line[*i + 1] && line[*i + 1] != '>')
-		{			
-			if (line[*i + 1] == '<')
-				printf("Error: 7\n");
+		if (line[*i] == '<' && line[*i + 1] && line[*i + 1] != '<' && line[*i + 1] == '>')
+			flag = 5;
+		else if (line[*i] == '<' && line[*i + 1] && line[*i + 1] != '<')
+			flag = 1;
+		else if (line[*i] == '>' && line[*i + 1] && line[*i + 1] != '>' && line[*i + 1] == '<')
+			flag = -1;
+		else if (line[*i] == '>' && line[*i + 1] && line[*i + 1] != '>')		
 			flag = 2;
-		}
+		else if (line[*i] == '>' && line[*i + 1] && line[*i  + 1] == '>' && line[*i  + 2] && line[*i + 2] == '>')
+			flag = -1;
 		else if (line[*i] == '>' && line[*i + 1] && line[*i  + 1] == '>')
-		{
-			if (line[*i  + 2] && line[*i + 2] == '>')
-				printf("Error: 1\n");
-			(*i)++;
 			flag = 3;
-		}
+		else if (line[*i] == '<' && line[*i + 1] && line[*i  + 1] == '<' && line[*i  + 2] && line[*i + 2] == '<')
+			flag = -1;
 		else if (line[*i] == '<' && line[*i + 1] && line[*i  + 1] == '<')
-		{
-			if (line[*i  + 2] && line[*i + 2] == '<')
-				printf("Error: 6\n");
-			(*i)++;
 			flag = 4;
-		}
+		if (flag >= 3)
+			(*i)++;			
 	}
 	return (flag);
 }
@@ -212,7 +197,7 @@ int ft_clean_line(char *line, char **new_line, int i, int x)
 	return (1);
 }
 	
-char	*ft_redir(char *line, t_data *data)
+int	ft_redir(char **line, t_data *data)
 {
 	int		i;
 	char	*new_line;
@@ -223,27 +208,75 @@ char	*ft_redir(char *line, t_data *data)
 	i = -1;
 	x = 0;
 	new_line = NULL;
-	while (line[++i])
+	while ((*line)[++i])
 	{
-		flag = ft_type_of_redir(line, &i);
+		flag = ft_type_of_redir(*line, &i);
 		if (flag > 0)
 		{
 			if (i > x && (i == 0 || flag < 3))
-				ft_clean_line(line, &new_line, i, x);
+				ft_clean_line(*line, &new_line, i, x);
 			else if (i > x)
-				ft_clean_line(line, &new_line, i - 1, x);
-			file = ft_name_of_file(line,i, &x);
+				ft_clean_line(*line, &new_line, i - 1, x);
+			file = ft_name_of_file(*line,i, &x);
 			ft_open_file(file, flag, data);
 			free(file);								//SI PUO FARE IL FREE ALLA FINE DELLA FUNZ OPEN_FILE
 		}
+		if (flag == -1)
+			return (0);
 	}
 	if (i > x)
-		ft_clean_line(line, &new_line, i, x);
-	free(line);
-	return (new_line);
+		ft_clean_line(*line, &new_line, i, x);
+	free(*line);
+	*line = new_line;
+	return (1);
 }
+// int	ft_type_of_redir(char *line, int *i)
+// {
 
+// 	int	flag;
 		
+// 	flag = 0;
+// 	ft_slide_quotes(line, i);
+// 	if (line[*i])
+// 	{
+// 		if (line[*i] == '<' && line[*i + 1] && line[*i + 1] != '<')
+// 		{
+// 			if (line[*i + 1] == '>')
+// 			{
+// 				(*i)++;
+// 				flag = 5;
+// 			}
+// 			else
+// 				flag = 1;
+// 		}
+// 		else if (line[*i] == '>' && line[*i + 1] && line[*i + 1] != '>')
+// 		{			
+// 			if (line[*i + 1] == '<')
+// 				printf("Error: 7\n");
+// 			flag = 2;
+// 		}
+// 		else if (line[*i] == '>' && line[*i + 1] && line[*i  + 1] == '>')
+// 		{
+// 			if (line[*i  + 2] && line[*i + 2] == '>')
+// 				printf("Error: 1\n");
+// 			(*i)++;
+// 			flag = 3;
+// 		}
+// 		else if (line[*i] == '<' && line[*i + 1] && line[*i  + 1] == '<')
+// 		{
+// 			if (line[*i  + 2] && line[*i + 2] == '<')
+// 				printf("Error: 6\n");
+// 			(*i)++;
+// 			flag = 4;
+// 		}
+// 	}
+// 	return (flag);
+// // }
+
+
+
+
+
 	// r = ft_check_execve(new_line, data);
 	// if (new_line)
 	// 	free(new_line);
