@@ -104,11 +104,12 @@ void	ft_check_cmd(char *line, t_data *data)
 //	len = ft_strlen(line);
 	//if (len == 4 && !ft_strncmp(line, "echo", 4))
 //	printf("strncmp: %d\n", ft_strncmp(line, "echo ", 5));
-	if (ft_strchr('|', line) != -1)
-		ft_pipe(line, data);
+	// if (ft_strchr('|', line) != -1)
+	// 	ft_pipe(line, data);
 	// else if(ft_strchr('>', line) != -1 || ft_strchr('<', line) != -1)
 	// 	ft_redir(line,data);
-	else if (!ft_strncmp(line, "echo ", 5) || ft_strncmp(line, "echo ", 5) == -32)
+	// else 
+	if (!ft_strncmp(line, "echo ", 5) || ft_strncmp(line, "echo ", 5) == -32)
 		ft_echo(line + 4, data);
 	else if (!ft_strncmp(line, "cd ", 3) || ft_strncmp(line, "cd ", 3) == -32)
 		ft_cd(line + 2, data);
