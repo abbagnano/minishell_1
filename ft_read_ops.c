@@ -154,6 +154,8 @@ void    ft_read_ops(t_data *data)
 			//if (!ft_check_quotes(line, '\'') || !ft_check_quotes(line, '\"'))
 			if (!ft_check_quote(line))
 				free(line);
+			else if (ft_strchr('|', line) != -1)
+				ft_exec_pippe(line, data);
 			else
 				ft_exec_cmd(line, data);
 		//	printf("read:%p\n", line);

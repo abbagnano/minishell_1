@@ -130,7 +130,9 @@ void	ft_check_cmd(char *line, t_data *data)
 	else
 	{
 		ft_write("minishell: command not found\n");
+		// ft_write(line);
 		errno = 1;
+		// exit(0);
 	}
 }
 
@@ -138,37 +140,38 @@ void	ft_exec_cmd(char *line, t_data *data)
 {
 	int	x;
 
+
 //	 printf("0 line: %s\n", line);
-	x = 0;
+		x = 0;
 
-	data->std_fd[0] = dup(0);
-	data->std_fd[1] = dup(1);
-	// printf("line: %s/n", line);
-	tcsetattr(0, 0, &data->old_term);
-	while (ft_strchr('$', line + x) != -1)// && ft_strchr('\'', line) == -1)
-		ft_env_line(&line, &x, data);
-	
-	//  printf("1 line: %s\n", line);
-	if (ft_strchr('\'', line) || ft_strchr('\"', line))
-		ft_clean_quotes(&line);
-	
-	if(ft_strchr('>', line) != -1 || ft_strchr('<', line) != -1)
-		if (ft_redir(&line,data) == 0)
-		{
-			printf("Error REDIR\n");     //TEMPORANEO
-			exit(0);
-		}
-	//   printf("2 line: %s\n", line);
-	if (line)
-		ft_check_cmd(line, data);
-	
-	free(line);
+		// data->std_fd[0] = dup(0);
+		// data->std_fd[1] = dup(1);
+		// printf("line: %s/n", line);
+		tcsetattr(0, 0, &data->old_term);
+		while (ft_strchr('$', line + x) != -1)// && ft_strchr('\'', line) == -1)
+			ft_env_line(&line, &x, data);
+		
+		//  printf("1 line: %s\n", line);
+		if (ft_strchr('\'', line) || ft_strchr('\"', line))
+			ft_clean_quotes(&line);
+		
+		if(ft_strchr('>', line) != -1 || ft_strchr('<', line) != -1)
+			if (ft_redir(&line,data) == 0)
+			{
+				printf("Error REDIR\n");     //TEMPORANEO
+				exit(0);
+			}
+		//   printf("2 line: %s\n", line);
+		if (line)
+			ft_check_cmd(line, data);
+		
+		free(line);
 
-	dup2(data->std_fd[1],1);
-	close(data->std_fd[1]);
-	dup2(data->std_fd[0], 0);
-	close(data->std_fd[0]);
-
+		// dup2(data->std_fd[1],1);
+		// close(data->std_fd[1]);
+		// dup2(data->std_fd[0], 0);
+		// close(data->std_fd[0]);
+	
 
 
 

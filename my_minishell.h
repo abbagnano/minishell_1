@@ -143,4 +143,7 @@ int		ft_check_clean(char **line, int *x, char c);
 // int		ft_check_quotes(t_char **line_head);
 // int		ft_check_quotes_clean(t_char **line_head, char c);
 
+/*	ft_exec_pippe.c	*/
+void	ft_exec_pippe(char *line, t_data  *data);
+
 #endif
