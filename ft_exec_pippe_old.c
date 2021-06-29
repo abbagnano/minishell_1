@@ -1,99 +1,76 @@
 #include "my_minishell.h"
 #include "my_minishell2.h"
 
-void free_pipes(int **pipes, int num)
-{
-	int i;
-
-	i = -1;
-	while (++i < num)
-		free(pipes[i]);
-	free(pipes);
-}
-
-int close_all_fd_pipe(int **fd_pipe, int num)
-{
-	int i;
-
-	i = -1;
-	while (++i < num)
-	{
-		close(fd_pipe[i][0]);
-		close(fd_pipe[i][1]);
-	}	
-	return (0);
-}
 
 void	ft_exec_pippe(char *line, t_data *data)
 {
 	int		x;
-	int		**fd;
+	int		*fd;
 	char	**matr;
-	int pid;
-	int pippe;
 
+	// int fd[2];
+	fd = (int *)malloc(sizeof(int) * 2);
 
-	x = 0;
-	pid = 0;
-	while (line[x])
-	{
-		if (line[x] == '|')
-			pid++;
-		x++;
-	}
+	int pid; 
+	pipe(fd);
 
-	fd = (int **)malloc(sizeof(int) * pid);
-	x = 0;
-	while (x < pid)
-		fd[x++] = (int *)malloc(sizeof(int) * 2);
-	x = 0;
-	while (x < pid)
-		pipe(fd[x++]);
 	matr = ft_split(line, '|');
 	x = 0;
-	pippe = pid;
 	while (matr[x])
 	{
 	
 			pid = fork();
-			if (pid == 0)
+			if (pid == 0 && !matr[x + 1])
 			{
-				if (x != 0)
-				{
-					dup2(fd[x - 1][0], 0);
-				//if (x != pippe)
-		//			close(fd[x - 1][0]);
-				}
-				if (matr[x + 1])
-					dup2(fd[x][1], 1);
-		//		close(fd[x][1]);
-		//		close(fd[x][0]);
-				close_all_fd_pipe(fd, pippe);
+				printf("\tlast child:%s\n", matr[x]);
+				// dup2(fd[0], 0);//	sembra indifferente
+				// close(fd[0]);		//	sembra indifferente
+				// dup2(fd[1], 1);		//		non fa scrivere a schermo
+				// close(fd[1]);		// non fa scrivere a schermo
+			
 				ft_exec_cmd(matr[x], data);
-				free_pipes(fd, pippe);
 				ft_exit("", data);
 			}
-		//	else
-		//	{
-		//		printf("\tpid: %d\n", pid);
-				wait(NULL);
-//	close_all_fd_pipe(fd, pippe);
-		//		close(fd[x - 1][0]);
-				close(fd[x][1]);
+			else if (pid == 0)
+			{
+				printf("\tchild:%s\n", matr[x]);
+				// dup2(fd[0], 0);			//	sembra indifferente
+				close(fd[0]);
+				dup2(fd[1], 1);			// questo permette di non far scerivere il risultato del child
+				// close(fd[1]);			// indifferente
+			
+				ft_exec_cmd(matr[x], data);
+				ft_exit("", data);
+			}
+			else
+			{
+
+			wait(NULL);
+			// if (!matr[x + 1])
 				x++;
-		//	}
+			// if (matr[x + 1])
+			// 	continue ;					//	indifferente
+			// 	close(fd[1]);
+			// printf("\tmaster:%s\n", matr[x]);
+			// x++;
+			// if (!matr[x + 1])		// indifferente
+			// 	close(fd[1]);				// indifferente
+			// close (1);
+			// dup2(fd[0], 0); //data->std_fd[0]);
+			// close(fd[0]);
+			// ft_exec_cmd(matr[x], data);
+			// ft_exit("closing 3rd\n", data);
+		//	if (!matr[x + 1])					// non cambia niente ( pero forse serve fd[0])
+				close(fd[0]);				//	questo permette di chiudere la lettura
+
+			}
+		// }
+		// printf("\t\tend_x:%d\n", x);
 	}
-//	printf("pid: %d\n", pid);
-//	close_all_fd_pipe(fd, pippe);
-//	x = -1;
-//	while (++x < pippe)
-//		wait(NULL);
-//	close_all_fd_pipe(fd, pippe);
-	free_pipes(fd, pippe);
-//	dup2(data->std_fd[1], 1); // data->std_fd[0]);		//	sembra indifferente 
-//	close(data->std_fd[1]);								// sembra indifferente
-	dup2(data->std_fd[0], 0); // data->std_fd[0]);		// questo lascia aperto ./minishell in reading
-//	close(data->std_fd[0]);							// se si aggiunge questo si killa ./minishell
+			// dup2(data->std_fd[1], 1); // data->std_fd[0]);		//	sembra indifferente 
+			// close(data->std_fd[1]);								// sembra indifferente
+			dup2(data->std_fd[0], 0); // data->std_fd[0]);		// questo lascia aperto ./minishell in reading
+			// close(data->std_fd[0]);							// se si aggiunge questo si killa ./minishell
 	free(matr);
 	free(line);
 	tcsetattr(0, 0, &data->my_term);
