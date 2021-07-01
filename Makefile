@@ -21,7 +21,8 @@ OBJS	=	minishell.o \
 			utils_read_ops.o \
 			utils_t_char.o \
 			ft_check_quotes.o \
-			ft_exec_pippe.o
+			ft_exec_pippe.o \
+			ft_check_exportline.o
 			
 all		:	$(NAME)
 

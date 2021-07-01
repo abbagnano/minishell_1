@@ -7,17 +7,16 @@ TODO:
 -IGNORA CTRL+C , CTRL / E NEL CAT
 -IGNORA CTRL+C , CTRL / NEL <<INFILE CAT
 -TILDE IN cd, TILDE IN PATH EXECVE
--PIPE E REDIRECTION DEVONO USARE LE BUILTIN INVECE CHE L'ÉXECCVE DIRETTAMENTE?
 -GESTIONE DEGLI ERRORI
 -LEAKS
 -POF per i processi 
 
+-  pdf nuovo:  “<<” read input from the current source until a line containing only the delimiter is seen. it doesn’t need to update history!
+
 - echo ..    | cat -e     // spazio finale in piu
 
 EXPORT:
--export ARG =ciao NON DEVE FUNZ
 -export ARG= ciao DEVE CREARE: ARG="" e ciao (2 VARIABILI)
--export ARG="ciao ciao" DEVE CREARE: ARG= "ciao ciao"
 -export ARG="ciao" e poi ARG+="ciao" DEVE CREARE: ARG=ciaociao
 
 <<:

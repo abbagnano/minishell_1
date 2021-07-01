@@ -146,4 +146,8 @@ int		ft_check_clean(char **line, int *x, char c);
 /*	ft_exec_pippe.c	*/
 void	ft_exec_pippe(char *line, t_data  *data);
 
+/*	ft_check_exportline.c	*/
+// void	ft_check_exportline(char *str, int z, t_data *data);
+void	ft_matrline(char *str, t_data *data);
+
 #endif

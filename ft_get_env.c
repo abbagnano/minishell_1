@@ -61,9 +61,13 @@ void	ft_export(char *line, t_data *data)
 	while (line[x] && line[x] == ' ')
 		x++;
 	if (!line[x])
+	{
 		ft_print_sort(data->env_head, data);
-	else
-		ft_add_env(line + x, data);
+		return ;
+	}
+	ft_matrline(line + x, data);
+	// ft_check_exportline(line, x, data);
+	// ft_add_env(line + x, data);
 }
 
 void	ft_get_env(char **env, t_data *data)
