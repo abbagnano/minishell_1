@@ -14,6 +14,9 @@ TODO:
 -LEAKS
 -POF per i processi 
 
+- CHIUDI BACKUP FD 
+- cd .. | cat -e 
+
 EXPORT:
 -export ARG =ciao NON DEVE FUNZ
 -export ARG= ciao DEVE CREARE: ARG="" e ciao (2 VARIABILI)

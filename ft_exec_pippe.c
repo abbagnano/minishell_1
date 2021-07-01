@@ -7,7 +7,7 @@ void free_pipes(int **pipes, int num)
 
 	i = -1;
 	while (++i < num)
-		free(pipes[i]);
+		free((pipes)[i]);
 	free(pipes);
 }
 
@@ -42,17 +42,24 @@ void	ft_exec_pippe(char *line, t_data *data)
 		x++;
 	}
 
-	fd = (int **)malloc(sizeof(int) * pid);
+	fd = (int **)malloc(sizeof(int *) * pid);
 	x = 0;
 	while (x < pid)
-		fd[x++] = (int *)malloc(sizeof(int) * 2);
+	{
+		fd[x] = (int *)malloc(sizeof(int) * 2);
+		x++;
+	}
 	x = 0;
 	while (x < pid)
-		pipe(fd[x++]);
+	{
+		pipe(fd[x]);
+		x++;
+	}
 	matr = ft_split(line, '|');
 	x = 0;
 	pippe = pid;
-	while (matr[x])
+	while ( x <= pippe)
+	// while (matr[x])
 	{
 	
 			pid = fork();
@@ -61,39 +68,43 @@ void	ft_exec_pippe(char *line, t_data *data)
 				if (x != 0)
 				{
 					dup2(fd[x - 1][0], 0);
-				//if (x != pippe)
-		//			close(fd[x - 1][0]);
 				}
-				if (matr[x + 1])
+				if (x != pippe)
 					dup2(fd[x][1], 1);
+				// if (matr[x + 1])
+				// 	dup2(fd[x][1], 1);
 		//		close(fd[x][1]);
 		//		close(fd[x][0]);
 				close_all_fd_pipe(fd, pippe);
+				// printf("-%s-\t%d\n", matr[x], x);
 				ft_exec_cmd(matr[x], data);
-				free_pipes(fd, pippe);
+				free_pipes(fd, pippe);						///////
 				ft_exit("", data);
 			}
 		//	else
 		//	{
 		//		printf("\tpid: %d\n", pid);
-				wait(NULL);
-//	close_all_fd_pipe(fd, pippe);
+				// wait(NULL);
+	// close_all_fd_pipe(fd, pippe);
 		//		close(fd[x - 1][0]);
-				close(fd[x][1]);
+				// close(fd[x][1]);
 				x++;
 		//	}
 	}
 //	printf("pid: %d\n", pid);
+	close_all_fd_pipe(fd, pippe);
+	x = -1;
+	while (++x <= pippe)
+		wait(NULL);
 //	close_all_fd_pipe(fd, pippe);
-//	x = -1;
-//	while (++x < pippe)
-//		wait(NULL);
-//	close_all_fd_pipe(fd, pippe);
-	free_pipes(fd, pippe);
+	free_pipes(fd, pippe);							//////
 //	dup2(data->std_fd[1], 1); // data->std_fd[0]);		//	sembra indifferente 
 //	close(data->std_fd[1]);								// sembra indifferente
 	dup2(data->std_fd[0], 0); // data->std_fd[0]);		// questo lascia aperto ./minishell in reading
 //	close(data->std_fd[0]);							// se si aggiunge questo si killa ./minishell
+	x = 0;
+	while (matr[x])
+		free(matr[x++]);
 	free(matr);
 	free(line);
 	tcsetattr(0, 0, &data->my_term);

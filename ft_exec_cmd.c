@@ -168,9 +168,9 @@ void	ft_exec_cmd(char *line, t_data *data)
 		
 		free(line);
 
-		// dup2(data->std_fd[1],1);
+		dup2(data->std_fd[1],1);
 		// close(data->std_fd[1]);
-		// dup2(data->std_fd[0], 0);
+		dup2(data->std_fd[0], 0);
 		// close(data->std_fd[0]);
 	
 
