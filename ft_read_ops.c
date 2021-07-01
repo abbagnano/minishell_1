@@ -16,12 +16,15 @@ int	ft_read_special(t_char **line_head, t_data *data, int *x, int *len)
 			(*x)++;
 			ft_arrow_up(line_head, data, *x - 1, len);
 		}
-		else if (buf == 'B' && *x > 0)
+		else if (buf == 'B' && *x >= 0)
 		{
 			if (*x == max_cmd)
 				(*x)--;
 			(*x)--;
+			// printf("\nx:%d\n", *x);
 			ft_arrow_up(line_head, data, *x, len);
+			if (*x == -1)
+				(*x)++;
 		}
 	}
 	return (1);
@@ -59,7 +62,7 @@ int	ft_reading(t_char **line_head, int *len, t_data *data)
 	while (buf != '\n')
 	{
 		read(0, &buf, 1);
-		//	printf("%d\t%c\n", buf, buf);
+			// printf("%d\t%c\n", buf, buf);
 		if (buf == 27 && ft_read_special(line_head, data, &x, len))
 			continue ;
 		else if (buf == 12)			// ctrl -l
@@ -110,7 +113,7 @@ int	ft_reading(t_char **line_head, int *len, t_data *data)
 			*len = 0;
 			return (1);
 		}
-		else if (buf == 28)
+		else if (buf == 28 || buf == 9)
 		{
 			//printf("\n%s%s%s\n", tgetstr("up", NULL), tgetstr("bl", NULL), tgetstr("up", NULL));
 			continue ;

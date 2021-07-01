@@ -78,12 +78,12 @@ void	ft_exec_pippe(char *line, t_data *data)
 				close_all_fd_pipe(fd, pippe);
 				// printf("-%s-\t%d\n", matr[x], x);
 				ft_exec_cmd(matr[x], data);
+				// printf("\tpid: %d\t-%s-\n", pid, matr[x]);
 				free_pipes(fd, pippe);						///////
 				ft_exit("", data);
 			}
 		//	else
 		//	{
-		//		printf("\tpid: %d\n", pid);
 				// wait(NULL);
 	// close_all_fd_pipe(fd, pippe);
 		//		close(fd[x - 1][0]);

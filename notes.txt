@@ -6,16 +6,13 @@ TODO:
 -CTRL-\ fa l'uscita di un processo figlio es cat
 -IGNORA CTRL+C , CTRL / E NEL CAT
 -IGNORA CTRL+C , CTRL / NEL <<INFILE CAT
--DISATTIVA TAB
--FRECCIA GIU IN HISTORY
 -TILDE IN cd, TILDE IN PATH EXECVE
 -PIPE E REDIRECTION DEVONO USARE LE BUILTIN INVECE CHE L'ÉXECCVE DIRETTAMENTE?
 -GESTIONE DEGLI ERRORI
 -LEAKS
 -POF per i processi 
 
-- CHIUDI BACKUP FD 
-- cd .. | cat -e 
+- echo ..    | cat -e     // spazio finale in piu
 
 EXPORT:
 -export ARG =ciao NON DEVE FUNZ

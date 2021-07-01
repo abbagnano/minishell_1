@@ -47,6 +47,13 @@ void	ft_arrow_up(t_char **line_head, t_data *data, int x, int *len)
 	//printf("%s%s\n", tgetstr("cd", NULL), tgetstr("up", NULL));
 
 	ft_write("\033[0;32mminishell% \033[0m");
+	if (x == -1)
+	{
+		*len = 0;
+		ft_free_char(line_head);
+		line_head = NULL;
+		return ;
+	}	
 	ft_write(tmp->line);
 	*len = ft_strlen(tmp->line);
 }

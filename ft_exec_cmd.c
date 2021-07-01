@@ -11,9 +11,18 @@ void	ft_cd(char *line, t_data *data)
 		return ;
 	while (line[x] == ' ')
 		x++;
+	if (ft_strchr('\'', line) == -1 || ft_strchr('\"', line) == -1)
+	{
+		ret = ft_strlen(line) - 1;
+		while (line[ret] == ' ')
+			ret--;
+		line[ret + 1] = '\0';
+	}	
+	// printf("-%s-\n", line + x);
 	ret = chdir(line + x);
 	if (ret == -1)
 	{
+		// printf("errno:%d\n", errno);
 		ft_write(strerror(errno));
 		ft_write("\n");
 	}
@@ -48,10 +57,12 @@ void	ft_echo(char *line, t_data *data)
 		x++;
 	if ((!ft_strncmp(line + x, "-n ", 3) || ft_strncmp(line + x, "-n ", 3) == -32) && !ft_strncmp(line + x, "-n", 2))
 	{
-		printf("\n\tsdfasf\n");
+		// printf("\n\tsdfasf\n");
 		new_line = 0;
 		x += 3;
 	}
+	while (line[x] == ' ')
+		x++;
 	while (line[x])
 	{
 		if (line[x] == ' ')
