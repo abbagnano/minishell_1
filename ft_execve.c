@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 11:22:46 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/18 12:09:50 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/07/02 10:07:24 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,37 +71,31 @@ int ft_do_execve(t_data *data)
 int ft_is_a_loc_com(t_data *data)
 {
 	char	*path;
-	char	*save;
-	int		fd;
+	struct	stat fd_stat;
+	
 	// printf("loc_command\n");
 	path = getcwd(NULL, 0);
-	save = path;
-	path = ft_strjoin(path, "/");
-	free(save);	
-	save = path;
-	path = ft_strjoin(path, data->args[0]);
-	free(save);
-	fd = open(path, O_RDONLY);
-	if (fd > 0)
+	ft_strjoin_over(&path, "/");
+	ft_strjoin_over(&path, data->args[0]);
+	if (!stat(path, &fd_stat))
 	{
 		free(data->args[0]);
 		data->args[0] = ft_strdup(path);
 		free(path);
-		close(fd);
 		return (1);
 	}
 	free(path);
-	exit(0);
+	// exit(0);
 	return (0);
 }
 
 int	ft_is_a_sys_com(t_data *data)
 {
 	char *path;
-	char *save;
-	int fd;
 	int i;
 	char **path_matrix;
+	struct stat fd_stat;
+
 
 	path = getenv("PATH");
 	// printf("sys_command\n");
@@ -114,17 +108,13 @@ int	ft_is_a_sys_com(t_data *data)
 		// save = path_matrix[i];
 		path = ft_strjoin(path_matrix[i], "/");
 		// free(save);
-		save = path;
-		path = ft_strjoin(path, data->args[0]);
-		free(save);
-		fd = open(path, O_RDONLY);
-		if (fd > 0)
+		ft_strjoin_over(&path, data->args[0]);
+		if (!stat(path, &fd_stat))
 		{
 			free(data->args[0]);
 			data->args[0] = ft_strdup(path);
 			free(path);
 			ft_free_matrix(&path_matrix);
-			close(fd);
 			return (1);
 		}
 		free(path);
@@ -137,20 +127,16 @@ int ft_check_execve(char *line, t_data *data)
 {
 
 	int r;
-	int fd;
-	
+	struct stat fd_stat;
+
 	r = 0;
 	if (line)
 		data->args = ft_split(line, ' ');
 	if (ft_strchr('/', data->args[0]) == 0)   //TESTARE
 	{
 		// printf("abs_command\n");
-		fd = open(data->args[0], O_RDONLY);
-		if (fd > 0)
-		{
-			close(fd);
+		if (!stat(data->args[0], &fd_stat))
 			r = 1;
-		}	
 		else
 			r = 0;
 	}	

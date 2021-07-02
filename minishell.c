@@ -36,6 +36,7 @@ int		ft_matrlen(char **matr)
 int	main(int ac, char **av, char **env)
 {
 	t_data	data;
+	char *command[2];
 
 //	data.line_head = (t_char **)malloc(sizeof(t_char *) * 1);
 //	*data.line_head = NULL;
@@ -49,6 +50,17 @@ int	main(int ac, char **av, char **env)
 	ft_get_env(env, &data);	
 	if (ac == 1)
 		ft_no_arg(&data);
+	if (ac >= 2)
+	{
+		(command)[0] = av[1];
+		(command)[1] = NULL;
+		// printf("command: %s\n", (command)[0]);
+		// printf("command: %s\n", (command)[1]);
+		execve((command)[0], command, env);
+		printf("Error execve\n");
+		exit(1);
+
+	}
 	(void)av;
 	ft_exit("", &data);
 }

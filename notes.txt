@@ -1,16 +1,16 @@
 gcc -lncurses term_test.c 
 
 TODO: 
--av[1]
--LSTAT AL POSTO DI OPEN
+
 -CTRL-\ fa l'uscita di un processo figlio es cat
 -IGNORA CTRL+C , CTRL / E NEL CAT
 -IGNORA CTRL+C , CTRL / NEL <<INFILE CAT
--TILDE IN cd, TILDE IN PATH EXECVE
+
 -GESTIONE DEGLI ERRORI
 -LEAKS
 -POF per i processi 
--TEST PIPES doppi apici apici redirection 
+-TEST PIPES doppi apici apici redirection
+
 
 -  pdf nuovo:  “<<” read input from the current source until a line containing only the delimiter is seen. it doesn’t need to update history!
 
@@ -19,42 +19,6 @@ TODO:
 EXPORT:
 -export ARG= ciao DEVE CREARE: ARG="" e ciao (2 VARIABILI)
 -export ARG="ciao" e poi ARG+="ciao" DEVE CREARE: ARG=ciaociao
-
-<<:
--ELIMINA FILE TEMPORANEO DOPO LA LETTURA?   ->UNLINK OPPURE PIPE
--<INFILE PRIMA DI <<EOF
-->OUTFILE PRIMA DI EOF
--CHIUDI FILE DESCR DUP
--PRINTARE "MINISHELL: COMMAND NOT FOUND" NEL FD data->std_fd[1] e non nello st out, 
-	esempio rigurdante l'errore "<infile" cat -e >outfile che scrive l'outfput dell'errore in outfile
--IN CASO DI QUOTE OPEN PRINT ERRORE?
--FT EXIT RETURN REDIR
-
-REDIR_PARSING:
-esempio: ls -l>outfile non funziona, non riesce a passare il -l
-echo ciao > outfile non deve funzionare perche passa per le builtin, invertire l'ordine di chiamata in exec_cmd?
-NON DEVE FUNZIOANRE SE LA REDIRECTION STA ALLA FINE SENZA ARGOEMNTI E CON SPAZI
-/* ERRORS:
-	<infile >outfile >> outfile2
-	Segmentation fault: 11
-
-	bash-3.2$ <infile >outfile >>outfile2 cat DEVE PRENDERE SOLO IL SECONDO, STESSO DISCORSO SE INVERTITI
-
-	<giusto<sbagliato deve creare il giusto
-	
-	<<>infile
-	<>infile 
-	<>>infile
-	
-	><<infile
-	><infile
-	>><infile 
-
-	2>&1 > dirlist
-
-	cat infile >outfile non funziona
-*/
-
 
 SIGNAL
 https://stackoverflow.com/questions/4217037/catch-ctrl-c-in-c/4217052

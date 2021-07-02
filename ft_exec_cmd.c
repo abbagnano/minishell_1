@@ -151,7 +151,7 @@ void	ft_check_cmd(char *line, t_data *data)
 void	ft_exec_cmd(char *line, t_data *data)
 {
 	int	x;
-
+	struct stat t_stat;
 
 //	 printf("0 line: %s\n", line);
 		x = 0;
@@ -183,9 +183,8 @@ void	ft_exec_cmd(char *line, t_data *data)
 		// close(data->std_fd[1]);
 		dup2(data->std_fd[0], 0);
 		// close(data->std_fd[0]);
-	
-
-
+		if (!stat("/tmp/minishell", &t_stat))					//METTERE ALLA FINE?
+			unlink("/tmp/minishell");
 
 	tcsetattr(0, 0, &data->my_term);
 
