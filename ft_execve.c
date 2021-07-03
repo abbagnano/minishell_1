@@ -18,7 +18,8 @@ void  ft_sign_ign_quit(int sig)
     //  char  c;
 
 	printf("Quit: 3\n");
-    signal(sig, SIG_IGN);
+    // signal(sig, SIG_IGN);						//////		HO TOLTO QUESTO perche rimaneva in attesa di un segnale se si chiamava nuovamente cat
+
     //  printf("OUCH, did you hit Ctrl-C?\n"
     //         "Do you really want to quit? [y/n] \n");
     //  c = getchar();
@@ -32,7 +33,7 @@ void  ft_sign_ign_quit(int sig)
 void	ft_sign_ign_int(int sig)
 {
 	printf("\n");
-	signal(sig, SIG_IGN);
+	// signal(sig, SIG_IGN);			//////		HO TOLTO QUESTO perche rimaneva in attesa di un segnale se si chiamava nuovamente cat
 }
 
 int ft_do_execve(t_data *data)
