@@ -16,10 +16,6 @@ TODO:
 
 - echo ..    | cat -e     // spazio finale in piu
 
-EXPORT:
--export ARG= ciao DEVE CREARE: ARG="" e ciao (2 VARIABILI)
--export ARG="ciao" e poi ARG+="ciao" DEVE CREARE: ARG=ciaociao
-
 SIGNAL
 https://stackoverflow.com/questions/4217037/catch-ctrl-c-in-c/4217052
 https://en.wikipedia.org/wiki/Control_key

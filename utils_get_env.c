@@ -85,6 +85,9 @@ void	ft_fix_env(char **line)
 	fixed[x++] = '\'';
 	fixed[x++] = '\'';
 	fixed[x] = '\0';
+	// free(*line);
+	// free(tmp);
+	// *line = NULL;
 	*line = fixed;
 }
 
@@ -95,6 +98,9 @@ int	ft_search_env(char *line, int x, int len, t_data *data)
 
 	tmp = *data->env_head;
 	tmp_x = tmp;
+	// printf("search: %s\t%d\n", line, len);
+	if (len == -1)
+		len = ft_strlen(line);
 	if (!ft_strncmp(line, tmp->line, len) && !ft_strncmp(line, tmp->line, len + 1))
 	{
 		*data->env_head = (*data->env_head)->next;
@@ -106,10 +112,10 @@ int	ft_search_env(char *line, int x, int len, t_data *data)
 	while (tmp)
 	{
 		tmp_x = tmp;
+			// printf("\t%s\t%d\t%d\n", tmp->line, ft_strncmp(line, tmp->line, len), ft_strncmp(line, tmp->line, len + 1));
 		tmp = tmp->next;
-		if (tmp && !ft_strncmp(line, tmp->line, len) && !ft_strncmp(line, tmp->line, len + 1))
+		if (tmp && !ft_strncmp(line, tmp->line, len) && (!ft_strncmp(line, tmp->line, len + 1) || ft_strncmp(line, tmp->line, len + 1) == -61))
 		{
-			//printf("\t\t%s\t%d\n", tmp->line + x, ft_strncmp(line, tmp->line + x, len));
 			tmp_x->next = tmp->next;
 			free(tmp->line);
 			free(tmp);
@@ -123,16 +129,27 @@ int	ft_search_env(char *line, int x, int len, t_data *data)
 	(void)x;
 }
 
-void	ft_add_env(char *line, t_data *data)
+void	ft_add_env(char *line, int fix, t_data *data)
 {
 	t_read	*new;
+	// int		fix;
 
+	// printf("add_env:line: %d\n", line[ft_strchr('=', line) + 1]);
+	// fix = 0;
 	new = (t_read *)malloc(sizeof(t_read) * 1);
-	if (ft_strchr('=', line) < 0)
-		ft_fix_env(&line);
+	// if (ft_strchr('=', line) < 0)
+		// ft_fix_env(&line);
+	// if (line[ft_strchr('=', line) + 1] == 39 && line[ft_strchr('=', line) + 2] == 39)
+		// fix++;
 	new->line = ft_strdup(line);
 	new->next = NULL;
 	ft_unset(line, data);
+	if (fix)
+	{
+		free(line);
+		// printf("fixed: %s\t%s\n", line, new->line);
+	}
+	// ft_search_env(line, 0, ft_strchr('=', line), data);
 	ft_append_read(new, data->env_head);
 	data->env_len++;
 	ft_list_to_matr(data->env_head, &data->envp, data);

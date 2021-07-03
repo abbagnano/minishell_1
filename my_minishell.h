@@ -103,7 +103,7 @@ char	*ft_itoa_errno(int num);
 void	ft_list_to_matr(t_read **env_head, char ***envp, t_data *data);
 void	ft_fix_env(char **line);
 int		ft_search_env(char *line, int x, int len, t_data *data);
-void	ft_add_env(char *line, t_data *data);
+void	ft_add_env(char *line, int fix, t_data *data);
 
 /*		ft_print_sort.c	*/
 int		ft_strstr(char *find, char *str);

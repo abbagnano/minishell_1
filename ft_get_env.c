@@ -24,6 +24,7 @@ void	ft_unset(char *line, t_data *data)				/// unset deve cercare fino all' '='
 
 	len = 0;
 	x = 0;
+	// x = ft_strchr(' ', line);
 	while (line[x] == ' ')
 		x++;
 	while (line[x + len] && (line[x + len] != ' ' && line[x + len] != '='))
