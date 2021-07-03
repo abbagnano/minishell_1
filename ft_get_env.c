@@ -33,7 +33,7 @@ void	ft_unset(char *line, t_data *data)				/// unset deve cercare fino all' '='
 		// len++;
 	if (!line[x])
 	{
-		ft_write("not enough arguments\n");
+		// ft_write("not enough arguments\n");		//	in bash nn fa niente
 		return ;
 	}
 	else
@@ -51,7 +51,10 @@ void	ft_env(char *line, t_data *data)
 	if (!line[x])
 		ft_print_env(data->env_head);
 	else
+	{
 		ft_write("bad option or too many arguments\n");
+		errno = 1;
+	}
 }
 
 void	ft_export(char *line, t_data *data)

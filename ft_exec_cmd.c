@@ -25,18 +25,29 @@ void	ft_cd(char *line, t_data *data)
 		// printf("errno:%d\n", errno);
 		ft_write(strerror(errno));
 		ft_write("\n");
+		errno = 1;
 	}
-
+	///		aggiornare env $PWD & $OLDPWD ??
 	(void)data;
 }
 
 void	ft_pwd(char *line, t_data *data)
 {
 	char	*path;
+	// char	buf[1000];
 
 	path = NULL;
+	// buf = NULL;
 //	path = getcwd(path, 1);
+	// path = getcwd(buf, 1000);
 	path = getcwd(NULL, 0);
+	if (!path)
+	{
+		ft_write(strerror(errno));
+		ft_write("\n");
+		errno = 1;
+		return ;
+	}
 	ft_write(path);
 	ft_write("\n");
 	free(path);
@@ -117,7 +128,39 @@ void	ft_echo(char *line, t_data *data)
 	// ft_write(line + x);
 	if (new_line)
 		ft_write("\n");
+	errno = 0;
 	(void)data;
+}
+
+void	ft_exit_cmd(char *line, t_data *data)
+{
+	int	x;
+	int	tot;
+
+	x = 0;
+	tot = 0;
+	ft_write("exit\n");
+	while (line[x] && line [x] == ' ')
+		x++;
+	while (line[x] && line[x] >= '0' && line[x] <= '9')
+		tot = tot * 10 + line[x++] - 48;
+	if (line[x] && line[x] != ' ' && (line[x] < '0' || line[x] > '9'))
+	{
+		ft_write("minishell: exit: numeric argument required\n");
+		errno = 255;
+		ft_exit("", data);
+	}
+	while (line[x] && line [x] == ' ')
+		x++;
+	if (line[x])
+	{
+		ft_write("minishell: exit: too many arguments\n");
+		errno = 1;
+		return ;
+	}
+	if (errno != 255)
+		errno = tot;
+	ft_exit_num(errno, data);
 }
 
 void	ft_check_cmd(char *line, t_data *data)
@@ -148,7 +191,7 @@ void	ft_check_cmd(char *line, t_data *data)
 	else if (!ft_strncmp(line, "unset ", 6) || ft_strncmp(line, "unset ", 6) == -32)
 		ft_unset(line + 5, data);
 	else if (!ft_strncmp(line, "exit ", 5) || ft_strncmp(line, "exit ", 5) == -32)
-		ft_exit("exit\n", data);
+		ft_exit_cmd(line + 4, data);	// ft_exit("exit\n", data);
 	else if (ft_check_execve(line,data))
 		ft_do_execve(data);			//IMPORTANTE SE C'E' IL PUNTO e VIRGOLA 
 									//HA IL RETURN 0=SUCCESS, 1=NOT SUCCESS
@@ -156,7 +199,7 @@ void	ft_check_cmd(char *line, t_data *data)
 	{
 		ft_write("minishell: command not found\n");
 		// ft_write(line);
-		errno = 1;
+		errno = 127;
 		// exit(0);
 	}
 }
@@ -173,9 +216,10 @@ void	ft_exec_cmd(char *line, t_data *data)
 		// data->std_fd[1] = dup(1);
 		// printf("line: %s/n", line);
 		tcsetattr(0, 0, &data->old_term);
+		// printf("\t1 errno: %d\n", errno);
 		while (ft_strchr('$', line + x) != -1)// && ft_strchr('\'', line) == -1)
 			ft_env_line(&line, &x, data);
-		
+		// printf("\t1 errno: %d\n", errno);
 		//  printf("1 line: %s\n", line);
 		if (ft_strchr('\'', line) || ft_strchr('\"', line))
 			ft_clean_quotes(&line);
@@ -196,9 +240,12 @@ void	ft_exec_cmd(char *line, t_data *data)
 		// close(data->std_fd[1]);
 		dup2(data->std_fd[0], 0);
 		// close(data->std_fd[0]);
-		if (!stat("/tmp/minishell", &t_stat))					//METTERE ALLA FINE?
-			unlink("/tmp/minishell");
-
+		// printf("\t3 errno: %d\n", errno);
+		x = errno;
+		if (!stat("/tmp/minishell", &t_stat))					//METTERE ALLA FINE?		// modifica errno..
+			unlink("/tmp/minishell");				
+		errno = x;
+		// printf("\t4 errno: %d\n", errno);
 	tcsetattr(0, 0, &data->my_term);
 
 

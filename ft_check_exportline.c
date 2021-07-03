@@ -77,8 +77,11 @@ void	ft_check_exportline(char *str, t_data *data)
 	if (str[x] == '=')
 	{
 		ft_write("export: \'");
-		ft_write(str + x);
+		ft_write(str /*+ x*/);
 		ft_write("\': not a valid identifier\n");
+		// ft_write(strerror(errno));	//	Undefined error: 0
+		// ft_write("\n");
+		errno = 1;
 		return ;
 	}
 	while (str[x] && str[x] != '=')		//-export ARG =ciao NON DEVE FUNZ
@@ -89,9 +92,12 @@ void	ft_check_exportline(char *str, t_data *data)
 				x++;
 			if (!str[x])
 				break ;
+			// ft_write(strerror(errno));	//operation not permitted
+			// ft_write("\n");
 			ft_write("export: \'");
-			ft_write(str + x);
+			ft_write(str /*+ x*/);
 			ft_write("\': not a valid identifier\n");
+			errno = 1;
 			return ;
 		}
 		if (x != 0 && str[x] == '+' && str[x + 1] == '=')
@@ -121,8 +127,9 @@ void	ft_check_exportline(char *str, t_data *data)
 		else
 		{
 			ft_write("export: \'");
-			ft_write(str + x);
+			ft_write(str /*+ x*/);
 			ft_write("\': not a valid identifier\n");
+			errno = 1;
 			return ;
 		}
 	}

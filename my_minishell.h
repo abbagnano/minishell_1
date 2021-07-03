@@ -66,6 +66,7 @@ void	ft_print_cmd(t_read **head);
 /*		ft_exit.c		*/
 void	ft_free_env_read(t_read **head);
 void	ft_free_read(t_read **head);
+void	ft_exit_num(int num, t_data *data);
 void	ft_exit(char *str, t_data *data);
 
 /*		utils_basic.c	*/

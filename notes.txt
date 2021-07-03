@@ -13,7 +13,7 @@ TODO:
 
 
 -  pdf nuovo:  “<<” read input from the current source until a line containing only the delimiter is seen. it doesn’t need to update history!
-
+-	aggiornare env $PWD & $OLDPWD  dopo cmd: cd 
 
 SIGNAL
 https://stackoverflow.com/questions/4217037/catch-ctrl-c-in-c/4217052
