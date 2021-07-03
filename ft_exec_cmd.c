@@ -45,6 +45,18 @@ void	ft_pwd(char *line, t_data *data)
 	(void)line;	//	aggiungere check se ci sono comandi dopo il pwd
 }
 
+int	ft_last_spaces(char *str)
+{
+	int	x;
+
+	x  = 0;
+	while (str[x] && str[x] == ' ')
+		x++;
+	if (str[x])
+		return (0);
+	return (1);
+}
+
 void	ft_echo(char *line, t_data *data)
 {
 	int	x;
@@ -65,9 +77,10 @@ void	ft_echo(char *line, t_data *data)
 		x++;
 	while (line[x])
 	{
-		if (line[x] == ' ')
+		if (line[x] == ' ' && line[x + 1])
 		{
-			write(1, &line[x], 1);
+			if (!ft_last_spaces(line + x))
+				write(1, &line[x], 1);
 			x++;
 			while (line[x] && line[x] == ' ')
 				x++;
