@@ -13,15 +13,17 @@
 #include "my_minishell.h"
 #include "my_minishell2.h"
 
+int g_g;
+
 void  ft_sign_ign_quit(int sig)
 {
     //  char  c;
 
-	// printf("Quit: 3\n");
+	printf("Quit: 3   %d\n", sig);
 	ft_write("Quit: 3\n");
 	errno = 128 + sig;
     // signal(sig, SIG_IGN);						//////		HO TOLTO QUESTO perche rimaneva in attesa di un segnale se si chiamava nuovamente cat
-
+	// kill(g_g, SIGTERM);
     //  printf("OUCH, did you hit Ctrl-C?\n"
     //         "Do you really want to quit? [y/n] \n");
     //  c = getchar();
@@ -37,7 +39,15 @@ void	ft_sign_ign_int(int sig)
 	// printf("\n");
 	ft_write("\n");
 	errno = 128 + sig;
+	// kill(g_g, SIGTERM);
 	// signal(sig, SIG_IGN);			//////		HO TOLTO QUESTO perche rimaneva in attesa di un segnale se si chiamava nuovamente cat
+}
+void	ft_kill_child(int sig)
+{
+	// printf("sig: %d\n", sig);
+	// printf("sdfsdfsdfdsfsdfsdfsdfsdfsdfgsd\n");
+	// g_g++;
+	kill(g_g, SIGTERM);
 }
 
 int ft_do_execve(char *line, t_data *data)
@@ -48,7 +58,9 @@ int ft_do_execve(char *line, t_data *data)
 	pid = fork();
 	if (pid == 0)
 	{
-		execve(data->args[0], data->args, data->envp);
+		int ret;
+		ret = execve(data->args[0], data->args, data->envp);
+		printf("ret:%d\n", ret);
 		dup2(data->std_fd[1],1);
 		dup2(data->std_fd[0], 0);
 		ft_write_2(strerror(errno));
@@ -57,23 +69,31 @@ int ft_do_execve(char *line, t_data *data)
 		// char *asd = strerror(errno);
 		// write(2, asd, strlen(asd));
 		// perror(data->args[0]);
-		// ft_write("\n");
+		// ft_write("asdasdasdas\n");
 		// free(data->envp);
 		// char *asd;
 		// read(0, asd, 1);
+		// kill(0, SIGCHLD);
+		// kill(0, SIGCONT);
 		ft_exit_num(126, data);
+		// ft_exit_num(0, data);
 	}
 	else
 	{
 		// printf("%s\n", data->args[0]);
 		ft_free_matrix(&data->args);
+		g_g = pid;
 		signal(SIGQUIT, ft_sign_ign_quit);
 		signal(SIGINT, ft_sign_ign_int);
-		// signal(SIGQUIT, SIG_IGN);
+		// signal(SIGSTOP, ft_sign_ign_quit);
+		signal(SIGCHLD, ft_kill_child);
+		
 	// 	char qwe;
 	// read(0, &qwe, 1);
+		// if ()
+		// kill(pid, SIGSTOP);
 		waitpid(pid, &status, 0);
-		// printf("err:%d\n", errno);
+		// printf("err:%d\n", status);
 		if (!WIFSIGNALED(status))
 			errno = status;
 		pid = WEXITSTATUS(status);
