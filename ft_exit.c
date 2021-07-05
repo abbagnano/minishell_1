@@ -42,6 +42,9 @@ void	ft_exit_num(int num, t_data *data)
 	// printf("xxxxxxxxxxx\n");
 	// printf("waiting_leaks\n");
 	// read(0, &str, 1);
+	// char buff;
+	// read(1, &buff, 1);
+	// printf(" %s\n", buff);
 	exit(num);
 }
 

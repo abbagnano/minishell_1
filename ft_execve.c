@@ -40,7 +40,7 @@ void	ft_sign_ign_int(int sig)
 	// signal(sig, SIG_IGN);			//////		HO TOLTO QUESTO perche rimaneva in attesa di un segnale se si chiamava nuovamente cat
 }
 
-int ft_do_execve(t_data *data)
+int ft_do_execve(char *line, t_data *data)
 {
 	int pid;
 	int status;
@@ -50,9 +50,17 @@ int ft_do_execve(t_data *data)
 	{
 		execve(data->args[0], data->args, data->envp);
 		dup2(data->std_fd[1],1);
-		// dup2(data->std_fd[0], 0);
-		ft_write(strerror(errno));
-		ft_write("\n");
+		dup2(data->std_fd[0], 0);
+		ft_write_2(strerror(errno));
+		ft_free_matrix(&data->args);
+		free(line);
+		// char *asd = strerror(errno);
+		// write(2, asd, strlen(asd));
+		// perror(data->args[0]);
+		// ft_write("\n");
+		// free(data->envp);
+		// char *asd;
+		// read(0, asd, 1);
 		ft_exit_num(126, data);
 	}
 	else
@@ -62,6 +70,8 @@ int ft_do_execve(t_data *data)
 		signal(SIGQUIT, ft_sign_ign_quit);
 		signal(SIGINT, ft_sign_ign_int);
 		// signal(SIGQUIT, SIG_IGN);
+	// 	char qwe;
+	// read(0, &qwe, 1);
 		waitpid(pid, &status, 0);
 		// printf("err:%d\n", errno);
 		if (!WIFSIGNALED(status))
@@ -174,5 +184,6 @@ int ft_check_execve(char *line, t_data *data)
 		r = 1;
 	if (r == 0)
 		ft_free_matrix(&data->args);
+
 	return (r);
 }

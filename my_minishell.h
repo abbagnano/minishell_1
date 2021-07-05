@@ -76,6 +76,8 @@ int		ft_strchr(char c, char *s1);
 int		ft_strlen(char *str);
 void	ft_write(char *str);
 
+void	ft_write_2(char *str);
+
 /*		ft_buf_to_list.c	*/
 int		ft_buf_to_node(int len, int x, char *buf, t_read *new);
 void	ft_append_read(t_read *new, t_read **head);

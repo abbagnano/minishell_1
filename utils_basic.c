@@ -45,6 +45,15 @@ int		ft_strlen(char *str)
 	return (x);
 }
 
+void	ft_write_2(char *str)
+{
+	int len;
+
+	len = ft_strlen(str);
+	write(2, str, len);
+	write(2, "\n", 1);
+}
+
 void	ft_write(char *str)
 {
 	int len;

@@ -102,7 +102,7 @@ void	ft_exec_pippe(char *line, t_data *data)
 	{
 		// wait(&status);
 				waitpid(pid, &status, 0);
-				printf("err: %d\n", errno);
+				// printf("err: %d\n", errno);
 				if (!WIFSIGNALED(status))
 					errno = status;
 				pid = WEXITSTATUS(status);

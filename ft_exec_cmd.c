@@ -25,15 +25,20 @@ void	ft_cd(char *line, t_data *data)
 	ret = chdir(line + x);
 	if (ret == -1)
 	{
+		// 	char *asd = strerror(errno);
+		// write(2, asd, strlen(asd));
 		// printf("errno:%d\n", errno);
-		ft_write(strerror(errno));
-		ft_write("\n");
+		ft_write_2(strerror(errno));
+		// ft_write_2("\n");
+		// perror(line + x);
 		errno = 1;
 		return ;
 	}
 	// free(tmp);
 	new = ft_strjoin("OLDPWD=", tmp);
-	ft_add_env(new, 1, data);
+	// printf("%s\n", new);
+	if (new)
+		ft_add_env(new, 1, data);
 	free(tmp);
 	tmp = getcwd(NULL, 0);
 	new = ft_strjoin("PWD=", tmp);
@@ -54,7 +59,7 @@ void	ft_pwd(char *line, t_data *data)
 		x++;
 	if (line[x] && line[x] == '-')
 	{
-		ft_write("invalid option\n");
+		ft_write_2("invalid option");
 		errno = 1;
 		return ;
 	}
@@ -62,8 +67,9 @@ void	ft_pwd(char *line, t_data *data)
 	path = getcwd(NULL, 0);
 	if (!path)
 	{
-		ft_write(strerror(errno));
-		ft_write("\n");
+		ft_write_2(strerror(errno));
+		// ft_write("\n");
+		// perror(path);
 		errno = 1;
 		return ;
 	}
@@ -163,15 +169,15 @@ void	ft_exit_cmd(char *line, t_data *data)
 		tot = tot * 10 + line[x++] - 48;
 	if (line[x] && line[x] != ' ' && (line[x] < '0' || line[x] > '9'))
 	{
-		ft_write("minishell: exit: numeric argument required\n");
+		ft_write_2("minishell: exit: numeric argument required");
 		errno = 255;
-		ft_exit("", data);
+		ft_exit_num(errno, data);
 	}
 	while (line[x] && line [x] == ' ')
 		x++;
 	if (line[x])
 	{
-		ft_write("minishell: exit: too many arguments\n");
+		ft_write_2("minishell: exit: too many arguments");
 		errno = 1;
 		return ;
 	}
@@ -210,11 +216,11 @@ void	ft_check_cmd(char *line, t_data *data)
 	else if (!ft_strncmp(line, "exit ", 5) || ft_strncmp(line, "exit ", 5) == -32)
 		ft_exit_cmd(line + 4, data);	// ft_exit("exit\n", data);
 	else if (ft_check_execve(line,data))
-		ft_do_execve(data);			//IMPORTANTE SE C'E' IL PUNTO e VIRGOLA 
+		ft_do_execve(line, data);			//IMPORTANTE SE C'E' IL PUNTO e VIRGOLA 
 									//HA IL RETURN 0=SUCCESS, 1=NOT SUCCESS
 	else
 	{
-		ft_write("minishell: command not found\n");
+		ft_write_2("minishell: command not found");
 		// ft_write(line);
 		errno = 127;
 		// exit(0);
