@@ -31,7 +31,6 @@ void	ft_exec_pippe(char *line, t_data *data)
 	char	**matr;
 	int pid;
 	int pippe;
-	int	status;
 
 
 	x = 0;
@@ -80,10 +79,8 @@ void	ft_exec_pippe(char *line, t_data *data)
 				// printf("-%s-\t%d\n", matr[x], x);
 				ft_exec_cmd(matr[x], data);
 				// printf("\tpid: %d\t-%s-\n", pid, matr[x]);
-				free_pipes(fd, pippe);
-				// printf("err: %d\n", errno);					///////
-				ft_exit_num(errno, data);
-				// ft_exit("", data);
+				free_pipes(fd, pippe);						///////
+				ft_exit("", data);
 			}
 		//	else
 		//	{
@@ -91,7 +88,6 @@ void	ft_exec_pippe(char *line, t_data *data)
 	// close_all_fd_pipe(fd, pippe);
 		//		close(fd[x - 1][0]);
 				// close(fd[x][1]);
-		
 				x++;
 		//	}
 	}
@@ -99,18 +95,7 @@ void	ft_exec_pippe(char *line, t_data *data)
 	close_all_fd_pipe(fd, pippe);
 	x = -1;
 	while (++x <= pippe)
-	{
-		// wait(&status);
-				waitpid(pid, &status, 0);
-				printf("err: %d\n", errno);
-				if (!WIFSIGNALED(status))
-					errno = status;
-				pid = WEXITSTATUS(status);
-				if (pid)
-					errno = pid;
-	// printf("status: %d\texitstatus: %d\nwifexited: %d\twifsignaled: %d\n", status, WEXITSTATUS(status), WIFEXITED(status), WIFSIGNALED(status));
-
-	}
+		wait(NULL);
 //	close_all_fd_pipe(fd, pippe);
 	free_pipes(fd, pippe);							//////
 //	dup2(data->std_fd[1], 1); // data->std_fd[0]);		//	sembra indifferente 
@@ -120,7 +105,6 @@ void	ft_exec_pippe(char *line, t_data *data)
 	x = 0;
 	while (matr[x])
 		free(matr[x++]);
-	// printf("err: %d\n", errno);
 	free(matr);
 	free(line);
 	tcsetattr(0, 0, &data->my_term);

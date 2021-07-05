@@ -3,8 +3,10 @@
 
 void	ft_cd(char *line, t_data *data)
 {
-	int	ret;
-	int	x;
+	int		ret;
+	int		x;
+	char	*tmp;
+	char	*new;
 
 	x = 0;
 	if (!line[x])		//se il comando è solo "cd" senza path allora non fa niente
@@ -17,7 +19,8 @@ void	ft_cd(char *line, t_data *data)
 		while (line[ret] == ' ')
 			ret--;
 		line[ret + 1] = '\0';
-	}	
+	}
+	tmp = getcwd(NULL, 0);
 	// printf("-%s-\n", line + x);
 	ret = chdir(line + x);
 	if (ret == -1)
@@ -26,20 +29,36 @@ void	ft_cd(char *line, t_data *data)
 		ft_write(strerror(errno));
 		ft_write("\n");
 		errno = 1;
+		return ;
 	}
+	// free(tmp);
+	new = ft_strjoin("OLDPWD=", tmp);
+	ft_add_env(new, 1, data);
+	free(tmp);
+	tmp = getcwd(NULL, 0);
+	new = ft_strjoin("PWD=", tmp);
+	ft_add_env(new, 1, data);
+	free(tmp);
+
 	///		aggiornare env $PWD & $OLDPWD ??
-	(void)data;
+	// (void)data;
 }
 
 void	ft_pwd(char *line, t_data *data)
 {
 	char	*path;
-	// char	buf[1000];
+	int		x;
 
+	x = 0;
+	while (line[x] && line[x] == ' ')
+		x++;
+	if (line[x] && line[x] == '-')
+	{
+		ft_write("invalid option\n");
+		errno = 1;
+		return ;
+	}
 	path = NULL;
-	// buf = NULL;
-//	path = getcwd(path, 1);
-	// path = getcwd(buf, 1000);
 	path = getcwd(NULL, 0);
 	if (!path)
 	{
@@ -51,9 +70,7 @@ void	ft_pwd(char *line, t_data *data)
 	ft_write(path);
 	ft_write("\n");
 	free(path);
-
 	(void)data;
-	(void)line;	//	aggiungere check se ci sono comandi dopo il pwd
 }
 
 int	ft_last_spaces(char *str)

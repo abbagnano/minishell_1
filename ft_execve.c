@@ -17,8 +17,9 @@ void  ft_sign_ign_quit(int sig)
 {
     //  char  c;
 
-	printf("Quit: 3\n");
-	errno = 131;
+	// printf("Quit: 3\n");
+	ft_write("Quit: 3\n");
+	errno = 128 + sig;
     // signal(sig, SIG_IGN);						//////		HO TOLTO QUESTO perche rimaneva in attesa di un segnale se si chiamava nuovamente cat
 
     //  printf("OUCH, did you hit Ctrl-C?\n"
@@ -33,8 +34,9 @@ void  ft_sign_ign_quit(int sig)
 
 void	ft_sign_ign_int(int sig)
 {
-	printf("\n");
-	errno = 130;
+	// printf("\n");
+	ft_write("\n");
+	errno = 128 + sig;
 	// signal(sig, SIG_IGN);			//////		HO TOLTO QUESTO perche rimaneva in attesa di un segnale se si chiamava nuovamente cat
 }
 
@@ -47,19 +49,27 @@ int ft_do_execve(t_data *data)
 	if (pid == 0)
 	{
 		execve(data->args[0], data->args, data->envp);
+		dup2(data->std_fd[1],1);
+		// dup2(data->std_fd[0], 0);
+		ft_write(strerror(errno));
+		ft_write("\n");
+		ft_exit_num(126, data);
 	}
 	else
 	{
+		// printf("%s\n", data->args[0]);
 		ft_free_matrix(&data->args);
 		signal(SIGQUIT, ft_sign_ign_quit);
 		signal(SIGINT, ft_sign_ign_int);
 		// signal(SIGQUIT, SIG_IGN);
 		waitpid(pid, &status, 0);
+		// printf("err:%d\n", errno);
 		if (!WIFSIGNALED(status))
 			errno = status;
 		pid = WEXITSTATUS(status);
 		if (pid)
 			errno = pid;
+		// printf("err:%d\n", errno);
 		// printf("status: %d\texitstatus: %d\nwifexited: %d\twifsignaled: %d\n", status, WEXITSTATUS(status), WIFEXITED(status), WIFSIGNALED(status));
 		// printf("\twstopsig: %d\n", WSTOPSIG(status));
 		// printf("\twifcont: %d\n", WIFCONTINUED(status));
