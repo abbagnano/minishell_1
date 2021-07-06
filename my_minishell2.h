@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 11:23:52 by aviolini          #+#    #+#             */
-/*   Updated: 2021/07/02 08:34:43 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/07/06 16:54:49 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 /*ft_execve*/
 int		ft_check_execve(char *line, t_data *data);
-int		ft_do_execve(char *line, t_data *data);
+void	ft_do_execve(char *line, t_data *data);
 /*ft_pipe.c*/
 int		ft_pipe(char *line, t_data *data);
 /*ft_redir.c*/
