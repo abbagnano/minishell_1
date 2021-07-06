@@ -21,22 +21,14 @@ void	ft_cd(char *line, t_data *data)
 		line[ret + 1] = '\0';
 	}
 	tmp = getcwd(NULL, 0);
-	// printf("-%s-\n", line + x);
 	ret = chdir(line + x);
 	if (ret == -1)
 	{
-		// 	char *asd = strerror(errno);
-		// write(2, asd, strlen(asd));
-		// printf("errno:%d\n", errno);
 		ft_write_2(strerror(errno));
-		// ft_write_2("\n");
-		// perror(line + x);
 		errno = 1;
 		return ;
 	}
-	// free(tmp);
 	new = ft_strjoin("OLDPWD=", tmp);
-	// printf("%s\n", new);
 	if (new)
 		ft_add_env(new, 1, data);
 	free(tmp);
@@ -44,9 +36,6 @@ void	ft_cd(char *line, t_data *data)
 	new = ft_strjoin("PWD=", tmp);
 	ft_add_env(new, 1, data);
 	free(tmp);
-
-	///		aggiornare env $PWD & $OLDPWD ??
-	// (void)data;
 }
 
 void	ft_pwd(char *line, t_data *data)
@@ -68,8 +57,6 @@ void	ft_pwd(char *line, t_data *data)
 	if (!path)
 	{
 		ft_write_2(strerror(errno));
-		// ft_write("\n");
-		// perror(path);
 		errno = 1;
 		return ;
 	}
@@ -98,12 +85,10 @@ void	ft_echo(char *line, t_data *data)
 
 	x = 0;
 	new_line = 1;
-	// printf("echosss: %s\n", line);
 	while (line[x] == ' ')
 		x++;
 	if ((!ft_strncmp(line + x, "-n ", 3) || ft_strncmp(line + x, "-n ", 3) == -32) && !ft_strncmp(line + x, "-n", 2))
 	{
-		// printf("\n\tsdfasf\n");
 		new_line = 0;
 		x += 3;
 	}
@@ -121,7 +106,6 @@ void	ft_echo(char *line, t_data *data)
 		}
 		if (line[x] == 39)
 		{
-			// printf("\n\t39:%s\n", line + x);
 			x++;
 			while (line[x] && line[x] != 39)
 			{
@@ -132,7 +116,6 @@ void	ft_echo(char *line, t_data *data)
 		}
 		if (line[x] == 34)
 		{
-			// printf("\n\t34:%s\n", line + x);
 			x++;
 			while (line[x] && line[x] != 34)
 			{
@@ -143,12 +126,9 @@ void	ft_echo(char *line, t_data *data)
 		}
 		if (!line[x])
 			break ;
-		// printf("\nprinting: %c\t%d\n", line[x], line[x]);
 		write(1, &line[x], 1);
 		x++;
 	}
-	// printf("2 echosss: %s\n", line + x);
-	// ft_write(line + x);
 	if (new_line)
 		ft_write("\n");
 	errno = 0;
@@ -188,17 +168,6 @@ void	ft_exit_cmd(char *line, t_data *data)
 
 void	ft_check_cmd(char *line, t_data *data)
 {
-	// printf("line: -%s-\n", line);		//		LE NODE->LINE SONO GIA' PULITE DEGLI SPAZI DAVANTI
-//	int	len;
-
-//	len = ft_strlen(line);
-	//if (len == 4 && !ft_strncmp(line, "echo", 4))
-//	printf("strncmp: %d\n", ft_strncmp(line, "echo ", 5));
-	// if (ft_strchr('|', line) != -1)
-	// 	ft_pipe(line, data);
-	// else if(ft_strchr('>', line) != -1 || ft_strchr('<', line) != -1)
-	// 	ft_redir(line,data);
-	// else 
 	if (!ft_strncmp(line, "echo ", 5) || ft_strncmp(line, "echo ", 5) == -32)
 		ft_echo(line + 4, data);
 	else if (!ft_strncmp(line, "cd ", 3) || ft_strncmp(line, "cd ", 3) == -32)
@@ -214,10 +183,9 @@ void	ft_check_cmd(char *line, t_data *data)
 	else if (!ft_strncmp(line, "unset ", 6) || ft_strncmp(line, "unset ", 6) == -32)
 		ft_unset(line + 5, data);
 	else if (!ft_strncmp(line, "exit ", 5) || ft_strncmp(line, "exit ", 5) == -32)
-		ft_exit_cmd(line + 4, data);	// ft_exit("exit\n", data);
+		ft_exit_cmd(line + 4, data);
 	else if (ft_check_execve(line,data))
-		ft_do_execve(line, data);			//IMPORTANTE SE C'E' IL PUNTO e VIRGOLA 
-									//HA IL RETURN 0=SUCCESS, 1=NOT SUCCESS
+		ft_do_execve(line, data);
 	else
 	{
 		ft_write_2("minishell: command not found");
@@ -232,21 +200,12 @@ void	ft_exec_cmd(char *line, t_data *data)
 	int	x;
 	struct stat t_stat;
 
-//	 printf("0 line: %s\n", line);
 		x = 0;
-
-		// data->std_fd[0] = dup(0);
-		// data->std_fd[1] = dup(1);
-		// printf("line: %s/n", line);
 		tcsetattr(0, 0, &data->old_term);
-		// printf("\t1 errno: %d\n", errno);
-		while (ft_strchr('$', line + x) != -1)// && ft_strchr('\'', line) == -1)
+		while (ft_strchr('$', line + x) != -1)
 			ft_env_line(&line, &x, data);
-		// printf("\t1 errno: %d\n", errno);
-		//  printf("1 line: %s\n", line);
 		if (ft_strchr('\'', line) || ft_strchr('\"', line))
 			ft_clean_quotes(&line);
-		
 		if(ft_strchr('>', line) != -1 || ft_strchr('<', line) != -1)
 		{
 			if (ft_redir(&line, data) == 0)
@@ -258,37 +217,22 @@ void	ft_exec_cmd(char *line, t_data *data)
 				}
 				else
 				{
-				// printf("Error REDIR_%d\n", errno);     //TEMPORANEO
 					ft_write_2(strerror(errno));
-		  		// printf("2 line: %s\n", line);
-				// exit(0);
 					errno = 1;
 				}
 				x = 666;
 			}
 		}
-		// printf("x:%d\n", x);
 		if (line && x != 666)
 			ft_check_cmd(line, data);
 		
 		free(line);
 
 		dup2(data->std_fd[1],1);
-		// close(data->std_fd[1]);
 		dup2(data->std_fd[0], 0);
-		// close(data->std_fd[0]);
-		// printf("\t3 errno: %d\n", errno);
 		x = errno;
 		if (!stat("/tmp/minishell", &t_stat))					//METTERE ALLA FINE?		// modifica errno..
 			unlink("/tmp/minishell");				
 		errno = x;
-		// printf("\t4 errno: %d\n", errno);
 	tcsetattr(0, 0, &data->my_term);
-
-
-	// int x = 0;
-	// while (data->envp[x])
-	// {
-	// 	printf("\t%s\n", data->envp[x++]);
-	// }
 }
