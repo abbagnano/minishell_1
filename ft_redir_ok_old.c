@@ -117,26 +117,11 @@ int	ft_flag_3(char *file)
 	return (1);
 }
 
-void	ft_charrr(t_char **qwe)
-{
-	t_char *tmp;
-	t_char *new;
-
-	new = (t_char *)malloc(sizeof(t_char) * 1);
-	new->buf = '\n';
-	new->next = NULL;
-	tmp = *qwe;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = new;
-}
-
 int	ft_flag_4(char *file, t_data *data)
 {
 	int		fd;
 	int		r;
-	char	*buf;//[1024];
-	char	*buf2;
+	char	buf[1024];
 	int		len;
 	//FARE UNLINK DEL TEMP;
 
@@ -145,32 +130,17 @@ int	ft_flag_4(char *file, t_data *data)
 	if (fd < 0)
 		return (0);
 	write(data->std_fd[1], ">", 1);
-
-	t_char *qwe = NULL;
-	// t_char *tmp = qwe;
-	tcsetattr(0, 0, &data->my_term);
-	while (ft_reading(&qwe, &len, data)) // (r > 0)
+	while (r > 0)
 	{
-		// r = read(data->std_fd[0], buf, 1024);
-		// buf[r] = '\0';
-		if (len == 0)
-			break ;//printf("asd\n");
-		ft_charrr(&qwe);
-		ft_linod_to_line(&buf, &buf2, len, &qwe);
+		r = read(data->std_fd[0], buf, 1024);
+		buf[r] = '\0';
 		len = ft_strlen(file);
 		if ((ft_strncmp(buf, file, len + 1) == '\n' && ft_strncmp(buf, file, len) == 0) || buf[0] == '\0')
 			break;
 		write(fd, buf, ft_strlen(buf));
 		write(data->std_fd[1], ">", 1);
-		free(buf);
-		free(buf2);
-		// ft_free_char(&qwe);
-		// qwe = NULL;
 	}
 	close(fd);
-	tcsetattr(0, 0, &data->old_term);
-	if (len == 0)
-		return (1);
 	fd = open("/tmp/minishell", O_RDONLY, 0666);
 	if (fd < 0)
 		return (0);

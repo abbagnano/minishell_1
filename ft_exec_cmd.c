@@ -248,11 +248,14 @@ void	ft_exec_cmd(char *line, t_data *data)
 			ft_clean_quotes(&line);
 		
 		if(ft_strchr('>', line) != -1 || ft_strchr('<', line) != -1)
-			if (ft_redir(&line,data) == 0)
+		{
+			if (ft_redir(&line, data) == 0)
 			{
 				printf("Error REDIR\n");     //TEMPORANEO
 				exit(0);
 			}
+		}
+		// printf("x:%d\n", x);
 		//   printf("2 line: %s\n", line);
 		if (line)
 			ft_check_cmd(line, data);

@@ -19,7 +19,7 @@ void  ft_sign_ign_quit(int sig)
 {
     //  char  c;
 
-	printf("Quit: 3   %d\n", sig);
+	// printf("Quit: 3   %d\n", sig);
 	ft_write("Quit: 3\n");
 	errno = 128 + sig;
     // signal(sig, SIG_IGN);						//////		HO TOLTO QUESTO perche rimaneva in attesa di un segnale se si chiamava nuovamente cat
@@ -58,9 +58,7 @@ int ft_do_execve(char *line, t_data *data)
 	pid = fork();
 	if (pid == 0)
 	{
-		int ret;
-		ret = execve(data->args[0], data->args, data->envp);
-		printf("ret:%d\n", ret);
+		execve(data->args[0], data->args, data->envp);
 		dup2(data->std_fd[1],1);
 		dup2(data->std_fd[0], 0);
 		ft_write_2(strerror(errno));
