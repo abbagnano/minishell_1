@@ -48,6 +48,8 @@ void	ft_kill_child(int sig)
 	// printf("sdfsdfsdfdsfsdfsdfsdfsdfsdfgsd\n");
 	// g_g++;
 	kill(g_g, SIGTERM);
+	if (!errno)
+		errno = 128 + sig;
 }
 
 int ft_do_execve(char *line, t_data *data)

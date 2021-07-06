@@ -251,11 +251,19 @@ void	ft_exec_cmd(char *line, t_data *data)
 		{
 			if (ft_redir(&line, data) == 0)
 			{
-				ft_write_2(strerror(errno));
+				if (!errno || errno == 258)
+				{
+					ft_write_2("syntax error near unexpected token");
+					errno = 258;
+				}
+				else
+				{
 				// printf("Error REDIR_%d\n", errno);     //TEMPORANEO
+					ft_write_2(strerror(errno));
 		  		// printf("2 line: %s\n", line);
 				// exit(0);
-				errno = 1;
+					errno = 1;
+				}
 				x = 666;
 			}
 		}

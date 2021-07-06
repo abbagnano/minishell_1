@@ -112,6 +112,7 @@ int	ft_reading(t_char **line_head, int *len, t_data *data)
 			// write(1, "\n", 1);
 			write(data->std_fd[1], "\n", 1);
 			*len = 0;
+			errno = 1;
 			return (1);
 		}
 		else if (buf == 28 || buf == 9)

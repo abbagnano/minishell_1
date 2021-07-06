@@ -2,17 +2,12 @@ gcc -lncurses term_test.c
 
 TODO: 
 
--CTRL-\ fa l'uscita di un processo figlio es cat   .. forse risolto
--IGNORA CTRL+C , CTRL / E NEL CAT					..	forse risolto
--IGNORA CTRL+C , CTRL / NEL <<INFILE CAT			 ..	 forse risolto
-
 -GESTIONE DEGLI ERRORI
 -LEAKS
 -POF per i processi 
 -TEST PIPES doppi apici apici redirection
 
 
--  pdf nuovo:  “<<” read input from the current source until a line containing only the delimiter is seen. it doesn’t need to update history!
 
 SIGNAL
 https://stackoverflow.com/questions/4217037/catch-ctrl-c-in-c/4217052
