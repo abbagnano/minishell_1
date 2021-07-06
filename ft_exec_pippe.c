@@ -32,10 +32,8 @@ int	ft_init_pipes(char *line, int ***fd_pipes, t_data *data)
 	num_pipes = 0;
 	x = -1;
 	while (line[++x])
-	{
 		if (line[x] == '|')
 			num_pipes++;
-	}
 	(*fd_pipes) = (int **)malloc(sizeof(int *) * num_pipes);
 	if (!(*fd_pipes))
 		ft_exit(strerror(errno), data);
@@ -48,10 +46,8 @@ int	ft_init_pipes(char *line, int ***fd_pipes, t_data *data)
 	}
 	x = -1;
 	while (++x < num_pipes)
-	{
 		if (pipe((*fd_pipes)[x]) == -1)
 			ft_exit(strerror(errno), data);
-	}
 	return (num_pipes);
 }
 
@@ -99,7 +95,6 @@ void	ft_exec_pippe(char *line, t_data *data)
 	int		pid;
 	int		num_pipes;
 
-	x = -1;
 	matr = ft_split(line, '|');
 	if (!matr)
 		ft_exit(strerror(errno), data);
