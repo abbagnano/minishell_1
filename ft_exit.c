@@ -25,6 +25,37 @@ void	ft_free_read(t_read **head)
 	}
 }
 
+void	ft_exit_cmd(char *line, t_data *data)
+{
+	int	x;
+	int	tot;
+
+	x = 0;
+	tot = 0;
+	ft_write("exit\n");
+	while (line[x] && line [x] == ' ')
+		x++;
+	while (line[x] && line[x] >= '0' && line[x] <= '9')
+		tot = tot * 10 + line[x++] - 48;
+	if (line[x] && line[x] != ' ' && (line[x] < '0' || line[x] > '9'))
+	{
+		ft_write_2("minishell: exit: numeric argument required");
+		errno = 255;
+		ft_exit_num(errno, data);
+	}
+	while (line[x] && line [x] == ' ')
+		x++;
+	if (line[x])
+	{
+		ft_write_2("minishell: exit: too many arguments");
+		errno = 1;
+		return ;
+	}
+	if (errno != 255)
+		errno = tot;
+	ft_exit_num(errno, data);
+}
+
 void	ft_exit_num(int num, t_data *data)
 {
 	// ft_write(str);

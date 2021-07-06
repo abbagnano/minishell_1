@@ -13,7 +13,6 @@ OBJS	=	minishell.o \
 			ft_buf_to_list.o \
 			ft_arrow.o \
 			ft_execve.o \
-			ft_pipe.o \
 			ft_redir.o \
 			utils_aviol.o \
 			utils_aviol2.o \
@@ -22,7 +21,10 @@ OBJS	=	minishell.o \
 			utils_t_char.o \
 			ft_check_quotes.o \
 			ft_exec_pippe.o \
-			ft_check_exportline.o
+			ft_check_exportline.o \
+			utils_exportline.o \
+			utils_quotes.o \
+			utils_exec_cmd.o
 			
 all		:	$(NAME)
 

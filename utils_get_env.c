@@ -67,8 +67,11 @@ void	ft_fix_env(char **line)
 	char	*fixed;
 	char	*tmp;
 
+	// printf("\t-%s-\n", *line);
 	x = 0;
 	len = ft_strlen(*line);
+	if ((*line)[len - 1] == '=')
+		(*line)[--len] = '\0';
 	fixed = (char *)malloc(sizeof(char) * (len + 4));
 	tmp = *line;
 	len = 0;
@@ -85,9 +88,6 @@ void	ft_fix_env(char **line)
 	fixed[x++] = '\'';
 	fixed[x++] = '\'';
 	fixed[x] = '\0';
-	// free(*line);
-	// free(tmp);
-	// *line = NULL;
 	*line = fixed;
 }
 
@@ -133,6 +133,7 @@ void	ft_add_env(char *line, int fix, t_data *data)
 {
 	t_read	*new;
 	// int		fix;
+	// printf("\t\t-%s-\n", line);
 
 	// printf("add_env:line: %d\n", line[ft_strchr('=', line) + 1]);
 	// fix = 0;
