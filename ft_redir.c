@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/07/06 17:44:57 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/07/06 18:11:09 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,40 +19,45 @@ void	ft_slide_quotes(char *line, int *i)
 	{
 		(*i)++;
 		while (line[*i] && line[*i] != '"')
-		(*i)++;
+			(*i)++;
 	}	
 }
 
 int	ft_type_of_redir(char *line, int *i)
 {
 	int	flag;
-		
+
 	flag = 0;
 	ft_slide_quotes(line, i);
 	if (line[*i])
 	{
-		if (line[*i] == '<' && line[*i + 1] && line[*i + 1] != '<' && line[*i + 1] == '>')
+		if (line[*i] == '<' && line[*i + 1] && \
+			line[*i + 1] != '<' && line[*i + 1] == '>')
 			flag = 5;
-		else if (line[*i] == '<' && line[*i + 1] && line[*i + 1] != '<')
+		else if (line[*i] == '<' && line[*i + 1] && \
+			line[*i + 1] != '<')
 			flag = 1;
-		else if (line[*i] == '>' && line[*i + 1] && line[*i + 1] != '>' && line[*i + 1] == '<')
+		else if (line[*i] == '>' && line[*i + 1] && \
+			line[*i + 1] != '>' && line[*i + 1] == '<')
 			flag = -1;
-		else if (line[*i] == '>' && line[*i + 1] && line[*i + 1] != '>')		
+		else if (line[*i] == '>' && line[*i + 1] && \
+			line[*i + 1] != '>')
 			flag = 2;
-		else if (line[*i] == '>' && line[*i + 1] && line[*i  + 1] == '>' && line[*i  + 2] && line[*i + 2] == '>')
+		else if (line[*i] == '>' && line[*i + 1] && \
+			line[*i + 1] == '>' && line[*i + 2] && line[*i + 2] == '>')
 			flag = -1;
-		else if (line[*i] == '>' && line[*i + 1] && line[*i  + 1] == '>')
+		else if (line[*i] == '>' && line[*i + 1] && line[*i + 1] == '>')
 			flag = 3;
-		else if (line[*i] == '<' && line[*i + 1] && line[*i  + 1] == '<' && line[*i  + 2] && line[*i + 2] == '<')
+		else if (line[*i] == '<' && line[*i + 1] && line[*i + 1] == '<' && \
+			line[*i + 2] && line[*i + 2] == '<')
 			flag = -1;
-		else if (line[*i] == '<' && line[*i + 1] && line[*i  + 1] == '<')
+		else if (line[*i] == '<' && line[*i + 1] && line[*i + 1] == '<')
 			flag = 4;
 		if (flag >= 3)
-			(*i)++;			
+			(*i)++;
 	}
 	return (flag);
 }
-
 
 char	*ft_name_of_file(char *line, int i,int *x)
 {
@@ -272,16 +277,10 @@ int	ft_redir(char **line, t_data *data)
 		flag = ft_type_of_redir(*line, &i);
 		if (flag > 0)
 		{
-			if (i > x && (i == 0 || flag < 3))
-			{
-				if (ft_clean_line(*line, &new_line, i, x) == 0)
-					return (ft_redir_error(new_line));
-			}
-			else if (i > x)
-			{
-				if (ft_clean_line(*line, &new_line, i - 1, x) == 0)
-					return (ft_redir_error(new_line));
-			}
+			if ((i > x) && (i == 0 || flag < 3) && ft_clean_line(*line, &new_line, i, x) == 0)
+				return (ft_redir_error(new_line));
+			else if ((i > x) && !(i == 0 || flag < 3) && ft_clean_line(*line, &new_line, i - 1, x) == 0)
+				return (ft_redir_error(new_line));
 			file = ft_name_of_file(*line,i, &x);
 			if (ft_open_file(file, flag, data) == 0)
 				return (ft_redir_error(new_line));
@@ -289,11 +288,8 @@ int	ft_redir(char **line, t_data *data)
 		if (flag == -1)
 			return (ft_redir_error(new_line));					
 	}
-	if (i > x)
-	{
-		if (ft_clean_line(*line, &new_line, i, x) == 0)
-			return (ft_redir_error(new_line));
-	}
+	if (i > x && ft_clean_line(*line, &new_line, i, x) == 0)
+		return (ft_redir_error(new_line));
 	free(*line);
 	*line = new_line;
 	return (1);
