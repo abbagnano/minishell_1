@@ -24,201 +24,89 @@ int close_all_fd_pipe(int **fd_pipe, int num)
 	return (0);
 }
 
+// int ft_init_pipes(char *line, t_data *data)
+// {
+// 	int	x;
+// 	int	num_pipes;
+
+// 	num_pipes = 0;
+// 	x = -1;
+
+
+// 	return(num_pipes);
+// }
+
+
 void	ft_exec_pippe(char *line, t_data *data)
 {
 	int		x;
 	int		**fd;
 	char	**matr;
 	int pid;
-	int pippe;
+	int num_pipes;
 	int	status;
 
 
-	x = 0;
-	pid = 0;
-	while (line[x])
+	x = -1;
+	num_pipes = 0;
+	while (line[++x])
 	{
 		if (line[x] == '|')
-			pid++;
-		x++;
+			num_pipes++;
 	}
-
-	fd = (int **)malloc(sizeof(int *) * pid);
-	x = 0;
-	while (x < pid)
+	fd = (int **)malloc(sizeof(int *) * num_pipes);
+	if (!fd)
+		ft_exit(strerror(errno), data);
+	x = -1;
+	while (++x < num_pipes)
 	{
 		fd[x] = (int *)malloc(sizeof(int) * 2);
-		x++;
+		if (!fd[x])
+			ft_exit(strerror(errno), data);
 	}
-	x = 0;
-	while (x < pid)
+	x = -1;
+	while (++x < num_pipes)
 	{
-		pipe(fd[x]);
-		x++;
+		if (pipe(fd[x]) == -1)
+			ft_exit(strerror(errno), data);
 	}
 	matr = ft_split(line, '|');
-	x = 0;
-	pippe = pid;
-	while ( x <= pippe)
-	// while (matr[x])
+	if (!matr)
+		ft_exit(strerror(errno), data);
+	x = -1;
+	while ( ++x <= num_pipes)
 	{
-	
-			pid = fork();
-			if (pid == 0)
-			{
-				if (x != 0)
-					dup2(fd[x - 1][0], 0);
-				if (x != pippe)
-					dup2(fd[x][1], 1);
-				// if (matr[x + 1])
-				// 	dup2(fd[x][1], 1);
-		//		close(fd[x][1]);
-		//		close(fd[x][0]);
-				close_all_fd_pipe(fd, pippe);
-				// printf("-%s-\t%d\n", matr[x], x);
-				ft_exec_cmd(matr[x], data);
-				// printf("\tpid: %d\t-%s-\n", pid, matr[x]);
-				free_pipes(fd, pippe);
-				// printf("err: %d\n", errno);					///////
-				ft_exit_num(errno, data);
-				// ft_exit("", data);
-			}
-		//	else
-		//	{
-				// wait(NULL);
-	// close_all_fd_pipe(fd, pippe);
-		//		close(fd[x - 1][0]);
-				if (x != 0)
-					close(fd[x - 1][0]);
-				if (x != pippe)
-					close(fd[x][1]);
-				waitpid(pid, &status, 0);
-
-				// printf("err: %d\n", errno);
-				if (!WIFSIGNALED(status))
-					errno = status;
-				pid = WEXITSTATUS(status);
-				if (pid)
-					errno = pid;
-				x++;
-		//	}
+		pid = fork();
+		if (pid == -1)
+			ft_exit(strerror(errno), data);
+		if (pid == 0)
+		{
+			if (x != 0 && dup2(fd[x - 1][0], 0) == -1)
+				ft_exit(strerror(errno), data);
+			if (x != num_pipes && dup2(fd[x][1], 1) == -1)
+				ft_exit(strerror(errno), data);
+			close_all_fd_pipe(fd, num_pipes);
+			ft_exec_cmd(matr[x], data);
+			free_pipes(fd, num_pipes);
+			ft_exit_num(errno, data);
+		}
+		if (x != 0)
+			close(fd[x - 1][0]);
+		if (x != num_pipes)
+			close(fd[x][1]);
+		if (waitpid(pid, &status, 0) == -1)
+			ft_exit(strerror(errno), data);
+		if (!WIFSIGNALED(status))
+			errno = status;
+		pid = WEXITSTATUS(status);
+		if (pid)
+			errno = pid;
 	}
-//	printf("pid: %d\n", pid);
-	// close_all_fd_pipe(fd, pippe);
-	// x = -1;
-	// while (++x <= pippe)
-	// {
-	// 	// wait(&status);
-	// 			waitpid(pid, &status, 0);
-	// 			// printf("err: %d\n", errno);
-	// 			if (!WIFSIGNALED(status))
-	// 				errno = status;
-	// 			pid = WEXITSTATUS(status);
-	// 			if (pid)
-	// 				errno = pid;
-	// // printf("status: %d\texitstatus: %d\nwifexited: %d\twifsignaled: %d\n", status, WEXITSTATUS(status), WIFEXITED(status), WIFSIGNALED(status));
-
-	// }
-//	close_all_fd_pipe(fd, pippe);
-	free_pipes(fd, pippe);							//////
-//	dup2(data->std_fd[1], 1); // data->std_fd[0]);		//	sembra indifferente 
-//	close(data->std_fd[1]);								// sembra indifferente
-	dup2(data->std_fd[0], 0); // data->std_fd[0]);		// questo lascia aperto ./minishell in reading
-//	close(data->std_fd[0]);							// se si aggiunge questo si killa ./minishell
+	free_pipes(fd, num_pipes);
+	if (dup2(data->std_fd[0], 0) == -1)
+		ft_exit(strerror(errno), data);
 	x = 0;
-	while (matr[x])
-		free(matr[x++]);
-	// printf("err: %d\n", errno);
-	free(matr);
+	ft_free_matrix(&matr);
 	free(line);
 	tcsetattr(0, 0, &data->my_term);
-
-		// close(fd[1]);
 }
-
-
-// void	ft_exec_pippe(char *line, t_data *data)
-// {
-// 	int		x;
-// 	// int		*fd;
-// 	char	**matr;
-
-// 	int fd[2];
-// 	// fd = (int *)malloc(sizeof(int) * 2);
-
-// 	// int r = 
-// 	pipe(fd);
-
-// 	// printf("%d\n", r);
-
-
-// 	matr = ft_split(line, '|');
-// 	x = 0;
-// 	int pid = fork();
-// 	if (pid == 0)
-// 	{
-// 		dup2(fd[1], 1); //data->std_fd[1]);
-// 		// close(data->std_fd[1]);
-// 		// close(fd[1]);
-// 		ft_exec_cmd(matr[x], data);
-// 		ft_exit("closing 1st child\n", data);
-// 	}
-// 	else
-// 	{
-// 		wait(NULL);
-// 		x++;
-// 		while (matr[x + 1])
-// 		{
-// 			pid = fork();
-// 			if (pid == 0)
-// 			{
-// 				close(fd[1]);
-// 				dup2(fd[1], 1);
-// 				// close(fd[1]);
-// 				// dup2(fd[0], 0); // data->std_fd[0]);
-// 				// close(fd[0]);
-// 				ft_exec_cmd(matr[x], data);
-// 				ft_exit("closing 2nd\n", data);
-// 			}
-// 			else
-// 			{
-// 				wait(NULL);
-// 				x++;
-// 				close(fd[1]);
-// 				dup2(fd[0], 0); //data->std_fd[0]);
-// 				close(fd[0]);
-// 				ft_exec_cmd(matr[x], data);
-// 				// ft_exit("closing 3rd\n", data);
-// 			}
-// 		}
-// 		// else
-// 		// {
-// 				// close(fd[1]);
-// 				// dup2(fd[0], 0); // data->std_fd[0]);
-// 				// close(fd[0]);
-// 				// ft_exec_cmd(matr[x], data);
-// 				// x++;
-// 				// ft_exit("closing bond\n", data);
-// 		// }
-// 		dup2(data->std_fd[1], 1); // data->std_fd[0]);
-// 		close(data->std_fd[1]);
-// 		dup2(data->std_fd[0], 0); // data->std_fd[0]);
-// 		close(data->std_fd[0]);
-
-// 	}
-
-// 	// while (matr[x])
-// 	// {
-// 	// 	// dup2(fd[1], 1);//data->std_fd[1]);
-// 	// 	// close(fd[1]);
-// 	// 	ft_exec_cmd(matr[x], data);
-// 	// 	// dup2(fd[0], data->std_fd[0]);
-// 	// 	// close(fd[0]);
-// 	// 	// free(matr[x]);
-// 	// 	x++;
-// 	// }
-	
-// 	free(matr);
-// 	free(line);
-// 	//ft_exit("pippe\n", data);
-// }
