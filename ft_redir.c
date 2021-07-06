@@ -6,7 +6,7 @@
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/07/06 17:35:34 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/07/06 17:44:57 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,7 +251,7 @@ int ft_clean_line(char *line, char **new_line, int i, int x)
 	
 int ft_redir_error(char *new_line)
 {
-	if (!new_line)
+	if (new_line)
 		free(new_line);
 	return (0);
 }
