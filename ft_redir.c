@@ -274,7 +274,10 @@ int	ft_redir(char **line, t_data *data)
 			}
 			file = ft_name_of_file(*line,i, &x);
 			if (ft_open_file(file, flag, data) == 0)
+			{
+				free(file);								//IL FREE SI PUO FARE ANCHE NELLA FUNZIONE FT_OPEN_FILe
 				return (0);							//FARE IL FREE PRIMA DEL RETURN
+			}
 			free(file);								//IL FREE SI PUO FARE ANCHE NELLA FUNZIONE FT_OPEN_FILe
 		}
 		if (flag == -1)								

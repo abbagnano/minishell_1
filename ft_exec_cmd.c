@@ -251,13 +251,16 @@ void	ft_exec_cmd(char *line, t_data *data)
 		{
 			if (ft_redir(&line, data) == 0)
 			{
-				printf("Error REDIR\n");     //TEMPORANEO
-				exit(0);
+				ft_write_2(strerror(errno));
+				// printf("Error REDIR_%d\n", errno);     //TEMPORANEO
+		  		// printf("2 line: %s\n", line);
+				// exit(0);
+				errno = 1;
+				x = 666;
 			}
 		}
 		// printf("x:%d\n", x);
-		//   printf("2 line: %s\n", line);
-		if (line)
+		if (line && x != 666)
 			ft_check_cmd(line, data);
 		
 		free(line);

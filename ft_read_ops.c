@@ -109,7 +109,8 @@ int	ft_reading(t_char **line_head, int *len, t_data *data)
 				ft_free_char(line_head);
 				*line_head = NULL;
 			}
-			write(1, "\n", 1);
+			// write(1, "\n", 1);
+			write(data->std_fd[1], "\n", 1);
 			*len = 0;
 			return (1);
 		}
@@ -120,12 +121,14 @@ int	ft_reading(t_char **line_head, int *len, t_data *data)
 		}
 		else if (buf == 10 && !*len)	// '\n'
 		{
-			write(1, &buf, 1);
+			// write(1, &buf, 1);
+			write(data->std_fd[1], &buf, 1);
 			if(*line_head == NULL)
 			 	free(*line_head);
 			return (1);
 		}
-		write(1, &buf, 1);
+		// write(1, &buf, 1);
+		write(data->std_fd[1], &buf, 1);
 		ft_buffering(buf, len, line_head);
 	}
 	return (1);
