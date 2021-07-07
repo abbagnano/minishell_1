@@ -14,8 +14,8 @@
 
 size_t	ft_cntwrds(char const *s, char c)
 {
-	size_t count;
-	size_t i;
+	size_t	count;
+	size_t	i;
 
 	i = 0;
 	count = 0;
@@ -43,15 +43,16 @@ char	**ft_fill(char **ptr, char const *s, char c)
 	size_t	start;
 	size_t	end;
 
-	start = 0;
+	start = -1;
 	z = 0;
-	while (s[start])
+	while (s[++start])
 	{
 		if (s[start] != c)
 		{
 			end = (ft_idxwrd(s, c, start));
 			size = end - start + 1;
-			if (!(ptr[z] = ft_substr(s, start, size)))
+			ptr[z] = ft_substr(s, start, size);
+			if (!ptr[z])
 				return (NULL);
 			y = 0;
 			while (y < size)
@@ -59,7 +60,6 @@ char	**ft_fill(char **ptr, char const *s, char c)
 			ptr[z++][y] = '\0';
 			start = end;
 		}
-		start++;
 	}
 	return (ptr);
 }
@@ -72,7 +72,8 @@ char	**ft_split(char const *s, char c)
 	if (!(s))
 		return (NULL);
 	count = ft_cntwrds(s, c);
-	if (!(ptr = (char **)malloc(sizeof(char *) * (count + 1))))
+	ptr = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!ptr)
 		return (NULL);
 	ft_fill(ptr, s, c);
 	ptr[count] = NULL;

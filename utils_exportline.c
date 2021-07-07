@@ -39,7 +39,6 @@ void	ft_check_empty(char **str)
 	}
 }
 
-
 int	ft_last_spaces(char *str)
 {
 	int	x;

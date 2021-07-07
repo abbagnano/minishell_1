@@ -24,7 +24,9 @@ OBJS	=	minishell.o \
 			ft_check_exportline.o \
 			utils_exportline.o \
 			utils_quotes.o \
-			utils_exec_cmd.o
+			utils_exec_cmd.o \
+			utils_random.o \
+			utils_execve.o
 			
 all		:	$(NAME)
 

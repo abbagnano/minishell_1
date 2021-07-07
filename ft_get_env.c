@@ -3,7 +3,7 @@
 
 void	ft_print_env(t_read **head)
 {
-	t_read *tmp;
+	t_read	*tmp;
 
 	tmp = *head;
 	while (tmp)
@@ -17,27 +17,23 @@ void	ft_print_env(t_read **head)
 	}
 }
 
-void	ft_unset(char *line, t_data *data)				/// unset deve cercare fino all' '='
+void	ft_unset(char *line, t_data *data)
 {
 	int	len;
 	int	x;
 
 	len = 0;
 	x = 0;
-	// x = ft_strchr(' ', line);
 	while (line[x] == ' ')
 		x++;
 	while (line[x + len] && (line[x + len] != ' ' && line[x + len] != '='))
 		len++;
-	// if (line[x + len] == '=')
-		// len++;
 	if (!line[x])
 	{
-		// ft_write("not enough arguments\n");		//	in bash nn fa niente
 		return ;
 	}
 	else
-		ft_search_env(line + x, x, len, data);
+		ft_search_env(line + x, len, data);
 	ft_list_to_matr(data->env_head, &data->envp, data);
 }
 
@@ -70,8 +66,6 @@ void	ft_export(char *line, t_data *data)
 		return ;
 	}
 	ft_matrline(line + x, data);
-	// ft_check_exportline(line, x, data);
-	// ft_add_env(line + x, data);
 }
 
 void	ft_get_env(char **env, t_data *data)

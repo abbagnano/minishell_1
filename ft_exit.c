@@ -38,11 +38,7 @@ void	ft_exit_cmd(char *line, t_data *data)
 	while (line[x] && line[x] >= '0' && line[x] <= '9')
 		tot = tot * 10 + line[x++] - 48;
 	if (line[x] && line[x] != ' ' && (line[x] < '0' || line[x] > '9'))
-	{
-		ft_write_2("minishell: exit: numeric argument required");
-		errno = 255;
-		ft_exit_num(errno, data);
-	}
+		ft_exit_error(data);
 	while (line[x] && line [x] == ' ')
 		x++;
 	if (line[x])

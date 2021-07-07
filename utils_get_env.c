@@ -52,22 +52,20 @@ void	ft_fix_env(char **line)
 	int		x;
 	int		len;
 	char	*fixed;
-	char	*tmp;
 
 	x = 0;
 	len = ft_strlen(*line);
 	if ((*line)[len - 1] == '=')
 		(*line)[--len] = '\0';
 	fixed = (char *)malloc(sizeof(char) * (len + 4));
-	tmp = *line;
 	len = 0;
-	while (tmp[len + x])
+	while ((*line)[len + x])
 	{
-		while (tmp[len + x] == ' ')
+		while ((*line)[len + x] == ' ')
 			len++;
-		if (!tmp[len + x])
+		if (!(*line)[len + x])
 			break ;
-		fixed[x] = tmp[len + x];
+		fixed[x] = (*line)[len + x];
 		x++;
 	}
 	fixed[x++] = '=';
@@ -77,45 +75,39 @@ void	ft_fix_env(char **line)
 	*line = fixed;
 }
 
-int	ft_search_env(char *line, int x, int len, t_data *data)
+int	ft_search_env(char *line, int len, t_data *data)
 {
 	t_read	*tmp;
 	t_read	*tmp_x;
 
 	tmp = *data->env_head;
 	tmp_x = tmp;
-	if (len == -1)
-		len = ft_strlen(line);
-	if (!ft_strncmp(line, tmp->line, len) && !ft_strncmp(line, tmp->line, len + 1))
+	if (!ft_strncmp(line, tmp->line, len)
+		&& !ft_strncmp(line, tmp->line, len + 1))
 	{
 		*data->env_head = (*data->env_head)->next;
-		free(tmp->line);
-		free(tmp);
-		data->env_len--;
-		return (1);
+		return (ft_free_env(tmp, data));
 	}
 	while (tmp)
 	{
 		tmp_x = tmp;
 		tmp = tmp->next;
-		if (tmp && !ft_strncmp(line, tmp->line, len) && (!ft_strncmp(line, tmp->line, len + 1) || ft_strncmp(line, tmp->line, len + 1) == -61))
+		if (tmp && !ft_strncmp(line, tmp->line, len)
+			&& (!ft_strncmp(line, tmp->line, len + 1)
+				|| ft_strncmp(line, tmp->line, len + 1) == -61))
 		{
 			tmp_x->next = tmp->next;
-			free(tmp->line);
-			free(tmp);
-			data->env_len--;
-			return (1);
+			return (ft_free_env(tmp, data));
 		}
 	}
 	return (0);
-
-
-	(void)x;
 }
 
 void	ft_add_env(char *line, int fix, t_data *data)
 {
 	t_read	*new;
+
+	new = (t_read *)malloc(sizeof(t_read) * 1);
 	new->line = ft_strdup(line);
 	new->next = NULL;
 	ft_unset(line, data);

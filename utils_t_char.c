@@ -2,12 +2,12 @@
 
 int	ft_char_len(t_char **line_head)
 {
-	t_char *tmp;
-	int x;
+	t_char	*tmp;
+	int		x;
 
 	x = 0;
 	tmp = *line_head;
-	while(tmp)
+	while (tmp)
 	{
 		tmp = tmp->next;
 		x++;
@@ -29,23 +29,23 @@ void	ft_free_char(t_char **line_head)
 
 void	ft_write_char(t_char **line_head)
 {
-	t_char *tmp;
+	t_char	*tmp;
 
 	tmp = *line_head;
-	while(tmp)
+	while (tmp)
 	{
 		write(1, &tmp->buf, 1);
-		tmp=tmp->next;
+		tmp = tmp->next;
 	}
 }
 
 void	ft_canc_char(t_char **line_head)
 {
-	t_char *tmp;
+	t_char	*tmp;
 
 	tmp = *line_head;
-	while(tmp->next && tmp->next->next)
-		tmp=tmp->next;
+	while (tmp->next && tmp->next->next)
+		tmp = tmp->next;
 	if (tmp->next)
 	{
 		free(tmp->next);

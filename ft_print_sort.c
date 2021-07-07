@@ -109,7 +109,6 @@ void	ft_print_sort(t_read **head, t_data *data)
 			}
 			tmp_x = tmp_x->next;
 		}
-		tmp = tmp->next;		
+		tmp = tmp->next;
 	}
-
 }

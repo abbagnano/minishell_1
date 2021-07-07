@@ -23,7 +23,7 @@
 
 /*ft_execve*/
 int		ft_check_execve(char *line, t_data *data);
-int		ft_do_execve(char *line, t_data *data);
+void		ft_do_execve(char *line, t_data *data);
 /*ft_pipe.c*/
 int		ft_pipe(char *line, t_data *data);
 /*ft_redir.c*/
