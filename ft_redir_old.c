@@ -197,38 +197,30 @@ int	ft_redir_error(char *new_line)
 {
 	if (new_line)
 		free(new_line);
-	new_line = NULL;
 	return (0);
-}
-
-int	ft_norminette_dioporco(int *x, char **line, char *new_line, t_data *data)
-{
-	char	*file;
-
-	if ((x[0] > x[1]) && (x[0] == 0 || x[2] < 3)
-		&& ft_clean_line(*line, &new_line, x[0], x[1]) == 0)
-		return (ft_redir_error(new_line));
-	else if ((x[0] > x[1]) && !(x[0] == 0 || x[2] < 3)
-		&& ft_clean_line(*line, &new_line, x[0] - 1, x[1]) == 0)
-		return (ft_redir_error(new_line));
-	file = ft_name_of_file(*line, x[0], &x[1]);
-	if (ft_open_file(file, x[2], data) == 0)
-		return (ft_redir_error(new_line));
-	return (1);
 }
 
 int	ft_redir(char **line, char	*new_line, t_data *data)
 {
 	int		x[3];
+	char	*file;
 
 	x[0] = -1;
 	x[1] = 0;
 	while ((*line)[++x[0]])
 	{
 		x[2] = ft_type_of_redir(*line, 0, &x[0]);
-		if (x[2] > 0 && !ft_norminette_dioporco(x, line, new_line, data))
+		if (x[2] > 0)
 		{
-			return (0);//ft_redir_error(new_line));
+			if ((x[0] > x[1]) && (x[0] == 0 || x[2] < 3)
+				&& ft_clean_line(*line, &new_line, x[0], x[1]) == 0)
+				return (ft_redir_error(new_line));
+			else if ((x[0] > x[1]) && !(x[0] == 0 || x[2] < 3)
+				&& ft_clean_line(*line, &new_line, x[0] - 1, x[1]) == 0)
+				return (ft_redir_error(new_line));
+			file = ft_name_of_file(*line, x[0], &x[1]);
+			if (ft_open_file(file, x[2], data) == 0)
+				return (ft_redir_error(new_line));
 		}
 		if (x[2] == -1)
 			return (ft_redir_error(new_line));

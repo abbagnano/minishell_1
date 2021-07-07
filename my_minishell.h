@@ -120,7 +120,7 @@ void	ft_read_ops(t_char *line_head, t_read *cmd, t_data *data);
 void	ft_no_arg(t_data *data);
 void	ft_arg(char *av, t_data *data, char **env);
 
-/*		utils_basic.c	*/
+/*	utils_basic.c	*/
 int		ft_strcmp(char *s1, char *s2);
 int		ft_strncmp(char *s1, char *s2, int len);
 int		ft_strchr(char c, char *s1);
@@ -133,6 +133,12 @@ void	ft_option_echo(int *new_line, int *x, char *line);
 void	ft_echo_quotes(int *x, char *line, char c);
 void	ft_write_echo(int *x, char *line);
 void	ft_error_redir(int *x);
+
+/*	utils_exec_pippe.c		*/
+void	free_pipes(int **pipes, int num);
+int		close_all_fd_pipe(int **fd_pipe, int num);
+void	ft_pipe_exit(char *line, char **matr, t_data *data);
+void	ft_child(int *x, int **fd_pipes, char *matrx, t_data *data);
 
 /*	utils_execve.c	*/
 void	ft_sign_ign_quit(int sig);
@@ -147,7 +153,7 @@ int		ft_check_spaces(char *str, int *x);
 void	ft_check_empty(char **str);
 int		ft_last_spaces(char *str);
 
-/*		utils_get_env.c	*/
+/*	utils_get_env.c	*/
 char	*ft_itoa_errno(int num);
 void	ft_list_to_matr(t_read **env_head, char ***envp, t_data *data);
 void	ft_fix_env(char **line);
@@ -164,7 +170,7 @@ void	ft_write_2(char *str);
 void	ft_exit_error(t_data *data);
 int		ft_free_env(t_read	*tmp, t_data *data);
 
-/*		utils_read_ops.c	*/
+/*	utils_read_ops.c	*/
 int		ft_read_len(t_read **cmd_head);
 void	ft_add_front_read(t_read *new, t_read **head);
 void	ft_linod_to_line(char **line, char **line2,
@@ -173,7 +179,12 @@ void	ft_buffering(char buf, int *len, t_char **line_head);
 void	ft_restart_reading(t_char *line_head,
 			int *len, t_read *cmd, char *line);
 
-/*		utils_t_char.c		*/
+/*	utils_redir.c		*/
+void	ft_charrr(t_char **qwe);
+int		ft_ctr_c(int *fd);
+void	ft_flag4_reading(t_data *data, int fd, char *file);
+
+/*	utils_t_char.c		*/
 int		ft_char_len(t_char **line_head);
 void	ft_free_char(t_char **line_head);
 void	ft_write_char(t_char **line_head);

@@ -9,7 +9,6 @@ OBJS	=	minishell.o \
 			ft_get_env.o \
 			ft_print_sort.o	\
 			utils_get_env.o	\
-			ft_init_term.o \
 			ft_buf_to_list.o \
 			ft_arrow.o \
 			ft_execve.o \
@@ -26,7 +25,9 @@ OBJS	=	minishell.o \
 			utils_quotes.o \
 			utils_exec_cmd.o \
 			utils_random.o \
-			utils_execve.o
+			utils_execve.o \
+			utils_redir.o \
+			utils_exec_pippe.o
 			
 all		:	$(NAME)
 

@@ -122,7 +122,7 @@ void	ft_exec_cmd(char *line, t_data *data)
 		ft_clean_quotes(&line);
 	if (ft_strchr('>', line) != -1 || ft_strchr('<', line) != -1)
 	{
-		if (ft_redir(&line, data) == 0)
+		if (ft_redir(&line, NULL, data) == 0)
 			ft_error_redir(&x);
 	}
 	if (line && x != 666)

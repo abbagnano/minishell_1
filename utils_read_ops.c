@@ -82,10 +82,9 @@ void	ft_buffering(char buf, int *len, t_char **line_head)
 void	ft_restart_reading(t_char *line_head, int *len,
 	t_read *cmd, char *line)
 {
-	if (!line_head && !*len)
+	if (!line_head && *len == 0)
 	{
 		free(cmd);
-		free(line);
 		line_head = NULL;
 	}
 	*len = 0;

@@ -1,4 +1,5 @@
 #include "my_minishell.h"
+#include "my_minishell2.h"
 
 void	ft_write_2(char *str)
 {
