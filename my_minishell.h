@@ -97,6 +97,7 @@ void	ft_exec_cmd(char *line, t_data *data);
 /*	utils_exec_cmd.c	*/
 void	ft_update_pwd(char *tmp, t_data *data);
 void	ft_option_echo(int *new_line, int *x, char *line);
+void	ft_echo_quotes(int *x, char *line, char c);
 void	ft_write_echo(int *x, char *line);
 void	ft_error_redir(int *x);
 

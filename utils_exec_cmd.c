@@ -30,6 +30,17 @@ void	ft_option_echo(int *new_line, int *x, char *line)
 		ft_option_echo(new_line, x, line);
 }
 
+void	ft_echo_quotes(int *x, char *line, char c)
+{
+	(*x)++;
+	while (line[*x] && line[*x] != c)
+	{
+		write(1, &line[*x], 1);
+		(*x)++;
+	}
+	(*x)++;
+}
+
 void	ft_write_echo(int *x, char *line)
 {
 	if (line[*x] == ' ' && line[*x + 1])
@@ -42,23 +53,11 @@ void	ft_write_echo(int *x, char *line)
 		(*x)++;
 	if (line[*x] == 39)
 	{
-		(*x)++;
-		while (line[*x] && line[*x] != 39)
-		{
-			write(1, &line[*x], 1);
-			(*x)++;
-		}
-		(*x)++;
+		ft_echo_quotes(x, line, 39);
 	}
 	if (line[*x] == 34)
 	{
-		(*x)++;
-		while (line[*x] && line[*x] != 34)
-		{
-			write(1, &line[*x], 1);
-			(*x)++;
-		}
-		(*x)++;
+		ft_echo_quotes(x, line, 34);
 	}
 }
 

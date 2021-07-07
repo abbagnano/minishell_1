@@ -58,24 +58,16 @@ void	ft_exit_cmd(char *line, t_data *data)
 
 void	ft_exit_num(int num, t_data *data)
 {
-	// ft_write(str);
 	if (*data->cmd_head)
 		ft_free_read(data->cmd_head);
 	free(data->cmd_head);
 	if (*data->env_head)
 		ft_free_read(data->env_head);
-	//	ft_free_env_read(data->env_head);
 	free(data->env_head);
 	free(data->envp);
 	close(data->std_fd[0]);
 	close(data->std_fd[1]);
 	tcsetattr(0, 0, &data->old_term);
-	// printf("xxxxxxxxxxx\n");
-	// printf("waiting_leaks\n");
-	// read(0, &str, 1);
-	// char buff;
-	// read(1, &buff, 1);
-	// printf(" %s\n", buff);
 	exit(num);
 }
 
@@ -87,14 +79,10 @@ void	ft_exit(char *str, t_data *data)
 	free(data->cmd_head);
 	if (*data->env_head)
 		ft_free_read(data->env_head);
-	//	ft_free_env_read(data->env_head);
 	free(data->env_head);
 	free(data->envp);
 	close(data->std_fd[0]);
 	close(data->std_fd[1]);
 	tcsetattr(0, 0, &data->old_term);
-	// printf("xxxxxxxxxxx\n");
-	// printf("waiting_leaks\n");
-	// read(0, &str, 1);
 	exit(0);
 }

@@ -9,32 +9,21 @@ char	*ft_itoa_errno(int num)
 
 	tmp = num;
 	x = 3;
-	// printf("num:%d\n", num);
-//	printf("%s\n", var);
 	while (tmp > 10)
 	{
 		tmp /= 10;
 		x++;
 	}
-	// printf("%d\n", x);
-//	x += ft_strlen(var);
 	new = (char *)malloc(sizeof(char) * (x + 1));
 	new[x--] = '\0';
-	// while (var[--len] != '?')
-	// 	new[x--] = var[len];
 	while (num >= 10)
 	{
 		new[x--] = num % 10 + 48;
 		num /= 10;
 	}
 	new[x--] = num + 48;
-	// len -= 2;
-	// while (x && var[--len])
-	// 	new[x--] = var[len];
 	while (x)
 		new[x--] = ' ';
-	// printf("new: %s\n", new);
-	// free(var);
 	return (new);
 }
 
@@ -49,15 +38,13 @@ void	ft_list_to_matr(t_read **env_head, char ***envp, t_data *data)
 	new = (char **)malloc(sizeof(char *) * (data->env_len + 1));
 	while (tmp)
 	{
-		new[x] = tmp->line;//(*envp)[x];
+		new[x] = tmp->line;
 		x++;
 		tmp = tmp->next;
 	}	
 	new[x] = NULL;
-//	*envp = NULL;
 	free(*envp);
 	*envp = new;
-	// envp = &new;
 }
 
 void	ft_fix_env(char **line)
@@ -67,7 +54,6 @@ void	ft_fix_env(char **line)
 	char	*fixed;
 	char	*tmp;
 
-	// printf("\t-%s-\n", *line);
 	x = 0;
 	len = ft_strlen(*line);
 	if ((*line)[len - 1] == '=')
@@ -98,7 +84,6 @@ int	ft_search_env(char *line, int x, int len, t_data *data)
 
 	tmp = *data->env_head;
 	tmp_x = tmp;
-	// printf("search: %s\t%d\n", line, len);
 	if (len == -1)
 		len = ft_strlen(line);
 	if (!ft_strncmp(line, tmp->line, len) && !ft_strncmp(line, tmp->line, len + 1))
@@ -112,7 +97,6 @@ int	ft_search_env(char *line, int x, int len, t_data *data)
 	while (tmp)
 	{
 		tmp_x = tmp;
-			// printf("\t%s\t%d\t%d\n", tmp->line, ft_strncmp(line, tmp->line, len), ft_strncmp(line, tmp->line, len + 1));
 		tmp = tmp->next;
 		if (tmp && !ft_strncmp(line, tmp->line, len) && (!ft_strncmp(line, tmp->line, len + 1) || ft_strncmp(line, tmp->line, len + 1) == -61))
 		{
@@ -132,25 +116,13 @@ int	ft_search_env(char *line, int x, int len, t_data *data)
 void	ft_add_env(char *line, int fix, t_data *data)
 {
 	t_read	*new;
-	// int		fix;
-	// printf("\t\t-%s-\n", line);
-
-	// printf("add_env:line: %d\n", line[ft_strchr('=', line) + 1]);
-	// fix = 0;
-	new = (t_read *)malloc(sizeof(t_read) * 1);
-	// if (ft_strchr('=', line) < 0)
-		// ft_fix_env(&line);
-	// if (line[ft_strchr('=', line) + 1] == 39 && line[ft_strchr('=', line) + 2] == 39)
-		// fix++;
 	new->line = ft_strdup(line);
 	new->next = NULL;
 	ft_unset(line, data);
 	if (fix)
 	{
 		free(line);
-		// printf("fixed: %s\t%s\n", line, new->line);
 	}
-	// ft_search_env(line, 0, ft_strchr('=', line), data);
 	ft_append_read(new, data->env_head);
 	data->env_len++;
 	ft_list_to_matr(data->env_head, &data->envp, data);
