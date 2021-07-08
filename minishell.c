@@ -11,6 +11,7 @@ void	ft_init_term(t_data *data)
 	data->my_term.c_cc[VINTR] = 0;
 	data->my_term.c_cc[VQUIT] = 0;
 	tcsetattr(0, 0, &data->my_term);
+	data->flag = 0;
 }
 
 void	ft_no_arg(t_data *data)

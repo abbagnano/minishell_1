@@ -1,6 +1,6 @@
 #include "my_minishell.h"
 
-void	free_pipes(int **pipes, int num)
+void	ft_free_pipes(int **pipes, int num)
 {
 	int	i;
 
@@ -10,7 +10,7 @@ void	free_pipes(int **pipes, int num)
 	free(pipes);
 }
 
-int	close_all_fd_pipe(int **fd_pipe, int num)
+int	ft_close_all_fd_pipe(int **fd_pipe, int num)
 {
 	int	i;
 
@@ -36,6 +36,6 @@ void	ft_child(int *x, int **fd_pipes, char *matrx, t_data *data)
 {
 	ft_pipe_redir(x[0], x[1], fd_pipes, data);
 	ft_exec_cmd(matrx, data);
-	free_pipes(fd_pipes, x[1]);
+	ft_free_pipes(fd_pipes, x[1]);
 	ft_exit_num(errno, data);
 }

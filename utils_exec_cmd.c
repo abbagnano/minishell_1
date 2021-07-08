@@ -69,9 +69,6 @@ void	ft_error_redir(int *x)
 		errno = 1;
 		return ;
 	}
-	// if (!errno || errno == 258 || errno == 127)
-	// {
-		ft_write_2("syntax error near unexpected token");
-		errno = 258;
-	// }
+	ft_write_2("syntax error near unexpected token");
+	errno = 258;
 }

@@ -30,14 +30,12 @@ void	ft_arrow_up(t_char **line_head, t_data *data, int x, int *len)
 	ft_line_to_linod(line_head, tmp->line);
 	ft_write(tgetstr("cr", NULL));
 	ft_write(tgetstr("cd", NULL));
-	ft_write("\033[0;32mminishell% \033[0m");
-	if (x == -1)
-	{
-		*len = 0;
-		ft_free_char(line_head);
-		line_head = NULL;
+	if (data->flag)
+		ft_write(">");
+	else
+		ft_write("\033[0;32mminishell% \033[0m");
+	if (x == -1 && ft_empty_line(len, line_head))
 		return ;
-	}
 	ft_write(tmp->line);
 	*len = ft_strlen(tmp->line);
 }
@@ -62,10 +60,15 @@ int	ft_canc(t_char **line_head, int *len)
 	return (1);
 }
 
-int	ft_new_line(t_char **line_head, char buf, t_data *data)
+int	ft_new_line(t_char **line_head, int *len, char buf, t_data *data)
 {
 	write(data->std_fd[1], &buf, 1);
 	if (*line_head == NULL)
 		free(*line_head);
+	if (data->flag)
+	{
+		*len = 1;
+		ft_buffering(buf, len, line_head);
+	}
 	return (1);
 }

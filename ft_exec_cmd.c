@@ -82,25 +82,17 @@ void	ft_echo(char *line)
 
 void	ft_check_cmd(char *line, t_data *data)
 {
-	if (!ft_strncmp(line, "echo ", 5) || ft_strncmp(line, "echo ", 5) == -32)
-		ft_echo(line + 4);
+	if (line[0] == 'e')
+		ft_check_builtin(line, data);
 	else if (!ft_strncmp(line, "cd ", 3) || ft_strncmp(line, "cd ", 3) == -32)
 		ft_cd(line + 2, data);
 	else if (!ft_strncmp(line, "pwd ", 4) || ft_strncmp(line, "pwd ", 4) == -32)
 		ft_pwd(line + 3, data);
-	else if (!ft_strncmp(line, "export ", 7)
-		|| ft_strncmp(line, "export ", 7) == -32)
-		ft_export(line + 6, data);
-	else if (!ft_strncmp(line, "env ", 4) || ft_strncmp(line, "env ", 4) == -32)
-		ft_env(line + 3, data);
 	else if (!ft_strncmp(line, "unset ", 6)
 		|| ft_strncmp(line, "unset ", 6) == -32)
 		ft_unset(line + 5, data);
 	else if (!ft_strncmp(line, "", 1) || ft_last_spaces(line))
 		return ;
-	else if (!ft_strncmp(line, "exit ", 5)
-		|| ft_strncmp(line, "exit ", 5) == -32)
-		ft_exit_cmd(line + 4, data);
 	else if (ft_check_execve(line, data))
 		ft_do_execve(line, data);
 	else
@@ -121,11 +113,9 @@ void	ft_exec_cmd(char *line, t_data *data)
 		ft_env_line(&line, &x, data);
 	if (ft_strchr('\'', line) || ft_strchr('\"', line))
 		ft_clean_quotes(&line);
-	if (ft_strchr('>', line) >=0 || ft_strchr('<', line) >=0)
-	{
-		if (ft_redir(&line, data) == 0)
-			ft_error_redir(&x);
-	}
+	if ((ft_strchr('>', line) >= 0 || ft_strchr('<', line) >= 0)
+		&& ft_redir(&line, data) == 0)
+		ft_error_redir(&x);
 	if (line && x != 666)
 		ft_check_cmd(line, data);
 	free(line);

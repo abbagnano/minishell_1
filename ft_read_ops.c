@@ -73,7 +73,7 @@ int	ft_reading(t_char **line_head, int *len, t_data *data)
 		else if (buf == 3 && ft_ctrl_c_read(line_head, len, data))
 			return (1);
 		else if (buf == 10 && *len == 0)
-			return (ft_new_line(line_head, buf, data));
+			return (ft_new_line(line_head, len, buf, data));
 		write(data->std_fd[1], &buf, 1);
 		ft_buffering(buf, len, line_head);
 	}

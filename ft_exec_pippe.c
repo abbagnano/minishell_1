@@ -33,7 +33,7 @@ void	ft_pipe_redir(int x, int num_pipes, int **fd_pipes, t_data *data)
 		ft_exit(strerror(errno), data);
 	if (x != num_pipes && dup2(fd_pipes[x][1], 1) == -1)
 		ft_exit(strerror(errno), data);
-	close_all_fd_pipe(fd_pipes, num_pipes);
+	ft_close_all_fd_pipe(fd_pipes, num_pipes);
 }
 
 int	ft_pipe_wait(int pid, int x, int num_pipes, int **fd_pipes)
@@ -78,6 +78,6 @@ void	ft_exec_pippe(char *line, t_data *data)
 		if (ft_pipe_wait(pid, x[0], x[1], fd_pipes) == 0)
 			ft_exit(strerror(errno), data);
 	}
-	free_pipes(fd_pipes, x[1]);
+	ft_free_pipes(fd_pipes, x[1]);
 	ft_pipe_exit(line, matr, data);
 }

@@ -46,3 +46,31 @@ int	ft_line_forward(char **line, int *z, int *x, char c)
 	*x = *z;
 	return (0);
 }
+
+void	ft_quottes(char *line, int *i, int *c, int *x)
+{
+	char	q;
+
+	q = line[*i];
+	(*i)++;
+	*c = *i;
+	while (line[*c] && line[*c] != q)
+		(*c)++;
+	*x = *c + 1;
+}
+
+void	ft_slide_quotes(char *line, int *i)
+{
+	if (line[*i] == '"')
+	{
+		(*i)++;
+		while (line[*i] && line[*i] != '"')
+			(*i)++;
+	}
+	else if (line[*i] == '\'')
+	{
+		(*i)++;
+		while (line[*i] && line[*i] != '\'')
+			(*i)++;
+	}	
+}

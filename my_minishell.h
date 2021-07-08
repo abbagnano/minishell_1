@@ -69,6 +69,7 @@ typedef struct s_data
 	int				env_len;
 	char			**args;
 	int				std_fd[2];
+	int				flag;
 }	t_data;
 
 /*	ft_arrow.c	*/
@@ -76,7 +77,7 @@ void	ft_line_to_linod(t_char **line_head, char *line);
 void	ft_arrow_up(t_char **line_head, t_data *data, int x, int *len);
 int		ft_ctrl_l(t_char **line_head);
 int		ft_canc(t_char **line_head, int *len);
-int		ft_new_line(t_char **line_head, char buf, t_data *data);
+int		ft_new_line(t_char **line_head, int *len, char buf, t_data *data);
 
 /*	ft_buf_to_list.c	*/
 int		ft_buf_to_node(int len, int x, char *buf, t_read *new);
@@ -109,7 +110,7 @@ void	ft_echo(char *line);
 void	ft_check_cmd(char *line, t_data *data);
 void	ft_exec_cmd(char *line, t_data *data);
 
-/*	ft_exec_pippe.c	*/
+/*		ft_exec_pippe.c	*/
 int		ft_init_pipes(char *line, int ***fd_pipes, t_data *data);
 void	ft_pipe_redir(int x, int num_pipes, int **fd_pipes, t_data *data);
 int		ft_pipe_wait(int pid, int x, int num_pipes, int **fd_pipes);
@@ -133,9 +134,6 @@ void	ft_env(char *line, t_data *data);
 void	ft_export(char *line, t_data *data);
 void	ft_get_env(char **env, t_data *data);
 
-/*		ft_init_term.c	*/
-void	ft_init_term(t_data *data);
-
 /*		ft_print_sort.c	*/
 int		ft_strstr(char *find, char *str);
 void	ft_init_pos(t_read **head);
@@ -153,6 +151,7 @@ void	ft_read_ops(t_char *line_head, t_read *cmd, t_data *data);
 int		ft_redir(char **line, t_data *data);
 
 /*		minishell.c		***		MAIN	***		*/			
+void	ft_init_term(t_data *data);
 void	ft_no_arg(t_data *data);
 void	ft_arg(char *av, t_data *data, char **env);
 
@@ -181,8 +180,8 @@ void	ft_write_echo(int *x, char *line);
 void	ft_error_redir(int *x);
 
 /*	utils_exec_pippe.c		*/
-void	free_pipes(int **pipes, int num);
-int		close_all_fd_pipe(int **fd_pipe, int num);
+void	ft_free_pipes(int **pipes, int num);
+int		ft_close_all_fd_pipe(int **fd_pipe, int num);
 void	ft_pipe_exit(char *line, char **matr, t_data *data);
 void	ft_child(int *x, int **fd_pipes, char *matrx, t_data *data);
 
@@ -199,6 +198,13 @@ int		ft_check_spaces(char *str, int *x);
 void	ft_check_empty(char **str);
 int		ft_last_spaces(char *str);
 
+/*	utils_flagredir.c	*/
+int		ft_flag_1(char *file);
+int		ft_flag_2(char *file);
+int		ft_flag_3(char *file);
+int		ft_flag_4(char *file, t_data *data);
+int		ft_flag_5(char *file);
+
 /*	utils_get_env.c	*/
 char	*ft_itoa_errno(int num);
 void	ft_list_to_matr(t_read **env_head, char ***envp, t_data *data);
@@ -210,11 +216,15 @@ void	ft_add_env(char *line, int fix, t_data *data);
 int		ft_cpy_matr(char **matr, char **new);
 void	ft_utils_quotes(int *a, int *z, char *str, char **new);
 int		ft_line_forward(char **line, int *z, int *x, char c);
+void	ft_quottes(char *line, int *i, int *c, int *x);
+void	ft_slide_quotes(char *line, int *i);
 
 /*	utils_random.c		*/
 void	ft_write_2(char *str);
 void	ft_exit_error(t_data *data);
 int		ft_free_env(t_read	*tmp, t_data *data);
+int		ft_empty_line(int *len, t_char **line_head);
+void	ft_check_builtin(char *line, t_data *data);
 
 /*	utils_read_ops.c	*/
 int		ft_read_len(t_read **cmd_head);
@@ -228,7 +238,9 @@ void	ft_restart_reading(t_char *line_head,
 /*	utils_redir.c		*/
 void	ft_charrr(t_char **qwe);
 int		ft_ctr_c(int *fd);
-// void	ft_flag4_reading(t_data *data, int fd, char *file);
+void	ft_flag4_reading(t_data *data, int len, int fd, char *file);
+int		ft_clean_line(char *line, char **new_line, int i, int x);
+int		ft_redir_error(char *new_line);
 
 /*	utils_t_char.c		*/
 int		ft_char_len(t_char **line_head);

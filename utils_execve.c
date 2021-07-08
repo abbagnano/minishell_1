@@ -2,7 +2,7 @@
 
 void	ft_sign_ign_quit(int sig)
 {
-	ft_write("Quit: 3\n");
+	ft_write_2("Quit: 3");
 	errno = 128 + sig;
 }
 
