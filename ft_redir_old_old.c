@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_redir copy.c                                    :+:      :+:    :+:   */
+/*   ft_redir.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 09:26:04 by aviolini          #+#    #+#             */
-/*   Updated: 2021/07/08 10:27:24 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/07/08 10:26:33 by aviolini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,36 +29,39 @@ int	ft_type_of_redir(char *line, int *i)
 
 	flag = 0;
 	ft_slide_quotes(line, i);
-	if ((line[*i] == '>' && line[*i + 1] && line[*i + 1] != '>' && \
-		line[*i + 1] == '<') || \
-		(line[*i] == '>' && line[*i + 1] && line[*i + 1] == '>' && \
-		line[*i + 2] && line[*i + 2] == '>') || \
-		(line[*i] == '<' && line[*i + 1] && line[*i + 1] == '<' && \
-		line[*i + 2] && line[*i + 2] == '<') || 
-		(line[*i] == '<' || line[*i] == '>') && !(line[*i + 1]))
-		flag = -1;
-	else if (line[*i] == '<' && line[*i + 1] && line[*i + 1] != '<' && \
-	line[*i + 1] == '>')
-		flag = 5;
-	else if (line[*i] == '<' && line[*i + 1] && line[*i + 1] != '<')
-		flag = 1;
-	else if (line[*i] == '>' && line[*i + 1] && line[*i + 1] != '>')
-		flag = 2;
-	else if (line[*i] == '>' && line[*i + 1] && line[*i + 1] == '>')
-		flag = 3;
-	else if (line[*i] == '<' && line[*i + 1] && line[*i + 1] == '<')
-		flag = 4;
-	if (flag >= 3)
-		(*i)++;
+	if (line[*i])
+	{
+		if ((line[*i] == '<' || line[*i] == '>') && !(line[*i + 1]))
+			flag = -1;
+		else if (line[*i] == '<' && line[*i + 1] &&	line[*i + 1] != '<' && line[*i + 1] == '>')
+			flag = 5;
+		else if (line[*i] == '<' && line[*i + 1] &&	line[*i + 1] != '<')
+			flag = 1;
+		else if (line[*i] == '>' && line[*i + 1] &&	line[*i + 1] != '>' && line[*i + 1] == '<')
+			flag = -1;
+		else if (line[*i] == '>' && line[*i + 1] &&	line[*i + 1] != '>')
+			flag = 2;
+		else if (line[*i] == '>' && line[*i + 1] &&	line[*i + 1] == '>' && line[*i + 2] && line[*i + 2] == '>')
+			flag = -1;
+		else if (line[*i] == '>' && line[*i + 1] && line[*i + 1] == '>')
+			flag = 3;
+		else if (line[*i] == '<' && line[*i + 1] && line[*i + 1] == '<' && \
+			line[*i + 2] && line[*i + 2] == '<')
+			flag = -1;
+		else if (line[*i] == '<' && line[*i + 1] && line[*i + 1] == '<')
+			flag = 4;
+		if (flag >= 3)
+			(*i)++;
+	}
 	return (flag);
 }
 
-char	*ft_name_of_file(char *line, int i, int *x)
+char	*ft_name_of_file(char *line, int i,int *x)
 {
 	int	c;
 
 	(i)++;
-	while (line[i] && line[i] == ' ')
+	while(line[i] && line[i] == ' ')
 		(i)++;
 	if (line[i] == '"')
 	{
@@ -71,7 +74,7 @@ char	*ft_name_of_file(char *line, int i, int *x)
 	else
 	{
 		c = (i);
-		while (line[c] && line[c] != '<' && line[c] != '>' && line[c] != ' ')
+		while(line[c] && line[c] != '<' && line[c] != '>' && line[c] != ' ')
 			c++;
 		*x = c;
 	}
@@ -83,7 +86,7 @@ char	*ft_name_of_file(char *line, int i, int *x)
 int	ft_flag_1(char *file)
 {
 	int	fd;
-
+	
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		return (0);
@@ -95,8 +98,8 @@ int	ft_flag_1(char *file)
 int	ft_flag_2(char *file)
 {
 	int	fd;
-
-	fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0666);
+	
+	fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0666);	
 	if (fd < 0)
 		return (0);
 	dup2(fd, 1);
@@ -107,7 +110,7 @@ int	ft_flag_2(char *file)
 int	ft_flag_3(char *file)
 {
 	int	fd;
-
+	
 	fd = open(file, O_RDWR | O_CREAT | O_APPEND, 0666);
 	if (fd < 0)
 		return (0);
@@ -118,8 +121,8 @@ int	ft_flag_3(char *file)
 
 void	ft_charrr(t_char **qwe)
 {
-	t_char	*tmp;
-	t_char	*new;
+	t_char *tmp;
+	t_char *new;
 
 	new = (t_char *)malloc(sizeof(t_char) * 1);
 	new->buf = '\n';
@@ -149,7 +152,7 @@ int	ft_flag_4(char *file, t_data *data)
 {
 	int		fd;
 	int		r;
-	char	*buf;
+	char	*buf;//[1024];
 	char	*buf2;
 	int		len;
 	//FARE UNLINK DEL TEMP;
@@ -198,10 +201,10 @@ int	ft_flag_4(char *file, t_data *data)
 int	ft_flag_5(char *file)
 {
 	int	fd;
-
+	
 	fd = open(file, O_RDWR, 0666);
 	if (fd < 0)
-		fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0666);
+		fd = open(file, O_RDWR | O_CREAT | O_TRUNC , 0666);
 	if (fd < 0)
 		return (0);
 	dup2(fd, 0);
@@ -211,7 +214,7 @@ int	ft_flag_5(char *file)
 
 int	ft_open_file(char *file, int flag, t_data *data)
 {
-	int	ret;
+	int ret;
 
 	if (file == NULL)
 		return (0);
