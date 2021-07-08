@@ -153,7 +153,7 @@ int		ft_redir(char **line, t_data *data);
 /*		minishell.c		***		MAIN	***		*/			
 void	ft_init_term(t_data *data);
 void	ft_no_arg(t_data *data);
-void	ft_arg(char *av, t_data *data, char **env);
+void	ft_arg(char *av, char **env);
 
 /*ft_utils_aviol*/
 char	**ft_split(char const *s, char c);

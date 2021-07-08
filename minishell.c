@@ -26,7 +26,7 @@ void	ft_no_arg(t_data *data)
 	ft_write("exit\n");
 }
 
-void	ft_arg(char *av, t_data *data, char **env)
+void	ft_arg(char *av, char **env)
 {
 	char	*command[2];
 
@@ -34,13 +34,15 @@ void	ft_arg(char *av, t_data *data, char **env)
 	(command)[1] = NULL;
 	execve((command)[0], command, env);
 	ft_write_2(strerror(errno));
-	ft_exit_num(2, data);
+	exit(2);
 }
 
 int	main(int ac, char **av, char **env)
 {
 	t_data	data;
 
+	if (ac >= 2)
+		ft_arg(av[1], env);
 	data.cmd_head = (t_read **)malloc(sizeof(t_read *) * 1);
 	*data.cmd_head = NULL;
 	data.env_head = (t_read **)malloc(sizeof(t_read *) * 1);
@@ -49,7 +51,5 @@ int	main(int ac, char **av, char **env)
 	ft_get_env(env, &data);
 	if (ac == 1)
 		ft_no_arg(&data);
-	if (ac >= 2)
-		ft_arg(av[1], &data, env);
 	ft_exit("", &data);
 }
