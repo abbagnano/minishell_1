@@ -30,6 +30,15 @@
 
 int	g_pid;
 
+typedef struct s_redir
+{
+	int		i;
+	char	*new_line;
+	int		flag;
+	int		x;
+	char	*file;
+}	t_redir;
+
 typedef struct s_int
 {
 	int				x;

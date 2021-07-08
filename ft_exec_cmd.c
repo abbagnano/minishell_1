@@ -96,6 +96,8 @@ void	ft_check_cmd(char *line, t_data *data)
 	else if (!ft_strncmp(line, "unset ", 6)
 		|| ft_strncmp(line, "unset ", 6) == -32)
 		ft_unset(line + 5, data);
+	else if (!ft_strncmp(line, "", 1) || ft_last_spaces(line))
+		return ;
 	else if (!ft_strncmp(line, "exit ", 5)
 		|| ft_strncmp(line, "exit ", 5) == -32)
 		ft_exit_cmd(line + 4, data);
@@ -119,7 +121,7 @@ void	ft_exec_cmd(char *line, t_data *data)
 		ft_env_line(&line, &x, data);
 	if (ft_strchr('\'', line) || ft_strchr('\"', line))
 		ft_clean_quotes(&line);
-	if (ft_strchr('>', line) != -1 || ft_strchr('<', line) != -1)
+	if (ft_strchr('>', line) >=0 || ft_strchr('<', line) >=0)
 	{
 		if (ft_redir(&line, data) == 0)
 			ft_error_redir(&x);

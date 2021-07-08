@@ -58,3 +58,5 @@ int	ft_ctr_c(int *fd)
 // 		free(buf[1]);
 // 	}
 // }
+
+

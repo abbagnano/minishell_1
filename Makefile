@@ -26,8 +26,8 @@ OBJS	=	minishell.o \
 			utils_exec_cmd.o \
 			utils_random.o \
 			utils_execve.o \
-			utils_redir.o \
-			utils_exec_pippe.o
+			utils_exec_pippe.o 
+#utils_redir.o 
 			
 all		:	$(NAME)
 

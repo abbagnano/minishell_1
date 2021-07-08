@@ -62,15 +62,16 @@ void	ft_write_echo(int *x, char *line)
 
 void	ft_error_redir(int *x)
 {
-	if (!errno || errno == 258)
-	{
-		ft_write_2("syntax error near unexpected token");
-		errno = 258;
-	}
-	else
+	*x = 666;
+	if (errno > 0 && errno < 102)
 	{
 		ft_write_2(strerror(errno));
 		errno = 1;
+		return ;
 	}
-	*x = 666;
+	// if (!errno || errno == 258 || errno == 127)
+	// {
+		ft_write_2("syntax error near unexpected token");
+		errno = 258;
+	// }
 }
