@@ -1,5 +1,4 @@
 #include "my_minishell.h"
-#include "my_minishell2.h"
 
 void	free_pipes(int **pipes, int num)
 {

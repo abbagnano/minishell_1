@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   my_minishell.h                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/06 11:23:52 by aviolini          #+#    #+#             */
+/*   Updated: 2021/07/02 08:34:43 by aviolini         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MY_MINISHELL_H
 # define MY_MINISHELL_H
 
@@ -10,6 +22,11 @@
 # include <curses.h>
 # include <term.h>
 # include <termios.h>
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <sys/wait.h>
+# include <signal.h>
 
 int	g_pid;
 
@@ -84,7 +101,14 @@ void	ft_check_cmd(char *line, t_data *data);
 void	ft_exec_cmd(char *line, t_data *data);
 
 /*	ft_exec_pippe.c	*/
+int		ft_init_pipes(char *line, int ***fd_pipes, t_data *data);
+void	ft_pipe_redir(int x, int num_pipes, int **fd_pipes, t_data *data);
+int		ft_pipe_wait(int pid, int x, int num_pipes, int **fd_pipes);
 void	ft_exec_pippe(char *line, t_data *data);
+
+/*		ft_execve*/
+int		ft_check_execve(char *line, t_data *data);
+void	ft_do_execve(char *line, t_data *data);
 
 /*		ft_exit.c		*/
 void	ft_free_env_read(t_read **head);
@@ -116,9 +140,22 @@ int		ft_ctrl_d(char buf, t_char **line_head);
 int		ft_reading(t_char **line_head, int *len, t_data *data);
 void	ft_read_ops(t_char *line_head, t_read *cmd, t_data *data);
 
+/*		ft_redir.c*/
+int		ft_redir(char **line, t_data *data);
+
 /*		minishell.c		***		MAIN	***		*/			
 void	ft_no_arg(t_data *data);
 void	ft_arg(char *av, t_data *data, char **env);
+
+/*ft_utils_aviol*/
+char	**ft_split(char const *s, char c);
+
+/*ft_utils_aviol2*/
+int		ft_strjoin_over(char **s1, char const *s2);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	*ft_strdup(const char *str);
+int		ft_free_matrix(char ***matrix);
 
 /*	utils_basic.c	*/
 int		ft_strcmp(char *s1, char *s2);
@@ -182,7 +219,7 @@ void	ft_restart_reading(t_char *line_head,
 /*	utils_redir.c		*/
 void	ft_charrr(t_char **qwe);
 int		ft_ctr_c(int *fd);
-void	ft_flag4_reading(t_data *data, int fd, char *file);
+// void	ft_flag4_reading(t_data *data, int fd, char *file);
 
 /*	utils_t_char.c		*/
 int		ft_char_len(t_char **line_head);

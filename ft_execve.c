@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "my_minishell.h"
-#include "my_minishell2.h"
 
 void	ft_do_execve(char *line, t_data *data)
 {

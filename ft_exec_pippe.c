@@ -1,5 +1,4 @@
 #include "my_minishell.h"
-#include "my_minishell2.h"
 
 int	ft_init_pipes(char *line, int ***fd_pipes, t_data *data)
 {

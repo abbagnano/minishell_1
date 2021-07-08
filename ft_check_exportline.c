@@ -1,5 +1,4 @@
 #include "my_minishell.h"
-#include "my_minishell2.h"
 
 void	ft_env_join(char **str, t_data *data)
 {

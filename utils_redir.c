@@ -1,5 +1,4 @@
 #include "my_minishell.h"
-#include "my_minishell2.h"
 
 void	ft_charrr(t_char **qwe)
 {
@@ -30,32 +29,32 @@ int	ft_ctr_c(int *fd)
 	return (1);
 }
 
-void	ft_flag4_reading(t_data *data, int fd, char *file)
-{
-	t_char	*qwe;
-	char	*buf[2];
-	int		len;
+// void	ft_flag4_reading(t_data *data, int fd, char *file)
+// {
+// 	t_char	*qwe;
+// 	char	*buf[2];
+// 	int		len;
 
-	qwe = NULL;
-	len = 0;
-	tcsetattr(0, 0, &data->my_term);
-	while (ft_reading(&qwe, &len, data))
-	{
-		if (len == 0 && ft_ctr_c(&fd))
-			break ;
-		ft_charrr(&qwe);
-		ft_linod_to_line(&buf[0], &buf[1], len, &qwe);
-		len = ft_strlen(file);
-		if ((ft_strncmp(buf[0], file, len + 1) == '\n'
-				&& ft_strncmp(buf[0], file, len) == 0) || buf[0][0] == '\0')
-		{
-			free(buf[0]);
-			free(buf[1]);
-			break ;
-		}
-		write(fd, buf[0], ft_strlen(buf[0]));
-		write(data->std_fd[1], ">", 1);
-		free(buf[0]);
-		free(buf[1]);
-	}
-}
+// 	qwe = NULL;
+// 	len = 0;
+// 	tcsetattr(0, 0, &data->my_term);
+// 	while (ft_reading(&qwe, &len, data))
+// 	{
+// 		if (len == 0 && ft_ctr_c(&fd))
+// 			break ;
+// 		ft_charrr(&qwe);
+// 		ft_linod_to_line(&buf[0], &buf[1], len, &qwe);
+// 		len = ft_strlen(file);
+// 		if ((ft_strncmp(buf[0], file, len + 1) == '\n'
+// 				&& ft_strncmp(buf[0], file, len) == 0) || buf[0][0] == '\0')
+// 		{
+// 			free(buf[0]);
+// 			free(buf[1]);
+// 			break ;
+// 		}
+// 		write(fd, buf[0], ft_strlen(buf[0]));
+// 		write(data->std_fd[1], ">", 1);
+// 		free(buf[0]);
+// 		free(buf[1]);
+// 	}
+// }

@@ -1,11 +1,10 @@
 #include "my_minishell.h"
-#include "my_minishell2.h"
 
 int	ft_check_format(char c)
 {
 	if (c == '_' || (c >= 'A' && c <= 'Z')
 		|| (c >= 'a' && c <= 'z')
-		|| c == '=' || c == 39 | c == 34)
+		|| c == '=' || c == 39 || c == 34)
 		return (1);
 	return (0);
 }

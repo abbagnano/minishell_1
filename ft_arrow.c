@@ -1,5 +1,4 @@
 #include "my_minishell.h"
-#include "my_minishell2.h"
 
 void	ft_line_to_linod(t_char **line_head, char *line)
 {

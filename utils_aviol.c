@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "my_minishell2.h"
+#include "my_minishell.h"
 
 size_t	ft_cntwrds(char const *s, char c)
 {

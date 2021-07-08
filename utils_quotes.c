@@ -1,5 +1,4 @@
 #include "my_minishell.h"
-#include "my_minishell2.h"
 
 int	ft_cpy_matr(char **matr, char **new)
 {
