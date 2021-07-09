@@ -39,9 +39,7 @@ int	ft_flag_3(char *file)
 int	ft_flag_4(char *file, t_data *data)
 {
 	int	fd;
-	int	r;
 
-	r = 1;
 	fd = open("/tmp/minishell", O_RDWR | O_CREAT | O_TRUNC, 0666);
 	if (fd < 0)
 		return (0);
