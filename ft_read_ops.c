@@ -28,9 +28,8 @@ int	ft_read_special(t_char **line_head, t_data *data, int *x, int *len)
 	return (1);
 }
 
-int	ft_ctrl_d(char buf, t_char **line_head)
+int	ft_ctrl_d(t_char **line_head)
 {
-	buf = '\0';
 	if (*line_head == NULL)
 	{
 		free(*line_head);

@@ -143,7 +143,7 @@ void	ft_print_sort(t_read **head, t_data *data);
 
 /*		ft_read_ops.c	*/
 int		ft_read_special(t_char **line_head, t_data *data, int *x, int *len);
-int		ft_ctrl_d(char buf, t_char **line_head);
+int		ft_ctrl_d(t_char **line_head);
 int		ft_reading(t_char **line_head, int *len, t_data *data);
 void	ft_read_ops(t_char *line_head, t_read *cmd, t_data *data);
 
