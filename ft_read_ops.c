@@ -67,7 +67,7 @@ int	ft_reading(t_char **line_head, int *len, t_data *data)
 			continue ;
 		else if (buf == 9 || (buf == 127 && ft_canc(line_head, len)))
 			continue ;
-		else if (buf == 4 && !ft_ctrl_d(buf, line_head))
+		else if (buf == 4 && !ft_ctrl_d(line_head))
 			return (0);
 		else if (buf == 3 && ft_ctrl_c_read(line_head, len, data))
 			return (1);
