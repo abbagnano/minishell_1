@@ -102,6 +102,6 @@ void	ft_read_ops(t_char *line_head, t_read *cmd, t_data *data)
 				ft_exec_cmd(line, data);
 			cmd = cmd->next;
 		}
-		ft_restart_reading(line_head, &len, cmd, line);
+		ft_restart_reading(line_head, &len, cmd);
 	}
 }

@@ -233,7 +233,7 @@ void	ft_linod_to_line(char **line, char **line2,
 			int len, t_char **line_head);
 void	ft_buffering(char buf, int *len, t_char **line_head);
 void	ft_restart_reading(t_char *line_head,
-			int *len, t_read *cmd, char *line);
+			int *len, t_read *cmd);
 
 /*	utils_redir.c		*/
 void	ft_charrr(t_char **qwe);

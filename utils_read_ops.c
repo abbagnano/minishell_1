@@ -79,8 +79,7 @@ void	ft_buffering(char buf, int *len, t_char **line_head)
 	(*len)++;
 }
 
-void	ft_restart_reading(t_char *line_head, int *len,
-	t_read *cmd, char *line)
+void	ft_restart_reading(t_char *line_head, int *len,	t_read *cmd)
 {
 	if (!line_head && *len == 0)
 	{
@@ -88,6 +87,5 @@ void	ft_restart_reading(t_char *line_head, int *len,
 		line_head = NULL;
 	}
 	*len = 0;
-	line = NULL;
 	ft_write("\033[0;32mminishell% \033[0m");
 }
