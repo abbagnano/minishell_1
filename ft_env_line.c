@@ -105,14 +105,15 @@ void	ft_env_line(char **line, int *x, t_data *data)
 	int		z;
 	int		len;
 
-	z = 0;
+	z = ft_strchr('$', (*line + *x));
 	*x += ft_strchr('$', (*line + *x));
-	if (*x < 0)
+	if (*x < 0 || !(*line)[*x + 1] || (*line)[*x + 1] == ' ')
+	{
+		(*x)++;
 		return ;
+	}
 	if (!ft_env_quotes(&z, x, *line))
 		return ;
-	while (z < *x && (*line)[z])
-		z++;
 	ft_cpy_env(z, &len, *line, NULL);
 	if ((*line)[z + len] == '?')
 		len++;

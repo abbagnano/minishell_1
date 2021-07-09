@@ -60,6 +60,24 @@ int	ft_is_a_loc_com(t_data *data)
 	return (0);
 }
 
+char	*ft_search_path(int len, t_data *data)
+{
+	t_read	*tmp;
+
+	tmp = *data->env_head;
+	while (tmp)
+	{
+		if (tmp && !ft_strncmp("PATH", tmp->line, len)
+			&& (!ft_strncmp("PATH", tmp->line, len + 1)
+				|| ft_strncmp("PATH", tmp->line, len + 1) == -61))
+		{
+			return (tmp->line);
+		}
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
+
 int	ft_is_a_sys_com(t_data *data)
 {
 	char		*path;
@@ -67,7 +85,9 @@ int	ft_is_a_sys_com(t_data *data)
 	char		**path_matrix;
 	struct stat	fd_stat;
 
-	path = getenv("PATH");
+	path = ft_search_path(4, data);
+	if (!path)
+		return (1);
 	path_matrix = ft_split(path, ':');
 	i = -1;
 	while (path_matrix[++i])
@@ -84,8 +104,7 @@ int	ft_is_a_sys_com(t_data *data)
 		}
 		free(path);
 	}
-	ft_free_matrix(&path_matrix);
-	return (0);
+	return (ft_free_matrix(&path_matrix));
 }
 
 int	ft_check_execve(char *line, t_data *data)
