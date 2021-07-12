@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_exec_cmd.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fgradia <fgradia@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/07/12 10:19:39 by fgradia           #+#    #+#             */
+/*   Updated: 2021/07/12 10:19:41 by fgradia          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "my_minishell.h"
 
 void	ft_cd(char *line, t_data *data)
@@ -19,9 +31,9 @@ void	ft_cd(char *line, t_data *data)
 		line[ret + 1] = '\0';
 	}
 	tmp = getcwd(NULL, 0);
-	ret = chdir(line + x);
-	if (ret == -1)
+	if (chdir(line + x) == -1)
 	{
+		free(tmp);
 		ft_write_2(strerror(errno));
 		errno = 1;
 		return ;
