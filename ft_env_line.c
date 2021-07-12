@@ -6,7 +6,7 @@
 /*   By: fgradia <fgradia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/12 10:19:29 by fgradia           #+#    #+#             */
-/*   Updated: 2021/07/12 10:19:31 by fgradia          ###   ########.fr       */
+/*   Updated: 2021/07/12 11:40:03 by fgradia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,13 +117,10 @@ void	ft_env_line(char **line, int *x, t_data *data)
 	int		z;
 	int		len;
 
-	z = ft_strchr('$', (*line + *x));
+	z = 0;
 	*x += ft_strchr('$', (*line + *x));
-	if (*x < 0 || !(*line)[*x + 1] || (*line)[*x + 1] == ' ')
-	{
-		(*x)++;
+	if ((*x < 0 || !(*line)[*x + 1] || (*line)[*x + 1] == ' ') && ++(*x))
 		return ;
-	}
 	if (!ft_env_quotes(&z, x, *line))
 		return ;
 	ft_cpy_env(z, &len, *line, NULL);

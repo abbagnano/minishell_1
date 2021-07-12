@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   my_minishell.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fgradia <fgradia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 11:23:52 by aviolini          #+#    #+#             */
-/*   Updated: 2021/07/02 08:34:43 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/07/12 12:43:09 by fgradia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,7 @@ void	ft_no_arg(t_data *data);
 void	ft_arg(char *av, char **env);
 
 /*ft_utils_aviol*/
+size_t	ft_cntwrds(char const *s, char c);
 char	**ft_split(char const *s, char c);
 
 /*ft_utils_aviol2*/
@@ -184,6 +185,7 @@ void	ft_free_pipes(int **pipes, int num);
 int		ft_close_all_fd_pipe(int **fd_pipe, int num);
 void	ft_pipe_exit(char *line, char **matr, t_data *data);
 void	ft_child(int *x, int **fd_pipes, char *matrx, t_data *data);
+void	ft_no_pipe(char **matr, char *line, t_data *data);
 
 /*	utils_execve.c	*/
 void	ft_sign_ign_quit(int sig);

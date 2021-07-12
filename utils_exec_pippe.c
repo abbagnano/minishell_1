@@ -6,7 +6,7 @@
 /*   By: fgradia <fgradia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/12 10:23:09 by fgradia           #+#    #+#             */
-/*   Updated: 2021/07/12 10:23:10 by fgradia          ###   ########.fr       */
+/*   Updated: 2021/07/12 12:42:58 by fgradia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,12 @@ void	ft_child(int *x, int **fd_pipes, char *matrx, t_data *data)
 	ft_exec_cmd(matrx, data);
 	ft_free_pipes(fd_pipes, x[1]);
 	ft_exit_num(errno, data);
+}
+
+void	ft_no_pipe(char **matr, char *line, t_data *data)
+{
+	ft_exec_cmd(matr[0], data);
+	free(line);
+	free(matr[1]);
+	free(matr);
 }

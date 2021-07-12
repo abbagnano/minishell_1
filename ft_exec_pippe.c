@@ -6,7 +6,7 @@
 /*   By: fgradia <fgradia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/12 10:19:55 by fgradia           #+#    #+#             */
-/*   Updated: 2021/07/12 10:19:56 by fgradia          ###   ########.fr       */
+/*   Updated: 2021/07/12 13:18:55 by fgradia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,7 @@ int	ft_init_pipes(char *line, int ***fd_pipes, t_data *data)
 	int	x;
 	int	num_pipes;
 
-	num_pipes = 0;
-	x = -1;
-	while (line[++x])
-		if (line[x] == '|')
-			num_pipes++;
+	num_pipes = ft_cntwrds(line, '|') - 1;
 	(*fd_pipes) = (int **)malloc(sizeof(int *) * num_pipes);
 	if (!(*fd_pipes))
 		ft_exit(strerror(errno), data);
@@ -76,6 +72,8 @@ void	ft_exec_pippe(char *line, t_data *data)
 	matr = ft_split(line, '|');
 	if (!matr)
 		ft_exit(strerror(errno), data);
+	if (!matr[1])
+		return (ft_no_pipe(matr, line, data));
 	x[1] = ft_init_pipes(line, &fd_pipes, data);
 	x[0] = -1;
 	while (++x[0] <= x[1])
@@ -84,9 +82,7 @@ void	ft_exec_pippe(char *line, t_data *data)
 		if (pid == -1)
 			ft_exit(strerror(errno), data);
 		if (pid == 0)
-		{
 			ft_child(x, fd_pipes, matr[x[0]], data);
-		}
 		if (ft_pipe_wait(pid, x[0], x[1], fd_pipes) == 0)
 			ft_exit(strerror(errno), data);
 	}

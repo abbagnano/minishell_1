@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_execve.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aviolini <aviolini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fgradia <fgradia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 11:22:46 by aviolini          #+#    #+#             */
-/*   Updated: 2021/07/06 17:06:18 by aviolini         ###   ########.fr       */
+/*   Updated: 2021/07/12 13:14:55 by fgradia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	*ft_search_path(int len, t_data *data)
 			&& (!ft_strncmp("PATH", tmp->line, len + 1)
 				|| ft_strncmp("PATH", tmp->line, len + 1) == -61))
 		{
-			return (tmp->line);
+			return (tmp->line + 5);
 		}
 		tmp = tmp->next;
 	}

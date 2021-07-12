@@ -6,7 +6,7 @@
 /*   By: fgradia <fgradia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/12 10:19:39 by fgradia           #+#    #+#             */
-/*   Updated: 2021/07/12 10:19:41 by fgradia          ###   ########.fr       */
+/*   Updated: 2021/07/12 12:44:33 by fgradia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,10 @@ void	ft_echo(char *line)
 void	ft_check_cmd(char *line, t_data *data)
 {
 	if (line[0] == 'e')
+	{
 		ft_check_builtin(line, data);
+		return ;
+	}
 	else if (!ft_strncmp(line, "cd ", 3) || ft_strncmp(line, "cd ", 3) == -32)
 		ft_cd(line + 2, data);
 	else if (!ft_strncmp(line, "pwd ", 4) || ft_strncmp(line, "pwd ", 4) == -32)
@@ -103,7 +106,7 @@ void	ft_check_cmd(char *line, t_data *data)
 	else if (!ft_strncmp(line, "unset ", 6)
 		|| ft_strncmp(line, "unset ", 6) == -32)
 		ft_unset(line + 5, data);
-	else if (!ft_strncmp(line, "", 1) || ft_last_spaces(line))
+	else if (!line[0] || !ft_strncmp(line, "", 1) || ft_last_spaces(line))
 		return ;
 	else if (ft_check_execve(line, data))
 		ft_do_execve(line, data);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_aviol.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arrigo <arrigo@student.42.fr>              +#+  +:+       +#+        */
+/*   By: fgradia <fgradia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/15 12:20:25 by aviolini          #+#    #+#             */
-/*   Updated: 2021/06/07 08:59:03 by arrigo           ###   ########.fr       */
+/*   Updated: 2021/07/12 13:18:36 by fgradia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,18 @@ size_t	ft_cntwrds(char const *s, char c)
 	count = 0;
 	while (s[i])
 	{
+		if (s[i] == 34)
+		{
+			i++;
+			while (s[i] != 34)
+				i++;
+		}
+		if (s[i] == 39)
+		{
+			i++;
+			while (s[i] != 39)
+				i++;
+		}
 		if (s[i] != c && (s[i + 1] == c || s[i + 1] == '\0'))
 			count++;
 		i++;
@@ -31,7 +43,21 @@ size_t	ft_cntwrds(char const *s, char c)
 size_t	ft_idxwrd(char const *s, char c, size_t i)
 {
 	while (s[i] != c && s[i])
+	{
+		if (s[i] == 34)
+		{
+			i++;
+			while (s[i] != 34)
+				i++;
+		}
+		if (s[i] == 39)
+		{
+			i++;
+			while (s[i] != 39)
+				i++;
+		}
 		i++;
+	}
 	return (i - 1);
 }
 
