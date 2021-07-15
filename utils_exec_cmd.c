@@ -6,7 +6,7 @@
 /*   By: fgradia <fgradia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 11:22:46 by aviolini          #+#    #+#             */
-/*   Updated: 2021/07/12 10:23:04 by fgradia          ###   ########.fr       */
+/*   Updated: 2021/07/15 14:45:03 by fgradia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@ void	ft_update_pwd(char *tmp, t_data *data)
 
 void	ft_option_echo(int *new_line, int *x, char *line)
 {
+	int	y;
+
+	y = *x;
 	if ((!ft_strncmp(line + *x, "-n ", 3)
 			|| ft_strncmp(line + *x, "-n ", 3) == -32)
 		&& !ft_strncmp(line + *x, "-n", 2))
@@ -37,7 +40,7 @@ void	ft_option_echo(int *new_line, int *x, char *line)
 	}
 	while (line[*x] == ' ')
 		(*x)++;
-	if (line[*x] == '-' && line[*x + 1] == 'n')
+	if (*x != y && line[*x] == '-' && line[*x + 1] == 'n')
 		ft_option_echo(new_line, x, line);
 }
 
