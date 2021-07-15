@@ -6,7 +6,7 @@
 /*   By: fgradia <fgradia@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 11:55:46 by aviolini          #+#    #+#             */
-/*   Updated: 2021/07/12 10:22:05 by fgradia          ###   ########.fr       */
+/*   Updated: 2021/07/15 09:51:41 by fgradia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@ void	ft_print_env(t_read **head)
 
 void	ft_unset(char *line, t_data *data)
 {
-	int	len;
-	int	x;
+	int		len;
+	int		x;
+	char	**matr;
 
 	len = 0;
 	x = 0;
@@ -40,12 +41,20 @@ void	ft_unset(char *line, t_data *data)
 	while (line[x + len] && (line[x + len] != ' ' && line[x + len] != '='))
 		len++;
 	if (!line[x])
-	{
 		return ;
+	matr = ft_split(line + x, ' ');
+	x = 0;
+	while (matr[x])
+	{
+		len = 0;
+		while (matr[x][len] && (matr[x][len] != ' ' && matr[x][len] != '='))
+			len++;
+		ft_search_env(matr[x], len, data);
+		ft_list_to_matr(data->env_head, &data->envp, data);
+		free(matr[x]);
+		x++;
 	}
-	else
-		ft_search_env(line + x, len, data);
-	ft_list_to_matr(data->env_head, &data->envp, data);
+	free(matr);
 }
 
 void	ft_env(char *line, t_data *data)
